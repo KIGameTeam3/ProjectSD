@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class PlayerBase : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //////////////////////////////////////////////////////////////////////////////////
+        //테스트 코드
+        if (Input.GetMouseButtonDown(0))
+        {
+            GameManager.Instance.StartGame();
+        }
+        else if (Input.GetMouseButtonDown(1))
+        {
+            GameManager.Instance.EndGame();
+        }
+
+        Debug.Log(GameManager.Instance.GetPlayTime());
+        //////////////////////////////////////////////////////////////////////////////////
     }
 }
