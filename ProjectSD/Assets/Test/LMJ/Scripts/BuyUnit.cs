@@ -1,22 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
-    public GameObject unitPrefab;
+    #region 유닛 변수
+    public GameObject unitPrefab;   // 생성할 유닛 프리팹
     private GameObject unitObj;  // 드래그 중인 유닛을 저장할 변수
-
+    private float unitDestroy = 7f; // 유닛 파괴 시간
     private Vector3 mousePosition = default;
     private Vector3 unitPosition = default;
-    private float unitDestroy = 7f;
+    private int unitPrice = 200;    // 유닛 가격
+    #endregion
+
+    #region 구매
+    public Text price;
+    public Text name;
+    #endregion
+
+    public GameObject gameManager = default;
 
     public void OnPointerDown(PointerEventData eventData)   // 버튼을 눌렀을 때
     {
         if (gameObject.CompareTag("UnitBtn") && unitPrefab != null) // 유닛 생성 조건
         {
             ScreentoWorld();
+
+            gameManager.GetComponent<GameManager>().SubtractGold(unitPrice);    // 재화 소모 메서드 호출
 
             // 유닛을 생성
             unitObj = Instantiate(unitPrefab, unitPosition, Quaternion.identity);

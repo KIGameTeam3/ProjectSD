@@ -4,15 +4,7 @@ using UnityEngine;
 
 public class UnitBase : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public string unitName = default;
+    public int unitPrice = default;
+    public int unitPower = default;
 }
