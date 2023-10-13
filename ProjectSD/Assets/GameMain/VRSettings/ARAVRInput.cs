@@ -109,6 +109,8 @@ public static class ARAVRInput
                 rHand = handObj.transform;
                 // 컨트롤러를 카메라의 자식 객체로 등록
                 rHand.parent = Camera.main.transform;
+#elif Oculus
+                rHand = GameObject.Find("RightControllerAnchor").transform;
 #endif
             }
             return rHand;
