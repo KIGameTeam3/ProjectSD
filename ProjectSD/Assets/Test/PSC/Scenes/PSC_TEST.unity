@@ -521,6 +521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e898a89e28bf3c84bbafe6df8a8fb912, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  handPosition: 1
 --- !u!1 &632435642
 GameObject:
   m_ObjectHideFlags: 0
@@ -1029,6 +1030,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e898a89e28bf3c84bbafe6df8a8fb912, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  handPosition: 0
 --- !u!1001 &1568966346
 PrefabInstance:
   m_ObjectHideFlags: 0

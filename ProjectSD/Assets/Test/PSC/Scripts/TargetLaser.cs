@@ -5,13 +5,8 @@ using UnityEngine;
 public class TargetLaser : MonoBehaviour
 {
 
-    LineRenderer lineRenderer;
-    HandPosition handPosition;
-    enum HandPosition
-    {
-        RIGHT,
-        LEFT
-    }
+    private LineRenderer lineRenderer;
+    public HandPosition handPosition;
 
     // Start is called before the first frame update
     void Awake()
@@ -24,11 +19,28 @@ public class TargetLaser : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if()
-        lineRenderer.SetPosition(0, ARAVRInput.RHandPosition);
-        lineRenderer.SetPosition(1, ARAVRInput.RHandPosition+(ARAVRInput.RHandDirection * 100));
-        if (ARAVRInput.Get(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.RTouch))
+        if(handPosition == HandPosition.RIGHT)
         {
+            lineRenderer.SetPosition(0, ARAVRInput.RHandPosition);
+            lineRenderer.SetPosition(1, ARAVRInput.RHandPosition + (ARAVRInput.RHandDirection * 1000));
+            if (ARAVRInput.Get(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.RTouch))
+            {
+            }
         }
+
+        else if (handPosition == HandPosition.LEFT)
+        {
+            lineRenderer.SetPosition(0, ARAVRInput.LHandPosition);
+            lineRenderer.SetPosition(1, ARAVRInput.LHandPosition + (ARAVRInput.LHandDirection * 1000));
+            if (ARAVRInput.Get(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch))
+            {
+            }
+        }
+
     }
+}
+public enum HandPosition
+{
+    RIGHT,
+    LEFT
 }
