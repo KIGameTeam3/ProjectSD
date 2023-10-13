@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class Golem : MonoBehaviour
 {
-    // {±«¼öÀÇ ÆäÀÌÁî¸¦ Ã¼Å©ÇÒ enum ½ºÅ×ÀÌÆ®
+    // {ê´´ìˆ˜ì˜ í˜ì´ì¦ˆë¥¼ ì²´í¬í•  enum ìŠ¤í…Œì´íŠ¸
     public enum Phase 
     {  
         READY,
@@ -19,30 +19,34 @@ public class Golem : MonoBehaviour
     }
 
     public Phase golemCheck { get; private set;}
-    // }±«¼öÀÇ ÆäÀÌÁî¸¦ Ã¼Å©ÇÒ enum ½ºÅ×ÀÌÆ®
+    // }ê´´ìˆ˜ì˜ í˜ì´ì¦ˆë¥¼ ì²´í¬í•  enum ìŠ¤í…Œì´íŠ¸
 
     private bool isAttack = false;
 
-    // {±«¼öÀÇ °¢Á¾ º¯¼ö
+    // {ê´´ìˆ˜ì˜ ê°ì¢… ë³€ìˆ˜
 
-    public float golemMaxHp = 100f;     // ±«¼öÀÇ ÃÊ±â Ã¼·Â
-    private float currentHp = default;   // ±«¼öÀÇ ÇöÀç Ã¼·Â    
-    public float startTime = 5f;        // °ÔÀÓ ½ÃÀÛ½Ã°£ Ã¼Å©
-                                        // TODO : ÃßÈÄ¿¡´Â °ÔÀÓ½ÃÀÛ ¹öÆ°À» ´©¸¦½Ã ±«¼ö°¡ Çàµ¿ÁøÀÔ ¿¹Á¤
+    public float golemMaxHp = 100f;     // ê´´ìˆ˜ì˜ ì´ˆê¸° ì²´ë ¥
+    private float currentHp = default;   // ê´´ìˆ˜ì˜ í˜„ì¬ ì²´ë ¥    
+    public float startTime = 5f;        // ê²Œì„ ì‹œì‘ì‹œê°„ ì²´í¬
+                                        // TODO : ì¶”í›„ì—ëŠ” ê²Œì„ì‹œì‘ ë²„íŠ¼ì„ ëˆ„ë¥¼ì‹œ ê´´ìˆ˜ê°€ í–‰ë™ì§„ì… ì˜ˆì •
 
-    public float phase1Time = 5f;      // ÆäÀÌÁî 1 Á¦ÇÑ½Ã°£
-    public float phase2Time = 5f;      // ÆäÀÌÁî 2 Á¦ÇÑ½Ã°£
-    private Transform player = default; // ÇÃ·¹ÀÌ¾î¸¦ Ä³½ÌÇÒ º¯¼ö
-    private float firstPos = default;   // ±«¼ö¿Í ÇÃ·¹ÀÌ¾îÀÇ ÃÖÃÊ °Å¸® Ä³½ÌÇÒ º¯¼ö
-    public float golemSpeed = 5f;       // ±«¼öÀÇ PC ÃßÀû ¼Óµµ
-    private bool phaseStart = false;
+    public float phase1Time = 30f;       // í˜ì´ì¦ˆ 1 ì œí•œì‹œê°„
+    public float phase1Ratio = 0.7f;    // í˜ì´ì¦ˆ 1 ì§„ì…í•˜ëŠ” ê±°ë¦¬ë¹„ìœ¨ = ìµœì´ˆ ê±°ë¦¬ë¡œë¶€í„° 70í¼ ë‚¨ì•˜ì„ ë•Œ
+    public float phase2Time = 30f;       // í˜ì´ì¦ˆ 2 ì œí•œì‹œê°„
+    public float phase2Ratio = 0.4f;    // í˜ì´ì¦ˆ 2 ì§„ì…í•˜ëŠ” ê±°ë¦¬ë¹„ìœ¨ = ìµœì´ˆ ê±°ë¦¬ë¡œë¶€í„° 40í¼ ë‚¨ì•˜ì„ ë•Œ
+    private Transform player = default; // í”Œë ˆì´ì–´ë¥¼ ìºì‹±í•  ë³€ìˆ˜
+    private float firstPos = default;   // ê´´ìˆ˜ì™€ í”Œë ˆì´ì–´ì˜ ìµœì´ˆ ê±°ë¦¬ ìºì‹±í•  ë³€ìˆ˜
+    public float golemSpeed = 5f;       // ê´´ìˆ˜ì˜ PC ì¶”ì  ì†ë„
 
     private Vector3 target = default;
 
-    // }±«¼öÀÇ °¢Á¾ º¯¼ö
+    // }ê´´ìˆ˜ì˜ ê°ì¢… ë³€ìˆ˜
 
-    private Rigidbody golemRigid = default;     // °ñ·½ÀÇ ¼Ó·ÂÀ» ÀÔ·ÂÇÒ ÄÄÆ÷³ÍÆ®
+    private Rigidbody golemRigid = default;     // ê³¨ë ˜ì˜ ì†ë ¥ì„ ì…ë ¥í•  ì»´í¬ë„ŒíŠ¸
     private Animator golemAni = default;
+
+    private IEnumerator throwball = default;
+    private IEnumerator spawnminion = default;
 
     // Start is called before the first frame update
     void Start()
@@ -57,7 +61,7 @@ public class Golem : MonoBehaviour
         target = (player.transform.position - transform.position).normalized;
         firstPos = Vector3.Distance(transform.position, player.transform.position);
 
-        Debug.Log($"°Å¸®°è»ê : {firstPos}, °Å¸® ºñÀ² : {firstPos * 0.7f}");
+        Debug.Log($"ê±°ë¦¬ê³„ì‚° : {firstPos}, ê±°ë¦¬ ë¹„ìœ¨ : {firstPos * 0.7f}");
 
         StartCoroutine(GameStart());
     }
@@ -70,11 +74,13 @@ public class Golem : MonoBehaviour
             golemAni.SetBool("isWalk", false);
             golemCheck = Phase.GAMEOVER;
 
-            Debug.Log("°ÔÀÓ Á¾·á");
+            Debug.Log("ê²Œì„ ì¢…ë£Œ");
         }
     }
     private void Update()
     {
+        //Debug.Log(golemCheck);
+
         if(Input.GetKeyDown(KeyCode.A))
         {
             OnDamageble(10f);
@@ -83,6 +89,12 @@ public class Golem : MonoBehaviour
         if (golemCheck == Phase.PHASE_LAST)
         {
             golemRigid.velocity = target * golemSpeed;
+        }
+
+        if(golemCheck == Phase.GAMEOVER)
+        {
+            golemRigid.velocity = Vector3.zero;
+            golemAni.SetBool("isWalk", false);
         }
     }
 
@@ -94,7 +106,6 @@ public class Golem : MonoBehaviour
         {
             gameStartTimer += Time.deltaTime;
 
-            Debug.Log($"°ÔÀÓ Ã¼Å© ½Ã°£ : {gameStartTimer}");
             yield return null;
         }
 
@@ -104,8 +115,14 @@ public class Golem : MonoBehaviour
         {
             if (firstPos * 0.7f >= Vector3.Distance(transform.position, player.transform.position))
             {
-                Debug.Log("ÆäÀÌÁî 1 Á¶°Ç ´Ş¼º ");
+                Debug.Log("í˜ì´ì¦ˆ 1 ì¡°ê±´ ë‹¬ì„± ");
                 golemCheck = Phase.PHASE_1;
+
+                golemRigid.velocity = Vector3.zero;
+                golemAni.SetBool("isWalk", false);
+                StartCoroutine(Phase1());
+
+                yield break;
             }
 
             golemRigid.velocity = target * golemSpeed;
@@ -113,43 +130,54 @@ public class Golem : MonoBehaviour
             yield return null;
         }
 
-        golemRigid.velocity = Vector3.zero;
-        golemAni.SetBool("isWalk", false);
-        StartCoroutine(Phase1());
+    
     }
 
     IEnumerator Phase1()
     {
-        Debug.Log("ÆäÀÌÁî 1 ÁøÀÔ");
+        throwball = ThrowBall();
+        spawnminion = SpawnMinion();
+
+        Debug.Log("í˜ì´ì¦ˆ 1 ì§„ì…");
         float phaseTimer = 0f;
 
-        // Á¦ÇÑ½Ã°£µ¿¾È °ñ·½ÀÇ ÀÏÁ¤ Ã¼·ÂÀ» ±ğ±â Àü±îÁö´Â °è¼ÓÇØ¼­ ½Ã°£À» ´©ÀûÇÑ´Ù
-        // Á¦ÇÑ½Ã°£ÀÌ ´Ù µÇ°Å³ª ÀÏÁ¤Ã¼·ÂÀÌ ±ğÀÌ¸é while¹® Å»Ãâ
-        while(phaseTimer < phase1Time &&  currentHp <= golemMaxHp * 0.7f)
+        // ì œí•œì‹œê°„ë™ì•ˆ ê³¨ë ˜ì˜ ì¼ì • ì²´ë ¥ì„ ê¹ê¸° ì „ê¹Œì§€ëŠ” ê³„ì†í•´ì„œ ì‹œê°„ì„ ëˆ„ì í•œë‹¤
+        // ì œí•œì‹œê°„ì´ ë‹¤ ë˜ê±°ë‚˜ ì¼ì •ì²´ë ¥ì´ ê¹ì´ë©´ whileë¬¸ íƒˆì¶œ
+        while(phaseTimer < phase1Time && currentHp >= golemMaxHp * 0.7f)
         {
             phaseTimer += Time.deltaTime;
 
-            //if (isAttack == false)
-            //{
-            //    int Attack = Random.Range(0, 2);
+            if (isAttack == false)
+            {
+                int Attack = Random.Range(0, 2);
 
-            //    switch (Attack)
-            //    {
-            //        case 0:
-            //            StartCoroutine(ThrowBall());
-            //            Attack = 
-            //            break;
-            //        case 1:
-            //            StartCoroutine(SpawnMinion());
-            //            break;
-            //    }
+                switch (Attack)
+                {
+                    case 0:
+                        StartCoroutine(throwball);
+                        Attack = 2;
+                        break;
+                    case 1:
+                        StartCoroutine(spawnminion);
+                        Attack = 2;
+                        break;
+                }
 
-            //}
+            }
 
             yield return null;
         }
 
-        Debug.Log("ÆäÀÌÁî 1 ³¡");
+        Debug.Log("í˜ì´ì¦ˆ 1 ë");
+
+        StopCoroutine(throwball);
+        StopCoroutine(spawnminion);
+
+        throwball = ThrowBall();
+        spawnminion = SpawnMinion();
+        
+        isAttack = false;
+
         golemAni.SetBool("isWalk", true);
 
         while (golemCheck == Phase.PHASE_1)
@@ -167,67 +195,77 @@ public class Golem : MonoBehaviour
         golemRigid.velocity = Vector3.zero;
         golemAni.SetBool("isWalk", false);
         StartCoroutine(Phase2());
-        // TODO : ÆäÀÌÁî2 ÁøÀÔ
+        // TODO : í˜ì´ì¦ˆ2 ì§„ì…
     }
 
     IEnumerator Phase2()
     {
-        Debug.Log("2ÆäÀÌÁî ÁøÀÔ");
+        Debug.Log("2í˜ì´ì¦ˆ ì§„ì…");
 
         float phaseTimer = 0f;
 
-        // Á¦ÇÑ½Ã°£µ¿¾È °ñ·½ÀÇ ÀÏÁ¤ Ã¼·ÂÀ» ±ğ±â Àü±îÁö´Â °è¼ÓÇØ¼­ ½Ã°£À» ´©ÀûÇÑ´Ù
-        // Á¦ÇÑ½Ã°£ÀÌ ´Ù µÇ°Å³ª ÀÏÁ¤Ã¼·ÂÀÌ ±ğÀÌ¸é while¹® Å»Ãâ
-        while (phaseTimer < phase2Time && currentHp <= golemMaxHp * 0.4f)
+        // ì œí•œì‹œê°„ë™ì•ˆ ê³¨ë ˜ì˜ ì¼ì • ì²´ë ¥ì„ ê¹ê¸° ì „ê¹Œì§€ëŠ” ê³„ì†í•´ì„œ ì‹œê°„ì„ ëˆ„ì í•œë‹¤
+        // ì œí•œì‹œê°„ì´ ë‹¤ ë˜ê±°ë‚˜ ì¼ì •ì²´ë ¥ì´ ê¹ì´ë©´ whileë¬¸ íƒˆì¶œ
+        while (phaseTimer < phase2Time && currentHp >= golemMaxHp * 0.4f)
         {
             phaseTimer += Time.deltaTime;
 
-            //int Attack = Random.Range(0, 2);
+            if (isAttack == false)
+            {
+                int Attack = Random.Range(0, 2);
 
-            //switch(Attack)
-            //{
-            //    case 0:
-            //        StartCoroutine(ThrowBall());
-            //        break;
-            //    case 1:
-            //        StartCoroutine(SpawnMinion());
-            //        break;
-            //}
+                switch (Attack)
+                {
+                    case 0:
+                        StartCoroutine(throwball);
+                        Attack = 2;
+                        break;
+                    case 1:
+                        StartCoroutine(spawnminion);
+                        Attack = 2;
+                        break;
+                }
+
+            }
 
             yield return null;
         }
 
         golemCheck = Phase.PHASE_LAST;
+        StopCoroutine(throwball);
+        StopCoroutine(spawnminion);
         golemAni.SetBool("isWalk", true);
 
-        Debug.Log("¶ó½ºÆ® ÆäÀÌÁî");
+        Debug.Log("ë¼ìŠ¤íŠ¸ í˜ì´ì¦ˆ");
     }
 
     IEnumerator ThrowBall()
     {
         isAttack = true;
-        Debug.Log("¿ø°Å¸® °ø°İ ½ÃÀÛ");
+        Debug.Log("ì›ê±°ë¦¬ ê³µê²© ì‹œì‘");
         yield return new WaitForSeconds(5f);
 
-        Debug.Log("¿ø°Å¸® °ø°İ Á¾·á");
+        Debug.Log("ì›ê±°ë¦¬ ê³µê²© ì¢…ë£Œ");
         isAttack = false;
+        throwball = ThrowBall();
     }
 
     IEnumerator SpawnMinion()
     {
         isAttack = true;
-        Debug.Log("Á¹°³ ¼ÒÈ¯ ½ÃÀÛ");
+        Debug.Log("ì¡¸ê°œ ì†Œí™˜ ì‹œì‘");
         yield return new WaitForSeconds(5f);
 
-        Debug.Log("Á¹°³ ¼ÒÈ¯ Á¾·á");
+        Debug.Log("ì¡¸ê°œ ì†Œí™˜ ì¢…ë£Œ");
         isAttack = false;
+        spawnminion = SpawnMinion();
     }
 
     private void OnDamageble(float damage)
     {
         currentHp -= damage;
 
-        Debug.Log($"±«¼ö ÇöÀç Ã¼·Â : {currentHp}");
+        Debug.Log($"ê´´ìˆ˜ í˜„ì¬ ì²´ë ¥ : {currentHp}");
         if(currentHp <= 0)
         {
             StopAllCoroutines();
