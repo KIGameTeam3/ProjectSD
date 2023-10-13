@@ -40,6 +40,9 @@ public class Golem : MonoBehaviour
 
     private Vector3 target = default;
 
+    [SerializeField] private Transform RHand = default;
+    [SerializeField] private Transform LHand = default;
+
     // }괴수의 각종 변수
 
     private Rigidbody golemRigid = default;     // 골렘의 속력을 입력할 컴포넌트
