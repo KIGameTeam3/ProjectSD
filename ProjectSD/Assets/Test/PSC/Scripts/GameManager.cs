@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -38,6 +38,53 @@ public class GameManager : MonoBehaviour
     public int gold = 0;                                    //플레이어 골드
     #endregion
 
+    #region 재화 변수
+    public Text goldText = default;
+    public int firstGold = 1000;    // 초기 재화
+    public int currentGold = 0;     // 보유중인 재화
+    private float updateInterval = 1.0f; // 1초 간격으로 업데이트하도록 설정
+    private float timeSinceLastUpdate = 0.0f;
+    #endregion
+
+    // [이미정] 231013 재화 초기값 설정
+    private void Start()
+    {
+        currentGold += firstGold;
+        goldText.text = currentGold.ToString(); // 텍스트에 현재 재화 할당
+    }
+
+    // [이미정] 231013 초당 재화 증가
+    private void Update()
+    {
+        // 매 프레임마다 deltaTime 값을 누적
+        timeSinceLastUpdate += Time.deltaTime;
+
+        // 설정한 간격(updateInterval)이 경과하면 변수를 증가시키고 timeSinceLastUpdate를 재설정
+        if (timeSinceLastUpdate >= updateInterval)
+        {
+            currentGold += 10;
+            Debug.Log("골드 값 증가: " + currentGold);
+            timeSinceLastUpdate = 0.0f; // 재설정
+
+            goldText.text = currentGold.ToString();
+        }
+    }
+
+    // [이미정] 231013 유닛 구매시 재화 소모
+    public void SubtractGold(int unitPrice)
+    {
+        currentGold -= unitPrice;
+        Debug.Log("유닛 구매: " + currentGold);
+        goldText.text = currentGold.ToString();
+    }
+
+    // [이미정] 231013 재화 추가 버튼 누를 시
+    public void OnAddGoldBtn()
+    {
+        currentGold += 50;
+        Debug.Log("골드 50추가");
+        goldText.text = currentGold.ToString();
+    }
 
     //플레이 타임 불러오기
     //1. 게임중에는 진행 시간을 불러온다
