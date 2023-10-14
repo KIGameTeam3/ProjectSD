@@ -28,11 +28,13 @@ public class MinionBase : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
+        Debug.Log($"벡터값으로 확인하기 : {player.transform.position - transform.position}");
         transform.LookAt(player.transform.position);
 
         if (Vector3.Distance(transform.position, player.transform.position) <= distance * 0.13f)
         {
             myRigid.velocity = Vector3.zero;
+            isDetected = false;
             myAni.SetBool("isWalk", false);
             isAttack = true;
             return;

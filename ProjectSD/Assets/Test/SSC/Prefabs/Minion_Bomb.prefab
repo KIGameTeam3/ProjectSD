@@ -297,6 +297,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3173607636964577296}
   - component: {fileID: 3266876403279583778}
+  - component: {fileID: 3924699693649703812}
+  - component: {fileID: 7772760553277847305}
   m_Layer: 0
   m_Name: Minion_Bomb
   m_TagString: Untagged
@@ -331,7 +333,7 @@ Animator:
   m_GameObject: {fileID: 3170877250666269528}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 8b2d11d64877f0b4cad5d45ec7d53473, type: 3}
-  m_Controller: {fileID: 9100000, guid: 64e2ef14a02f69a4b94edbee54ca296a, type: 2}
+  m_Controller: {fileID: 9100000, guid: bd66837d91bf62d498102fb46baf04bc, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -342,6 +344,37 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3924699693649703812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3170877250666269528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b536e08a49a2bd44ad3d51f038e7446, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myAni: {fileID: 3266876403279583778}
+  minionSpeed: 2
+  isAttack: 0
+--- !u!54 &7772760553277847305
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3170877250666269528}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 80
+  m_CollisionDetection: 0
 --- !u!1 &3170980851079030142
 GameObject:
   m_ObjectHideFlags: 0
@@ -543,6 +576,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3173720893830213700}
   - component: {fileID: 3309690590416511088}
+  - component: {fileID: 8664364077530825576}
   m_Layer: 0
   m_Name: RockGolemMesh
   m_TagString: Untagged
@@ -638,6 +672,20 @@ SkinnedMeshRenderer:
     m_Center: {x: -80.1039, y: -2.447403, z: 17.706985}
     m_Extent: {x: 241.08421, y: 215.05971, z: 397.3723}
   m_DirtyAABB: 0
+--- !u!64 &8664364077530825576
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3171344199518366374}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 0f2c5202b918687408ac5bc7429a03ea, type: 3}
 --- !u!1 &3171346434594945328
 GameObject:
   m_ObjectHideFlags: 0

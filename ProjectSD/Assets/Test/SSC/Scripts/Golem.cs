@@ -167,9 +167,8 @@ public class Golem : MonoBehaviour
             // 어느 한 공격이 진행중이라면 다른 공격 코루틴 진입을 못하게 불값으로 체크
             if (isAttack == false)
             {
-                // TODO : 현재 졸개소환을 테스트하기 위해 졸개만 나오게 설정해뒀음
                 // 2가지 공격패턴중 랜덤한 공격 패턴을 선정하기 위한 랜덤값
-                int Attack = Random.Range(1, 2);
+                int Attack = Random.Range(0, 2);
 
                 //  입력받은 랜덤값을 토대로 행동을 취한다.
                 switch (Attack)
@@ -247,9 +246,7 @@ public class Golem : MonoBehaviour
             // { 상단에 기술한 1페이즈 공격패턴과 동일한 동작
             if (isAttack == false)
             {
-
-                // TODO : 졸개소환만 진행 중
-                int Attack = Random.Range(1, 2);
+                int Attack = Random.Range(0, 2);
 
                 switch (Attack)
                 {
@@ -379,7 +376,7 @@ public class Golem : MonoBehaviour
             }
 
             spawnPoint.x = MinionSpawn.transform.position.x + Random.Range(-20f, 20f);
-            spawnPoint.z = MinionSpawn.transform.position.z + Random.Range(0, 1f);
+            spawnPoint.z = MinionSpawn.transform.position.z + Random.Range(-3f, -1f);
             spawnPoint.y = MinionSpawn.transform.position.y;
 
             minion.transform.position = spawnPoint;

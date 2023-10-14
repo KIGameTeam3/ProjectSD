@@ -14,11 +14,12 @@ public class Bomb : MonoBehaviour
         target = GameObject.FindWithTag("Player").GetComponent<Transform>();
     }
 
-    private void OnEnable()
+    private void OnTriggerEnter(Collider other)
     {
-        // 포물선 운동
-        //Vector3 velocity = GetVelocity(transform.position, target.transform.position, initialAngle);
-        //rb.velocity = velocity;
+        if(other.CompareTag("Player"))
+        {
+            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.BOMB);
+        }
     }
 
     public Vector3 GetVelocity(Vector3 startPos, Vector3 target, float initialAngle)
