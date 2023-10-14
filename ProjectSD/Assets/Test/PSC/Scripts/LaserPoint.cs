@@ -35,24 +35,23 @@ public class LaserPoint : MonoBehaviour
         ChangeControllerData(out startPos, out endPos, out controller);
 
         lineRenderer.SetPosition(0, startPos);
+        lineRenderer.SetPosition(1, endPos);
 
         Ray ray = new Ray(startPos, endPos);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
+        Debug.Log(GlobalFunction.GetLayerMask("Floor"));
+        if (Physics.Raycast(ray, out hit, LASER_LENGTH, GlobalFunction.GetLayerMask("Floor")))
         {
             hitPointer.SetActive(true);
-            hitPointer.transform.localScale = Vector3.one* Vector3.Distance(endPos,hit.point)* 0.1f;
+            hitPointer.transform.localScale = Vector3.one* Vector3.Distance(endPos,hit.point)* 0.001f;
             hitPointer.transform.position = hit.point;
-            endPos = hit.point;
-            
         }
         else if(hitPointer.activeSelf)
         {
             hitPointer.SetActive(false);
         }
 
-        lineRenderer.SetPosition(1, endPos);
         if (ARAVRInput.Get(ARAVRInput.Button.IndexTrigger, controller))
         {
             cloneMaterial.color = Color.blue;
@@ -65,7 +64,7 @@ public class LaserPoint : MonoBehaviour
 
     private void Init()
     {
-        hitPointer = Instantiate(hitPointer, transform.parent);
+        hitPointer = Instantiate(hitPointer, transform);
         lineRenderer = GetComponentInChildren<LineRenderer>();
         originMaterial = lineRenderer.material;
         cloneMaterial = Instantiate(originMaterial);

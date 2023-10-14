@@ -14,14 +14,14 @@ TagManager:
   - UI
   - 
   - Floor
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Monster
+  - Boss
+  - BossBullet
+  - Player
+  - PlayerBullet
+  - Tower
+  - Hand
+  - Crosshair
   - 
   - 
   - 

@@ -19,7 +19,6 @@ public class PlayerBase : MonoBehaviour
             GameManager.Instance.EndGame();
         }
 
-        Debug.Log(GameManager.Instance.GetPlayTime());
         //////////////////////////////////////////////////////////////////////////////////
     }
 }
