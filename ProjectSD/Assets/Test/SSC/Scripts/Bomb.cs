@@ -4,20 +4,22 @@ using UnityEngine;
 
 public class Bomb : MonoBehaviour
 {
-    public GameObject target;           // 타겟 위치
+    private Transform target;           // 타겟 위치
     public float initialAngle = 30f;    // 처음 날라가는 각도
     private Rigidbody rb;               // Rigidbody
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        target = GameObject.FindWithTag("Player").GetComponent<Transform>();
     }
 
-    private void OnEnable()
+    private void OnTriggerEnter(Collider other)
     {
-        // 포물선 운동
-        Vector3 velocity = GetVelocity(transform.position, target.transform.position, initialAngle);
-        rb.velocity = velocity;
+        if(other.CompareTag("Player"))
+        {
+            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.BOMB);
+        }
     }
 
     public Vector3 GetVelocity(Vector3 startPos, Vector3 target, float initialAngle)

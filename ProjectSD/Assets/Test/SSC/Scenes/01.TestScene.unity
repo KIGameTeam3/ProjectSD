@@ -130,9 +130,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 826041479, guid: 118cdc496b9ca934d9550a0710167235, type: 3}
-      propertyPath: golemSpeed
-      value: 2.5
+    - target: {fileID: 826041478, guid: 118cdc496b9ca934d9550a0710167235, type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 826041478, guid: 118cdc496b9ca934d9550a0710167235, type: 3}
+      propertyPath: m_Constraints
+      value: 112
       objectReference: {fileID: 0}
     - target: {fileID: 8584624732879253251, guid: 118cdc496b9ca934d9550a0710167235, type: 3}
       propertyPath: m_Name
@@ -144,7 +148,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8588035327547512545, guid: 118cdc496b9ca934d9550a0710167235, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 5.8
       objectReference: {fileID: 0}
     - target: {fileID: 8588035327547512545, guid: 118cdc496b9ca934d9550a0710167235, type: 3}
       propertyPath: m_LocalPosition.y
@@ -700,6 +704,14 @@ MonoBehaviour:
     objAmount: 10
     prefab: {fileID: 5166264765144382463, guid: 5d9a92a0f5c2e8f4ab1de6047482e9d5, type: 3}
     container: {fileID: 1150099556}
+  - Type: 1
+    objAmount: 10
+    prefab: {fileID: 7078827637945275490, guid: 84598b9ec307b044a99dcb5aabc5c3fd, type: 3}
+    container: {fileID: 916706794}
+  - Type: 2
+    objAmount: 10
+    prefab: {fileID: 3170877250666269528, guid: 824cc9cf3d77f33459fc6a8923ceec9c, type: 3}
+    container: {fileID: 1692967172}
 --- !u!4 &1907736277
 Transform:
   m_ObjectHideFlags: 0

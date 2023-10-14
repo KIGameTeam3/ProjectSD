@@ -94,6 +94,7 @@ public class ObjectPoolManager : MonoBehaviour
             objInstance = Instantiate(select.prefab, select.container.transform);
         }
 
+        objInstance.transform.parent = null;
         // 담긴 오브젝트 반환
         return objInstance;
     }
@@ -103,8 +104,9 @@ public class ObjectPoolManager : MonoBehaviour
     {
         PoolInfo select = GetPoolByType(type);
 
-        obj.SetActive(false);
         obj.transform.position = select.container.transform.position;
+        obj.transform.parent = select.container.transform;
+        obj.SetActive(false);
         Stack<GameObject> pool = select.poolObj;
 
         if (pool.Contains(obj) == false)
