@@ -9,36 +9,38 @@ public class MinionBase : MonoBehaviour
     private Rigidbody myRigid = default;
     private WaitForSeconds readyTime = new WaitForSeconds(1f);
     private Vector3 target = Vector3.zero;
-    private Animator myAni = default;
-    private bool isAttack = false;
+    public Animator myAni = default;
+    private bool isDetected = false;
     private float distance = default;
 
     public float minionSpeed = 5f;
+    public bool isAttack = false;
 
     void Start()
     {
         player = GameObject.FindWithTag("Player").GetComponent<Transform>();
         target = (player.transform.position - transform.position).normalized;
         myRigid = GetComponent<Rigidbody>();
-        myAni = GetComponent<Animator>();
         distance = Vector3.Distance(transform.position, player.transform.position);
 
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         transform.LookAt(player.transform.position);
 
         if (Vector3.Distance(transform.position, player.transform.position) <= distance * 0.13f)
         {
             myRigid.velocity = Vector3.zero;
+            myAni.SetBool("isWalk", false);
+            isAttack = true;
             return;
         }
 
-        if(isAttack == true)
+        if(isDetected == true)
         {
-            myAni.SetTrigger("isWalk");
+            myAni.SetBool("isWalk", true);
             myRigid.velocity = target * minionSpeed;
         }
     }
@@ -51,6 +53,6 @@ public class MinionBase : MonoBehaviour
     IEnumerator DetectedStart()
     {
         yield return readyTime;
-        isAttack = true;
+        isDetected = true;
     }
 }
