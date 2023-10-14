@@ -378,8 +378,8 @@ public class Golem : MonoBehaviour
                     break;
             }
 
-            spawnPoint.x = Random.Range(-20f, 20f);
-            spawnPoint.z = Random.Range(-5f, 0);
+            spawnPoint.x = MinionSpawn.transform.position.x + Random.Range(-20f, 20f);
+            spawnPoint.z = MinionSpawn.transform.position.z + Random.Range(0, 1f);
             spawnPoint.y = MinionSpawn.transform.position.y;
 
             minion.transform.position = spawnPoint;

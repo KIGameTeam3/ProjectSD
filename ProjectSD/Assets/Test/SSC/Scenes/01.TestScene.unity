@@ -134,6 +134,26 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.01
       objectReference: {fileID: 0}
+    - target: {fileID: 699890170, guid: 118cdc496b9ca934d9550a0710167235, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.23
+      objectReference: {fileID: 0}
+    - target: {fileID: 826041478, guid: 118cdc496b9ca934d9550a0710167235, type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1116598606, guid: 118cdc496b9ca934d9550a0710167235, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: 0f2c5202b918687408ac5bc7429a03ea, type: 3}
+    - target: {fileID: 1116598606, guid: 118cdc496b9ca934d9550a0710167235, type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1116598606, guid: 118cdc496b9ca934d9550a0710167235, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8584624732879253251, guid: 118cdc496b9ca934d9550a0710167235, type: 3}
       propertyPath: m_Name
       value: Monster
