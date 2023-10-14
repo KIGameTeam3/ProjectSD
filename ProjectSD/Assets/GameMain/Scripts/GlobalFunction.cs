@@ -8,4 +8,9 @@ public static class GlobalFunction
     {
         return 1 << LayerMask.NameToLayer(layerName);
     }
+
+    public static void ChangeMaterialColor<T>(this T material, Color color) where T : Material 
+    {
+        material.color = color;
+    }
 }

@@ -11,85 +11,122 @@ public class LaserPoint : MonoBehaviour
 
     #region private 변수
     private LineRenderer lineRenderer;
-    private Material originMaterial;
-    private Material cloneMaterial;
+    ARAVRInput.Controller controller;
     #endregion
 
     #region public 변수
     public HandPosition handPosition;
     public GameObject hitPointer;
+    public Material[] laserMaterials;
+    public Transform startPos;
     #endregion
 
 
     void Awake()
     {
+        GameManager.Instance.playerState = PlayerState.PLAY;
         Init();
     }
 
     void Update()
     {
-        Vector3 startPos = transform.position;
-        Vector3 endPos = transform.position;
-        ARAVRInput.Controller controller = ARAVRInput.Controller.RTouch;
+        //플레이 모드가 아니면 비활성화
+        if(GameManager.Instance.playerState != PlayerState.PLAY)
+        {
+            return;
+        }
 
-        ChangeControllerData(out startPos, out endPos, out controller);
+        Vector3 _startPos = startPos.position;
+        Vector3 _endPos = startPos.position;
 
-        lineRenderer.SetPosition(0, startPos);
-        lineRenderer.SetPosition(1, endPos);
+        //변수에 값 저장
+        ChangeControllerData(out _startPos, out _endPos);
 
-        Ray ray = new Ray(startPos, endPos);
+        Ray ray = new Ray(_startPos, _endPos);
         RaycastHit hit;
 
-        Debug.Log(GlobalFunction.GetLayerMask("Floor"));
-        if (Physics.Raycast(ray, out hit, LASER_LENGTH, GlobalFunction.GetLayerMask("Floor")))
+        //레이캐스트
+        //ray와 충돌할 Layer설정
+        //뒤에 + 로 계속 더하면 된다.
+        int colliderMask = GlobalFunction.GetLayerMask("Floor");
+        if (Physics.Raycast(ray, out hit, LASER_LENGTH, colliderMask))
         {
+            //조준점 보임
             hitPointer.SetActive(true);
-            hitPointer.transform.localScale = Vector3.one* Vector3.Distance(endPos,hit.point)* 0.001f;
+            //조준점 거리에 비례해서 크기조절
+            hitPointer.transform.localScale = Vector3.one * Vector3.Distance(_startPos, hit.point) * 0.1f;
+            //조준점 위치 변경
             hitPointer.transform.position = hit.point;
+            //lineRenderer의 끝부분 위치 변경
+            _endPos = hit.point;
         }
         else if(hitPointer.activeSelf)
         {
             hitPointer.SetActive(false);
         }
 
+        //조준선 색 변경
         if (ARAVRInput.Get(ARAVRInput.Button.IndexTrigger, controller))
         {
-            cloneMaterial.color = Color.blue;
+            lineRenderer.material.ChangeMaterialColor(laserMaterials[(int)LaserColor.SHOT].color);
         }
-        else if(ARAVRInput.GetUp(ARAVRInput.Button.IndexTrigger, controller))
+        else if (hit.collider != null)
         {
-            cloneMaterial.color =  originMaterial.color;
+            lineRenderer.material.ChangeMaterialColor(laserMaterials[(int)LaserColor.TARGET].color);
         }
+        else if (hit.collider==null || ARAVRInput.GetUp(ARAVRInput.Button.IndexTrigger, controller))
+        {
+            lineRenderer.material.ChangeMaterialColor(laserMaterials[(int)LaserColor.IDLE].color);
+        }
+
+        Debug.Log(_startPos + "/" + _endPos);
+
+        //조준선 길이 설정
+        lineRenderer.SetPosition(0, _startPos);
+        lineRenderer.SetPosition(1, _endPos);
+
     }
 
     private void Init()
     {
-        hitPointer = Instantiate(hitPointer, transform);
-        lineRenderer = GetComponentInChildren<LineRenderer>();
-        originMaterial = lineRenderer.material;
-        cloneMaterial = Instantiate(originMaterial);
-
-        lineRenderer.material = cloneMaterial;
-        lineRenderer.positionCount = 2;
-        lineRenderer.startWidth = 0.005f;
-        lineRenderer.endWidth = 0.015f;
-    }
-
-    private void ChangeControllerData(out Vector3 startPos, out Vector3 endPos, out ARAVRInput.Controller controller)
-    {
         if (handPosition == HandPosition.RIGHT)
         {
-            startPos = ARAVRInput.RHandPosition;
-            endPos = startPos + (ARAVRInput.RHandDirection * LASER_LENGTH);
             controller = ARAVRInput.Controller.RTouch;
+        }
+        else
+        {
+            controller = ARAVRInput.Controller.LTouch;
+        }
+
+        hitPointer = Instantiate(hitPointer, transform);
+        lineRenderer = GetComponentInChildren<LineRenderer>();
+
+        lineRenderer.material = laserMaterials[0];
+        lineRenderer.positionCount = 2;
+        lineRenderer.startWidth = 0.005f;
+        lineRenderer.endWidth = 0.015f; 
+    }
+
+    //입력 값에 따라서 값 변경
+    private void ChangeControllerData(out Vector3 startPos, out Vector3 endPos)
+    {
+        Transform gunHead = this.startPos;
+
+        if (handPosition == HandPosition.RIGHT)
+        {
+            //startPos = ARAVRInput.RHandPosition;
+            //endPos = startPos + (ARAVRInput.RHandDirection * LASER_LENGTH);
+            startPos = gunHead.position;
+            endPos = startPos + gunHead.forward * LASER_LENGTH;
             return;
         }
 
         else if (handPosition == HandPosition.LEFT)
         {
-            startPos = ARAVRInput.LHandPosition;
-            endPos = startPos + (ARAVRInput.LHandDirection * LASER_LENGTH);
-            controller = ARAVRInput.Controller.LTouch;
+            //startPos = ARAVRInput.LHandPosition;
+            //endPos = startPos + (ARAVRInput.LHandDirection * LASER_LENGTH);
+            startPos = gunHead.position;
+            endPos = startPos + gunHead.forward * LASER_LENGTH;
             return;
         }
 
@@ -97,12 +134,17 @@ public class LaserPoint : MonoBehaviour
         {
             startPos = transform.position;
             endPos = transform.position;
-            controller = ARAVRInput.Controller.RTouch;
             return;
         }
-
     }
 
+
+    public enum LaserColor : int
+    {
+        IDLE = 0,
+        TARGET,
+        SHOT
+    }
 }
 public enum HandPosition
 {
