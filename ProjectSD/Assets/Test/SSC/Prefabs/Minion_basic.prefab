@@ -424,7 +424,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myAni: {fileID: 7078827637945275491}
-  minionSpeed: 7
+  minionSpeed: 3.5
   isAttack: 0
   attackSpeed: 3
   atkRange: {fileID: 1746182595527324836}

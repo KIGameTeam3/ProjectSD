@@ -22,6 +22,12 @@ public class Bomb : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        Vector3 shoot = GetVelocity(transform.position, target.transform.position, initialAngle);
+        rb.velocity = shoot;
+    }
+
     public Vector3 GetVelocity(Vector3 startPos, Vector3 target, float initialAngle)
     {
         // Unity 현재 프로젝트의 물리적인 중력의 크기를 나타내는 값. 9.81

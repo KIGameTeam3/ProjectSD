@@ -4,8 +4,18 @@ using UnityEngine;
 
 public class MinionBomb : MinionBase
 {
-    protected override void Update()
+    //protected override void Update()
+    //{
+    //    base.Update();
+    //}
+
+    protected override void OnTriggerEnter(Collider other)
     {
-        base.Update();
+        base.OnTriggerEnter(other);
+
+        if (other.CompareTag("DeadZone"))
+        {
+            StartCoroutine(CoolObj(this.gameObject, PoolObjType.MINION_BOMB));
+        }
     }
 }

@@ -29,10 +29,10 @@ public class MinionBasic : MinionBase
                 switch (randAttack)
                 {
                     case 0:
-                        StartCoroutine(LeftAttack());
+                        myAni.SetTrigger("AttackLeft");
                         break;
                     case 1:
-                        StartCoroutine(RightAttack());
+                        myAni.SetTrigger("AttackRight");
                         break;
                 }
 
@@ -41,29 +41,25 @@ public class MinionBasic : MinionBase
 
     }
 
-    IEnumerator LeftAttack()
+    protected override void OnTriggerEnter(Collider other)
     {
-        myAni.SetTrigger("AttackLeft");
-        yield return new WaitForSeconds(1f);
+        base.OnTriggerEnter(other);
 
-        atkRange.enabled = true;
-        atkRange.enabled = false;
-
-        atkReset = false;
-        timeReset = 0f;
-
+        if (other.CompareTag("DeadZone"))
+        {
+            StartCoroutine(CoolObj(this.gameObject, PoolObjType.MINION_BASIC));
+        }
     }
 
-    IEnumerator RightAttack()
+    private void Attack()
     {
-        myAni.SetTrigger("AttackRight");
-        yield return new WaitForSeconds(1.5f);
-
         atkRange.enabled = true;
         atkRange.enabled = false;
+    }
 
+    IEnumerator AttackCooltime()
+    {
+        yield return new WaitForSeconds(1f);
         atkReset = false;
-        timeReset = 0f;
-
     }
 }

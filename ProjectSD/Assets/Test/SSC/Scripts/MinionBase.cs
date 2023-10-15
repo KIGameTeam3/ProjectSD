@@ -15,25 +15,29 @@ public class MinionBase : MonoBehaviour
 
     public float minionSpeed = 5f;
     public bool isAttack = false;
+    private bool isLimit = false;
 
     void Start()
     {
         player = GameObject.FindWithTag("Player").GetComponent<Transform>();
-        target = (player.transform.position - transform.position).normalized;
         myRigid = GetComponent<Rigidbody>();
         distance = Vector3.Distance(transform.position, player.transform.position);
-
     }
 
     // Update is called once per frame
     protected virtual void Update()
     {
-        Debug.Log($"벡터값으로 확인하기 : {player.transform.position - transform.position}");
+        if(isLimit == true)
+        {
+            return;
+        }
         transform.LookAt(player.transform.position);
+        target = (player.transform.position - transform.position).normalized;
 
         if (Vector3.Distance(transform.position, player.transform.position) <= distance * 0.13f)
         {
             myRigid.velocity = Vector3.zero;
+            //myRigid.isKinematic = true;
             isDetected = false;
             myAni.SetBool("isWalk", false);
             isAttack = true;
@@ -47,8 +51,25 @@ public class MinionBase : MonoBehaviour
         }
     }
 
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("DeadZone"))
+        {
+            myRigid.velocity = Vector3.zero;
+            isLimit = true;
+        }
+    }
+
+    protected virtual IEnumerator CoolObj(GameObject obj, PoolObjType type)
+    {
+        yield return new WaitForSeconds(3f);
+
+        ObjectPoolManager.instance.CoolObj(obj, type);
+    }
+
     private void OnEnable()
     {
+        isLimit = false;
         StartCoroutine(DetectedStart());
     }
 
