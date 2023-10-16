@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 5166264765144382459}
   - component: {fileID: 5166264765144382458}
   - component: {fileID: 5166264765144382461}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bomb
-  m_TagString: Untagged
+  m_TagString: HitPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

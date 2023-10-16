@@ -7,7 +7,7 @@ using System.Runtime.ExceptionServices;
 using UnityEditor;
 using UnityEngine;
 
-public class Golem : MonoBehaviour
+public class Golem : MonoBehaviour, IDamage
 {
     // {괴수의 페이즈를 체크할 enum 스테이트
     public enum Phase 
@@ -41,8 +41,8 @@ public class Golem : MonoBehaviour
 
     private Vector3 target = default;
 
-    [SerializeField] private Transform RHand = default;     // 괴수의 원거리공격 투사체 소환 포지션 : 오른손
-    [SerializeField] private Transform LHand = default;     // 괴수의 원거리공격 투사체 소환 포지션 : 왼손
+    [SerializeField] private GameObject RHandBomb = default;     // 괴수의 원거리공격 투사체 소환 포지션 : 오른손
+    [SerializeField] private GameObject LHandBomb = default;     // 괴수의 원거리공격 투사체 소환 포지션 : 왼손
     [SerializeField] private Transform MinionSpawn = default;   // 졸개 소환 위치
 
     // }괴수의 각종 변수
@@ -50,9 +50,8 @@ public class Golem : MonoBehaviour
     private Rigidbody golemRigid = default;     // 괴수의 속력을 입력할 컴포넌트
     private Animator golemAni = default;        // 괴수의 애니메이션을 관리할 컴포넌트
 
-    private IEnumerator throwball = default;    // 괴수의 공격 패턴 중 원거리 공격을 캐싱할 변수
-    private IEnumerator spawnminion = default;  // 괴수의 공격 패턴 중 졸개소환을 캐싱할 변수
-
+    private WaitForSeconds ballThrowcooltime = new WaitForSeconds(3f);
+    private WaitForSeconds minionSpawncooltime = new WaitForSeconds(5f);
     // Start is called before the first frame update
     void Start()
     {
@@ -61,7 +60,7 @@ public class Golem : MonoBehaviour
         golemCheck = Phase.READY;       // 괴수의 시작 스테이트패턴 READY : 유저의 게임 시작 입력 전까지는 대기를 취함
         golemRigid = GetComponent<Rigidbody>();     // 괴수의 리지드바디
         golemAni = GetComponent<Animator>();        // 괴수의 애니메이터
-        currentHp = golemMaxHp;                     //  괴수의 초기 체력은 설정한 Max체력값 
+        Initilize();
 
         target = (player.transform.position - transform.position).normalized;       // 괴수의 진행할 방향을 체크하기 위한 노말라이즈
         firstPos = Vector3.Distance(transform.position, player.transform.position); // 괴수의 초기 위치와 PC의 거리 체크
@@ -93,12 +92,6 @@ public class Golem : MonoBehaviour
     {
         // 괴수는 항상 플레이어를 바라본다.
         transform.LookAt(player.transform.position);
-
-        // TODO : 골렘의 데미지 입히는 메소드 임시 테스트
-        if(Input.GetKeyDown(KeyCode.A))
-        {
-            OnDamageble(10f);
-        }
 
         //  괴수는 라스트페이즈에 진입하면 PC를 향해 멈추지않고 다가오게 된다.
         if (golemCheck == Phase.PHASE_LAST)
@@ -152,10 +145,6 @@ public class Golem : MonoBehaviour
 
     IEnumerator Phase1()
     {
-        // 페이즈 진입에 따른 공격 코루틴들 캐싱
-        throwball = ThrowBall();        // 원거리공격 코루틴 캐싱
-        spawnminion = SpawnMinion();    // 졸개소환 코루틴 캐싱
-
         // 1페이즈 제한시간을 체크할 타이머
         float phaseTimer = 0f;
 
@@ -167,6 +156,7 @@ public class Golem : MonoBehaviour
             // 어느 한 공격이 진행중이라면 다른 공격 코루틴 진입을 못하게 불값으로 체크
             if (isAttack == false)
             {
+                isAttack = true;
                 // 2가지 공격패턴중 랜덤한 공격 패턴을 선정하기 위한 랜덤값
                 int Attack = Random.Range(0, 2);
 
@@ -175,17 +165,12 @@ public class Golem : MonoBehaviour
                 {
                     // 원거리 공격 진입
                     case 0:
-                        StartCoroutine(throwball);
-                        Attack = 2;     // TODO : 초기 로그 테스트중 코루틴 진입을 프레임별로 호출하는 때가 생김
-                                        // 본 설계자의 생각에는 코루틴 내에서 Attack 랜덤 레인지값이 초기화가 안된 상태로
-                                        // 공격 코루틴이 끝난 시점에서 While문의 호출당 초기화 안된 랜덤레인지 값을 호출하는듯해서
-                                        // 공격패턴을 제외한 임의의 정수값을 넣어서 방지해뒀음.
+                        ThrowBallStart();
                         break;
 
                     // 졸개 소환 진입
                     case 1:
-                        StartCoroutine(spawnminion);
-                        Attack = 2;
+                        golemAni.SetTrigger("SpawnMinion");
                         break;
                 }
 
@@ -197,17 +182,11 @@ public class Golem : MonoBehaviour
 
 
         // { 2페이즈 돌입을 위한 현재 동작들 정지
-        StopCoroutine(throwball);           // 진행 중이던 원거리 공격 코루틴 정지
-        StopCoroutine(spawnminion);         // 진행 중이던 졸개소환 코루틴 정지
-        throwball = ThrowBall();            // 원거리 공격 코루틴 초기화
-        spawnminion = SpawnMinion();        // 졸개 소환 코루틴 초기화
         isAttack = false;                   // 공격 행동상태 체크 불값 초기화
         golemAni.SetTrigger("isAttackStop");
         // } 2페이즈 돌입을 위한 현재 동작들 정지
 
-
         golemAni.SetBool("isWalk", true);
-
 
         // { 1페이즈가 끝난 시점에서 2페이즈로 넘어가는 상태를 체크중
         while (golemCheck == Phase.PHASE_1)
@@ -246,17 +225,17 @@ public class Golem : MonoBehaviour
             // { 상단에 기술한 1페이즈 공격패턴과 동일한 동작
             if (isAttack == false)
             {
+                isAttack = true;
+
                 int Attack = Random.Range(0, 2);
 
                 switch (Attack)
                 {
                     case 0:
-                        StartCoroutine(throwball);
-                        Attack = 2;
+                        ThrowBallStart();
                         break;
                     case 1:
-                        StartCoroutine(spawnminion);
-                        Attack = 2;
+                        golemAni.SetTrigger("SpawnMinion");
                         break;
                 }
 
@@ -274,36 +253,17 @@ public class Golem : MonoBehaviour
         // 라스트 페이즈는 업데이트상에서 플레이어를 향해 등속운동 하는것으로 동작함
         // { 라스트 페이즈 진입
         golemCheck = Phase.PHASE_LAST;
-        StopCoroutine(throwball);
-        StopCoroutine(spawnminion);
         golemAni.SetBool("isWalk", true);
         golemAni.SetTrigger("isAttackStop");
         // } 라스트 페이즈 진입
     }
 
-    // 원거리 공격 코루틴
-    IEnumerator ThrowBall()
+    private void ThrowBallStart()
     {
         // 원거리 공격 중 왼팔,오른팔을 정할 랜덤값
         int attackPos = Random.Range(0, 2);
 
-        // 코루틴 진행 중 다른 공격행동 진입을 방지하기 위한 불값 변경
-        isAttack = true;
-
         // { 오브젝트풀링 및 투사체의 포물선 운동에 접근하기 위한 각 장치
-        GameObject obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.BOMB);       // 풀링 오브젝트 호출
-        Bomb objBomb = null;            // 투사체의 포물선 운동이 입력된 Cs 캐싱
-        Rigidbody objRigid = null;      // 투사체의 포물선 운동을 위한 Rigidbody 컴포넌트 캐싱
-        Vector3 shoot = Vector3.zero;   // 투사체의 포물선 운동값을 캐싱할 변수
-
-        // 호출한 오브젝트가 입력 되었다면 각 컴포넌트 가져오기
-        if(obj != null)
-        {
-            objBomb = obj.GetComponent<Bomb>();
-            objRigid = obj.GetComponent<Rigidbody>();
-
-        }
-        // }오브젝트풀링 및 투사체의 포물선 운동에 접근하기 위한 각 장치
 
         // 랜덤값에 의한 왼팔, 오른팔 동작 스위치문
         switch (attackPos)
@@ -311,61 +271,48 @@ public class Golem : MonoBehaviour
             // 0이 입력되면 왼팔
             case 0:
                 golemAni.SetTrigger("isLeftAttack");                // 왼팔 애니메이터 동작
-                obj.transform.position = LHand.transform.position;  // 왼손 위치에 투사체 소환
-                obj.transform.parent = LHand.transform;             // 애니메이션에 따른 오브젝트 이동을 위해 잠시 왼손에 종속
-                obj.SetActive(true);                                // 소환된 투사체 활성화
-
-                yield return new WaitForSeconds(0.95f);     // 왼손이 내지르는데 걸리는 시간
-
-                obj.transform.parent = null;                // 왼손을 내지르면 투사체 종속 해제
-
-                // { 투사체의 포물선 운동 동작
-                shoot = objBomb.GetVelocity(obj.transform.position, player.transform.position, 30f);
-                objRigid.velocity = shoot;
-                // } 투사체의 포물선 운동 동작
+                LHandBomb.SetActive(true);
                 break;
 
             // 1이 입력되면 오른팔
             case 1:
-            golemAni.SetTrigger("isRightAttack");                   // 오른팔 애니메이터 동작
-                obj.transform.position = RHand.transform.position;  // 오른손 위치에 투사체 소환
-                obj.transform.parent = RHand.transform;             // 애니메이션에 따른 오브젝트 이동을 위해 잠시 오른손에 종속
-                obj.SetActive(true);                                // 소환된 투사체 활성화
-
-                yield return new WaitForSeconds(1.5f);      // 오른손이 내지르는데 걸리는 시간
-
-                obj.transform.parent = null;                // 오른손을 내지르면 투사체 종속 해제
-
-                // { 투사체의 포물선 운동 동작
-                shoot = objBomb.GetVelocity(obj.transform.position, player.transform.position, 30f);
-                objRigid.velocity = shoot;
-                // } 투사체의 포물선 운동 동작
+                golemAni.SetTrigger("isRightAttack");                   // 오른팔 애니메이터 동작=
+                RHandBomb.SetActive(true);
                 break;
+            
         }
 
-        // 원거리 공격의 쿨타임
-        yield return new WaitForSeconds(5f);
-
-        // 쿨타임이 끝나면 공격행동 재진입을 위해 불값 초기화
-        isAttack = false;
-
-        // 원거리 공격 코루틴 재진입을 위해 코루틴 초기화
-        throwball = ThrowBall();
     }
 
-    IEnumerator SpawnMinion()
+    private void FireLeft()
     {
-        isAttack = true;
+        GameObject obj = null;
+        obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.BOMB);
+        obj.transform.position = LHandBomb.transform.position;
+        obj.SetActive(true);
+        LHandBomb.SetActive(false);
+    }
 
+    private void FireRight()
+    {
+        GameObject obj = null;
+        obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.BOMB);
+        obj.transform.position = RHandBomb.transform.position;
+        obj.SetActive(true);
+        RHandBomb.SetActive(false);
+    }
+
+    private void SpawnMinion()
+    {
         Vector3 spawnPoint = Vector3.zero;
 
         GameObject minion = null;
 
-        for(int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++)
         {
-            int randomMinion = Random.Range(0,2);
+            int randomMinion = Random.Range(0, 2);
 
-            switch(randomMinion)
+            switch (randomMinion)
             {
                 case 0:
                     minion = ObjectPoolManager.instance.GetPoolObj(PoolObjType.MINION_BASIC);
@@ -383,14 +330,24 @@ public class Golem : MonoBehaviour
             minion.SetActive(true);
 
         }
-
-        yield return new WaitForSeconds(5f);
-
-        isAttack = false;
-        spawnminion = SpawnMinion();
     }
 
-    private void OnDamageble(float damage)
+    // 공격애니메이션이 끝나고 지정할 대기 시간
+    IEnumerator FireCooltime()
+    {
+        yield return ballThrowcooltime;
+        isAttack = false;
+    }
+
+    IEnumerator MinionCollTime()
+    {
+        yield return minionSpawncooltime;
+        isAttack = false;
+    }
+
+    // 괴수에게 데미지를 입히는 메소드
+    // TODO : 다른 클라이언트들의 공격체에 괴수 접촉시 Golem 스크립트를 가져와서 해당 메소드를 실행 요청
+    public void DamageAble(float damage)
     {
         currentHp -= damage;
 
@@ -399,6 +356,122 @@ public class Golem : MonoBehaviour
         {
             StopAllCoroutines();
             golemCheck = Phase.GAMEOVER;
+            golemAni.SetTrigger("isAttackStop");
         }
+        
     }
+
+    public void Initilize()
+    {
+         currentHp = golemMaxHp;                     //  괴수의 초기 체력은 설정한 Max체력값 
+    }
+
+    // LEGACY : 개발일지에 쓰일 공격패턴 애니메이션 설정 오류부분 (애니메이션 이벤트가 아닌 코루틴으로 접근하려 했음)
+
+    //// 원거리 공격 코루틴
+    //IEnumerator ThrowBall()
+    //{
+    //    // 원거리 공격 중 왼팔,오른팔을 정할 랜덤값
+    //    int attackPos = Random.Range(0, 2);
+
+    //    // 코루틴 진행 중 다른 공격행동 진입을 방지하기 위한 불값 변경
+    //    isAttack = true;
+
+    //    // { 오브젝트풀링 및 투사체의 포물선 운동에 접근하기 위한 각 장치
+    //    GameObject obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.BOMB);       // 풀링 오브젝트 호출
+    //    Bomb objBomb = null;            // 투사체의 포물선 운동이 입력된 Cs 캐싱
+    //    Rigidbody objRigid = null;      // 투사체의 포물선 운동을 위한 Rigidbody 컴포넌트 캐싱
+    //    Vector3 shoot = Vector3.zero;   // 투사체의 포물선 운동값을 캐싱할 변수
+
+    //    // 호출한 오브젝트가 입력 되었다면 각 컴포넌트 가져오기
+    //    if(obj != null)
+    //    {
+    //        objBomb = obj.GetComponent<Bomb>();
+    //        objRigid = obj.GetComponent<Rigidbody>();
+
+    //    }
+    //    // }오브젝트풀링 및 투사체의 포물선 운동에 접근하기 위한 각 장치
+
+    //    // 랜덤값에 의한 왼팔, 오른팔 동작 스위치문
+    //    switch (attackPos)
+    //    {
+    //        // 0이 입력되면 왼팔
+    //        case 0:
+    //            golemAni.SetTrigger("isLeftAttack");                // 왼팔 애니메이터 동작
+    //            obj.transform.position = LHand.transform.position;  // 왼손 위치에 투사체 소환
+    //            obj.transform.parent = LHand.transform;             // 애니메이션에 따른 오브젝트 이동을 위해 잠시 왼손에 종속
+    //            obj.SetActive(true);                                // 소환된 투사체 활성화
+
+    //            yield return new WaitForSeconds(0.95f);     // 왼손이 내지르는데 걸리는 시간
+
+    //            obj.transform.parent = null;                // 왼손을 내지르면 투사체 종속 해제
+
+    //            // { 투사체의 포물선 운동 동작
+    //            shoot = objBomb.GetVelocity(obj.transform.position, player.transform.position, 30f);
+    //            objRigid.velocity = shoot;
+    //            // } 투사체의 포물선 운동 동작
+    //            break;
+
+    //        // 1이 입력되면 오른팔
+    //        case 1:
+    //        golemAni.SetTrigger("isRightAttack");                   // 오른팔 애니메이터 동작
+    //            obj.transform.position = RHand.transform.position;  // 오른손 위치에 투사체 소환
+    //            obj.transform.parent = RHand.transform;             // 애니메이션에 따른 오브젝트 이동을 위해 잠시 오른손에 종속
+    //            obj.SetActive(true);                                // 소환된 투사체 활성화
+
+    //            yield return new WaitForSeconds(1.5f);      // 오른손이 내지르는데 걸리는 시간
+
+    //            obj.transform.parent = null;                // 오른손을 내지르면 투사체 종속 해제
+
+    //            // { 투사체의 포물선 운동 동작
+    //            shoot = objBomb.GetVelocity(obj.transform.position, player.transform.position, 30f);
+    //            objRigid.velocity = shoot;
+    //            // } 투사체의 포물선 운동 동작
+    //            break;
+    //    }
+
+    //    // 원거리 공격의 쿨타임
+    //    yield return new WaitForSeconds(5f);
+
+    //    // 쿨타임이 끝나면 공격행동 재진입을 위해 불값 초기화
+    //    isAttack = false;
+
+    //    // 원거리 공격 코루틴 재진입을 위해 코루틴 초기화
+    //    throwball = ThrowBall();
+    //}
+
+    //IEnumerator SpawnMinion22()
+    //{
+    //    Vector3 spawnPoint = Vector3.zero;
+
+    //    GameObject minion = null;
+
+    //    for(int i = 0; i < 10; i++)
+    //    {
+    //        int randomMinion = Random.Range(0,2);
+
+    //        switch(randomMinion)
+    //        {
+    //            case 0:
+    //                minion = ObjectPoolManager.instance.GetPoolObj(PoolObjType.MINION_BASIC);
+    //                break;
+    //            case 1:
+    //                minion = ObjectPoolManager.instance.GetPoolObj(PoolObjType.MINION_BOMB);
+    //                break;
+    //        }
+
+    //        spawnPoint.x = MinionSpawn.transform.position.x + Random.Range(-20f, 20f);
+    //        spawnPoint.z = MinionSpawn.transform.position.z + Random.Range(-3f, -1f);
+    //        spawnPoint.y = MinionSpawn.transform.position.y;
+
+    //        minion.transform.position = spawnPoint;
+    //        minion.SetActive(true);
+
+    //    }
+
+    //    yield return new WaitForSeconds(5f);
+
+    //    isAttack = false;
+    //}
+
 }
