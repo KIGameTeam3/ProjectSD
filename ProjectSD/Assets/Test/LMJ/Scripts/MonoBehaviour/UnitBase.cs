@@ -13,15 +13,14 @@ public class UnitBase : MonoBehaviour
     public GameObject bulletPrefab;     // 생성할 bullet 프리팹
     public float spawnRate = 2.0f;      // bullet 생성 주기
     private float timeAfterSpawn = default;   // 최근 생성 시점에서 지난 시간
-    public Transform target = default;
+    private Transform target = default;
     #endregion
 
 
     private void Start()
     {
         timeAfterSpawn = 0f;    // 생성 시간 초기화
-        target = GameObject.FindObjectOfType<playerTest>().transform;    // player 태그를 가진 오브젝트 찾아 타겟으로 설정
-        Debug.Log(target.name);
+        target = GameObject.FindWithTag("Player").transform;    // player 태그를 가진 오브젝트 찾아 타겟으로 설정
     }
 
     private void Update()
