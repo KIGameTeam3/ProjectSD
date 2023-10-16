@@ -50,7 +50,10 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         currentGold += firstGold;
-        goldText.text = currentGold.ToString(); // 텍스트에 현재 재화 할당
+        if (goldText != null)
+        {
+            goldText.text = currentGold.ToString(); // 텍스트에 현재 재화 할당
+        }
     }
 
     // [이미정] 231013 초당 재화 증가
@@ -59,14 +62,17 @@ public class GameManager : MonoBehaviour
         // 매 프레임마다 deltaTime 값을 누적
         timeSinceLastUpdate += Time.deltaTime;
 
+        // 추후 coroutine으로 변경 + 게임 시작 조건 추가
         // 설정한 간격(updateInterval)이 경과하면 변수를 증가시키고 timeSinceLastUpdate를 재설정
         if (timeSinceLastUpdate >= updateInterval)
         {
             currentGold += 10;
             Debug.Log("골드 값 증가: " + currentGold);
             timeSinceLastUpdate = 0.0f; // 재설정
-
-            goldText.text = currentGold.ToString();
+            if (goldText != null)
+            {
+                goldText.text = currentGold.ToString(); // 텍스트에 현재 재화 할당
+            }
         }
     }
 
@@ -75,7 +81,10 @@ public class GameManager : MonoBehaviour
     {
         currentGold -= unitPrice;
         Debug.Log("유닛 구매: " + currentGold);
-        goldText.text = currentGold.ToString();
+        if (goldText != null)
+        {
+            goldText.text = currentGold.ToString(); // 텍스트에 현재 재화 할당
+        }
     }
 
     // [이미정] 231013 재화 추가 버튼 누를 시
@@ -83,7 +92,10 @@ public class GameManager : MonoBehaviour
     {
         currentGold += 50;
         Debug.Log("골드 50추가");
-        goldText.text = currentGold.ToString();
+        if (goldText != null)
+        {
+            goldText.text = currentGold.ToString(); // 텍스트에 현재 재화 할당
+        }
     }
 
     //플레이 타임 불러오기
