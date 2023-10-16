@@ -83,6 +83,7 @@ public class GunBase : MonoBehaviour
 
     private void AttackReaction()
     {
+        ARAVRInput.PlayVibration(controller);
         gunAudioSource.Play();
         gunParticle.Play();
     }
