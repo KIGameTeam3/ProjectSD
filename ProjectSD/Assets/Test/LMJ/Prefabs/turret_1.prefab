@@ -42,7 +42,7 @@ SphereCollider:
   m_GameObject: {fileID: 1203774801076989810}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.03
   m_Center: {x: 0, y: 0, z: 0}
@@ -103,7 +103,7 @@ SphereCollider:
   m_GameObject: {fileID: 1230482318157915976}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.03
   m_Center: {x: 0, y: 0, z: 0}
@@ -552,9 +552,10 @@ GameObject:
   - component: {fileID: 1869866671135521870}
   - component: {fileID: 1869866671142409124}
   - component: {fileID: 428191351591645650}
-  m_Layer: 0
+  - component: {fileID: 8886337974404402339}
+  m_Layer: 13
   m_Name: turret_1
-  m_TagString: Untagged
+  m_TagString: Unit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -611,4 +612,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitData: {fileID: 11400000, guid: cc0aa6f46707c7c44bfe4d2fd3659d46, type: 2}
-  bulletSpawners: []
+--- !u!135 &8886337974404402339
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869866671135023214}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}

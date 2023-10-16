@@ -79,7 +79,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Unit_Yellow
+  m_Text: Unit_Name
 --- !u!1 &6130985322194465179
 GameObject:
   m_ObjectHideFlags: 0
@@ -217,6 +217,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitPrefab: {fileID: 6972977184947606605, guid: 1d508257f71540044ba5bd808d568645, type: 3}
+  _price: {fileID: 0}
+  _name: {fileID: 0}
   gameManager: {fileID: 0}
 --- !u!1 &6130985323041878636
 GameObject:
@@ -297,4 +299,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Gold
+  m_Text: Price
