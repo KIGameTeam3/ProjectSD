@@ -20,12 +20,6 @@ public class MinionBasic : MinionBase, IDamage
     {
         base.Update();
 
-        // TODO : 골렘의 데미지 입히는 메소드 임시 테스트
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            DamageAble(10f);
-        }
-
         // 부모클래스상에서 추적을 멈추고 공격범위에 들어섰다면
         if (isAttack == true)
         {

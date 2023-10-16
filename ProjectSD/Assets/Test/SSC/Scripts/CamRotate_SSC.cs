@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class CamRotate_SSC : MonoBehaviour
 {
-    // ÇöÀç°¢µµ
+    // í˜„ì¬ê°ë„
     Vector3 angle;
-    // ¸¶¿ì½º°¨µµ
+    // ë§ˆìš°ìŠ¤ê°ë„
     public float sensitivity = 200;
 
     void Start()
     {
-        // ½ÃÀÛÇÒ¶§ ÇöÀç Ä«¸Ş¶óÀÇ °¢µµ¸¦ Àû¿ëÇÑ´Ù.
+        // ì‹œì‘í• ë•Œ í˜„ì¬ ì¹´ë©”ë¼ì˜ ê°ë„ë¥¼ ì ìš©í•œë‹¤.
         angle.y = -Camera.main.transform.eulerAngles.x;
         angle.x = Camera.main.transform.eulerAngles.y;
         angle.z = Camera.main.transform.eulerAngles.z;
@@ -19,20 +19,20 @@ public class CamRotate_SSC : MonoBehaviour
 
     void Update()
     {
-        // ¸¶¿ì½º ÀÔ·Â¿¡ µû¶ó Ä«¸Ş¶ó¸¦ È¸Àü ½ÃÅ°°í ½Í´Ù.
-        // 1. »ç¿ëÀÚÀÇ ¸¶¿ì½º ÀÔ·ÂÀ» ¾ò¾î¿Í¾ß ÇÑ´Ù.
-        // ¸¶¿ì½ºÀÇ ÁÂ¿ì ÀÔ·ÂÀ» ¹Ş´Â´Ù.
+        // ë§ˆìš°ìŠ¤ ì…ë ¥ì— ë”°ë¼ ì¹´ë©”ë¼ë¥¼ íšŒì „ ì‹œí‚¤ê³  ì‹¶ë‹¤.
+        // 1. ì‚¬ìš©ìì˜ ë§ˆìš°ìŠ¤ ì…ë ¥ì„ ì–»ì–´ì™€ì•¼ í•œë‹¤.
+        // ë§ˆìš°ìŠ¤ì˜ ì¢Œìš° ì…ë ¥ì„ ë°›ëŠ”ë‹¤.
         float x = Input.GetAxis("Mouse X");
         float y = Input.GetAxis("Mouse Y");
 
-        // 2. ¹æÇâÀÌ ÇÊ¿äÇÏ´Ù.
-        // ÀÌµ¿ °ø½Ä¿¡ ´ëÀÔÇÏ¿© °¢ ¼Ó¼ºº°·Î È¸Àü °ªÀ» ´©Àû ½ÃÅ²´Ù.
+        // 2. ë°©í–¥ì´ í•„ìš”í•˜ë‹¤.
+        // ì´ë™ ê³µì‹ì— ëŒ€ì…í•˜ì—¬ ê° ì†ì„±ë³„ë¡œ íšŒì „ ê°’ì„ ëˆ„ì  ì‹œí‚¨ë‹¤.
         angle.x += x * sensitivity * Time.deltaTime;
         angle.y += y * sensitivity * Time.deltaTime;
 
         angle.y = Mathf.Clamp(angle.y, -90, 90);
-        // 3. È¸Àü ½ÃÅ°°í ½Í´Ù.
-        // Ä«¸Ş¶óÀÇ È¸Àü°ª¿¡ »õ·Î ¸¸µé¾îÁø È¸Àü °ªÀ» ÇÒ´çÇÑ´Ù.
+        // 3. íšŒì „ ì‹œí‚¤ê³  ì‹¶ë‹¤.
+        // ì¹´ë©”ë¼ì˜ íšŒì „ê°’ì— ìƒˆë¡œ ë§Œë“¤ì–´ì§„ íšŒì „ ê°’ì„ í• ë‹¹í•œë‹¤.
         transform.eulerAngles = new Vector3(-angle.y, angle.x, transform.eulerAngles.z);
     }
 }
