@@ -15,3 +15,5 @@ MonoBehaviour:
   unitName: Unit 2
   unitPrice: 200
   unitPower: 200
+  unitLifeTime: 10
+  bulletPointNum: 1

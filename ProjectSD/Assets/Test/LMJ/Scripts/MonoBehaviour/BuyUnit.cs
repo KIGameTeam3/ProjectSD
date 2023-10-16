@@ -10,10 +10,11 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     #region 유닛 변수
     public UnitBase unitPrefab;   // 생성할 유닛 프리팹
     private GameObject unitObj;  // 드래그 중인 유닛을 저장할 변수
-    private float unitDestroy = 7f; // 유닛 파괴 시간
+    private float unitDestroy = default; // 유닛 파괴 시간
     private Vector3 mousePosition = default;
     private Vector3 unitPosition = default;
-    private int unitPrice = 200;    // 유닛 가격
+    private int price = default;    // 유닛 가격
+    public bool installable = false;
     #endregion
 
     #region 구매
@@ -25,9 +26,10 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
 
     public void Start()
     {
-
-        //_name.text = unitPrefab.UnitData.unitName;
-        //_price.text = unitPrefab.unitPrice.ToString();
+        _name.text = unitPrefab.GetComponent<UnitBase>().unitData.unitName;
+        _price.text = unitPrefab.GetComponent<UnitBase>().unitData.unitPrice.ToString();
+        price = unitPrefab.GetComponent<UnitBase>().unitData.unitPrice;
+        unitDestroy = unitPrefab.GetComponent<UnitBase>().unitData.unitLifeTime;
     }
 
     public void OnPointerDown(PointerEventData eventData)   // 버튼을 눌렀을 때
@@ -36,7 +38,7 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         {
             ScreentoWorld();
 
-            gameManager.GetComponent<GameManager>().SubtractGold(unitPrice);    // 재화 소모 메서드 호출
+            gameManager.GetComponent<GameManager>().SubtractGold(price);    // 재화 소모 메서드 호출
 
             // 유닛을 생성
             unitObj = Instantiate(unitPrefab.gameObject, unitPosition, Quaternion.identity);
