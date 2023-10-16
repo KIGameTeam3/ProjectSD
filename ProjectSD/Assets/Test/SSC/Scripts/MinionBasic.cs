@@ -4,35 +4,50 @@ using UnityEditor.TextCore.Text;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
-public class MinionBasic : MinionBase
+public class MinionBasic : MinionBase, IDamage
 {
-    public float attackSpeed = 3f;
-    private float timeReset = 0f;
-    private bool atkReset = false;
+    public float attackSpeed = 1f;              // 일반졸개 근접공격 시작 타이머
+    private float timeReset = 0f;               // 근접공격 시작 체크값
+    private bool atkReset = false;              // 근접공격 업데이트 반복호출 방지용 불값
+    public float maxHp = 30f;                   // 일반졸개 체력 세팅값
+    public float currentHp = default;           // 일반졸개 현재 체력 체크
 
-    [SerializeField] private BoxCollider atkRange;
 
+    private WaitForSeconds atkcoolTime = new WaitForSeconds(1f);    // 공격 실행시 쿨타임
+    [SerializeField] private BoxCollider atkRange;      // 일반졸개 근접공격 콜라이더
 
     protected override void Update()
     {
         base.Update();
 
+        // TODO : 골렘의 데미지 입히는 메소드 임시 테스트
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            DamageAble(10f);
+        }
+
+        // 부모클래스상에서 추적을 멈추고 공격범위에 들어섰다면
         if (isAttack == true)
         {
+            // 공격 시간 누적
             timeReset += Time.deltaTime;
 
+            // 시간 누적치가 도달했다면 
             if (attackSpeed <= timeReset && atkReset == false)
             {
+                // 업데이트상 공격 반복 호출 방지용
                 atkReset = true;
+
+                // 애니메이션 선택
                 int randAttack = Random.Range(0, 2);
 
                 switch (randAttack)
                 {
                     case 0:
-                        StartCoroutine(LeftAttack());
+                        myAni.SetTrigger("AttackLeft");
                         break;
                     case 1:
-                        StartCoroutine(RightAttack());
+                        myAni.SetTrigger("AttackRight");
                         break;
                 }
 
@@ -41,29 +56,54 @@ public class MinionBasic : MinionBase
 
     }
 
-    IEnumerator LeftAttack()
+    protected override void OnTriggerEnter(Collider other)
     {
-        myAni.SetTrigger("AttackLeft");
-        yield return new WaitForSeconds(1f);
+        base.OnTriggerEnter(other);
 
-        atkRange.enabled = true;
-        atkRange.enabled = false;
-
-        atkReset = false;
-        timeReset = 0f;
-
+        // DeadZone(절벽 뒤) 트리거시 오브젝트 풀 반환
+        if (other.CompareTag("DeadZone"))
+        {
+            StartCoroutine(CoolObj(this.gameObject, PoolObjType.MINION_BASIC));
+        }
     }
 
-    IEnumerator RightAttack()
+    // 풀링오브젝트 반환에 의한 활성화시 초기 체력 세팅
+    protected override void OnEnable()
     {
-        myAni.SetTrigger("AttackRight");
-        yield return new WaitForSeconds(1.5f);
+        base.OnEnable();
+        Initilize();
+    }
 
+    // 애니메이션 이벤트 호출 메소드 (공격 발생)
+    private void Attack()
+    {
+        // 팔을 휘두르는 모션이 나오면 근접공격 콜라이더를 활성화, 비활성화
         atkRange.enabled = true;
         atkRange.enabled = false;
-
-        atkReset = false;
-        timeReset = 0f;
-
     }
+
+    // 애니메이션 이벤트 호출 메소드 (공격이 끝난 뒤)
+    IEnumerator AttackCooltime()
+    {
+        yield return atkcoolTime;
+        // 공격 재진입을 위해 불값 초기화
+        atkReset = false;
+    }
+
+    // { IDamage 인터페이스 
+    public void DamageAble(float damage)
+    {
+        currentHp -= damage;
+
+        if (currentHp <= 0)
+        {
+            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BASIC);
+        }
+    }
+
+    public void Initilize()
+    {
+        currentHp = maxHp;
+    }
+    // } IDamage 인터페이스 
 }
