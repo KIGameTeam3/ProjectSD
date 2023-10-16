@@ -19,4 +19,4 @@ MonoBehaviour:
   bulletSpeed: 50
   criticalChance: 1.5
   criticalMultiple: 1.5
-  lifeTime: 0
+  lifeTime: 5
