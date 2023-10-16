@@ -9,6 +9,8 @@ public class GunBase : MonoBehaviour
     public HandPosition handPosition;
     public LaserPoint point;
 
+    private AudioSource gunAudioSource;
+    private ParticleSystem gunParticle;
     private ARAVRInput.Controller controller;
     private bool isEnhance = false;
     private bool canShot = true;
@@ -22,32 +24,14 @@ public class GunBase : MonoBehaviour
     {
         if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, controller) && canShot)
         {
-            GunBulletBase currBullet;
-            if (!isEnhance)
-            {
-                currBullet = Instantiate(defaultBullet, point.startPos.position, Quaternion.identity);
-            }
-            else
-            {
-                currBullet = Instantiate(enhanceBullet, point.startPos.position, Quaternion.identity);
-            }
-
-
-            if (handPosition == HandPosition.RIGHT)
-            {
-                currBullet.Move(ARAVRInput.RHandDirection);
-            }
-            else
-            {
-                currBullet.Move(ARAVRInput.LHandDirection);
-            }
-
-            StartCoroutine(GunDelayRoutine(currBullet.GetRate()));
+            Shot();
         }
     }
 
-    void Init()
+    private void Init()
     {
+        gunAudioSource = GetComponent<AudioSource>();
+        gunParticle = GetComponent<ParticleSystem>();
 
         if (handPosition == HandPosition.RIGHT)
         {
@@ -59,7 +43,41 @@ public class GunBase : MonoBehaviour
         }
     }
 
-    IEnumerator GunDelayRoutine(float time)
+    private void Shot()
+    {
+        GunBulletBase currBullet;
+        Vector3 direction;
+        if (handPosition == HandPosition.RIGHT)
+        {
+            direction = ARAVRInput.RHandDirection;
+        }
+        else
+        {
+            direction = ARAVRInput.LHandDirection;
+        }
+
+        if (!isEnhance)
+        {
+            currBullet = Instantiate(defaultBullet, point.startPos.position, Quaternion.identity);
+        }
+        else
+        {
+            currBullet = Instantiate(enhanceBullet, point.startPos.position, Quaternion.identity);
+        }
+        currBullet.transform.up = direction;
+        currBullet.Move(direction);
+        AttackReaction();
+
+        StartCoroutine(GunDelayRoutine(currBullet.GetRate()));
+    }
+
+    private void AttackReaction()
+    {
+        gunAudioSource.Play();
+        gunParticle.Play();
+    }
+
+    public IEnumerator GunDelayRoutine(float time)
     {
         canShot = false;
         yield return new WaitForSeconds(time);

@@ -7,6 +7,6 @@ public class PlayerBase : MonoBehaviour
 
     public LaserPoint[] gun;
 
-    public GunBulletBase bullet;
+
 
 }

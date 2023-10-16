@@ -12,8 +12,10 @@ public class GunBulletStatus : ScriptableObject
     public float bulletDamage;
     public float bulletSpeed;
 
-    public float criticalChance;
-    public float criticalMultiple;
+    //public float criticalChance;
+    //public float criticalMultiple;
+
+    public float criticalRate;
 
     public float lifeTime;
 
