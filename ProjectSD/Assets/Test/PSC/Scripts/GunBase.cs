@@ -22,7 +22,16 @@ public class GunBase : MonoBehaviour
 
     private void Update()
     {
-        if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, controller) && canShot)
+        if (ARAVRInput.GetDown(ARAVRInput.Button.One))
+        {
+            ChangeWeaponMode(true);
+        }
+        else if (ARAVRInput.GetUp(ARAVRInput.Button.One))
+        {
+            ChangeWeaponMode(false);
+        }
+
+        if ((ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, controller) || ARAVRInput.Get(ARAVRInput.Button.IndexTrigger, controller)) && canShot)
         {
             Shot();
         }
@@ -64,6 +73,7 @@ public class GunBase : MonoBehaviour
         {
             currBullet = Instantiate(enhanceBullet, point.startPos.position, Quaternion.identity);
         }
+
         currBullet.transform.up = direction;
         currBullet.Move(direction);
         AttackReaction();
@@ -77,11 +87,16 @@ public class GunBase : MonoBehaviour
         gunParticle.Play();
     }
 
-    public IEnumerator GunDelayRoutine(float time)
+    private IEnumerator GunDelayRoutine(float time)
     {
         canShot = false;
         yield return new WaitForSeconds(time);
         canShot = true;
+    }
+
+    public void ChangeWeaponMode(bool enable)
+    {
+        isEnhance = enable;
     }
 
 }
