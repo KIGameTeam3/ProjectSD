@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9170549326604801417}
   - component: {fileID: 7686868762917516657}
-  - component: {fileID: 2096213446873753456}
   m_Layer: 0
   m_Name: BulletPoint
   m_TagString: Untagged
@@ -46,21 +45,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.03
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2096213446873753456
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1203774801076989810}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f0ef76ca3050254ba66d11c98224de3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unitActive: 0
-  bulletPrefab: {fileID: 4344226775905457457, guid: e51fe7cf5e436a6429f8d561aee97ccf, type: 3}
-  spawnRate: 5
 --- !u!1 &1230482318157915976
 GameObject:
   m_ObjectHideFlags: 0
@@ -71,7 +55,6 @@ GameObject:
   m_Component:
   - component: {fileID: 69880317945188751}
   - component: {fileID: 7646508438011062533}
-  - component: {fileID: 1263750956635955995}
   m_Layer: 0
   m_Name: BulletPoint
   m_TagString: Untagged
@@ -107,21 +90,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.03
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1263750956635955995
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1230482318157915976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f0ef76ca3050254ba66d11c98224de3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unitActive: 0
-  bulletPrefab: {fileID: 4344226775905457457, guid: e51fe7cf5e436a6429f8d561aee97ccf, type: 3}
-  spawnRate: 5
 --- !u!1 &1869866671135023200
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,7 +199,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1869866671135023202}
   m_LocalRotation: {x: 1.110223e-16, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.000000014901161, y: 0.6128496, z: 0.0000000031433096}
+  m_LocalPosition: {x: 0, y: 0.6128496, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -240,7 +208,7 @@ Transform:
   - {fileID: 1869866671135521856}
   - {fileID: 69880317945188751}
   m_Father: {fileID: 1869866671135521870}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1869866671136291938
 MeshFilter:
@@ -323,7 +291,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1869866671135521870}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1869866671136291940
 MeshFilter:
@@ -572,8 +540,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1869866671135521860}
   - {fileID: 1869866671135521858}
+  - {fileID: 1869866671135521860}
   - {fileID: 1869866671135521868}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -612,6 +580,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitData: {fileID: 11400000, guid: cc0aa6f46707c7c44bfe4d2fd3659d46, type: 2}
+  unitHead: {fileID: 1869866671135023202}
+  bulletPoints:
+  - {fileID: 1203774801076989810}
+  - {fileID: 1230482318157915976}
+  bulletPrefab: {fileID: 4344226775905457457, guid: e51fe7cf5e436a6429f8d561aee97ccf, type: 3}
+  spawnRate: 2
 --- !u!135 &8886337974404402339
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -6,6 +6,8 @@ TagManager:
   tags:
   - UnitBtn
   - Unit
+  - HitPoint
+  - Ground
   layers:
   - Default
   - TransparentFX
