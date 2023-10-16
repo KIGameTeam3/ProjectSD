@@ -14,12 +14,6 @@ public class MinionBomb : MinionBase, IDamage
     {
         base.Update();
 
-        // TODO : 골렘의 데미지 입히는 메소드 임시 테스트
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            DamageAble(10f);
-        }
-
         if(isAttack == true)
         {
             timeReset += Time.deltaTime;
@@ -77,7 +71,23 @@ public class MinionBomb : MinionBase, IDamage
 
         if (currentHp <= 0)
         {
+            // TODO : 자폭졸개는 사망시에도 자폭을 해야한다. 현재 자폭 기능을 똑같이 가져왔는데 해당 로직이 추가된 후 유니티의 렉이 심해짐
+                     
+            //RaycastHit[] hit = Physics.SphereCastAll(transform.position, 10, Vector3.up);
+
+            //foreach (RaycastHit obj in hit)
+            //{
+            //    // 레이를 맞은 오브젝트에 IDamage 인터페이스가 구현되어 있다면
+            //    if (obj.transform.GetComponent<IDamage>() != null)
+            //    {
+            //        // 해당 오브젝트들에게 데미지를 입힌다.
+            //        obj.transform.GetComponent<IDamage>().DamageAble(50f);
+            //    }
+            //}
+
+            //Debug.Log("죽었을시 자폭실행");
             ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BOMB);
+
         }
     }
 }

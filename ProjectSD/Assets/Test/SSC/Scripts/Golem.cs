@@ -93,12 +93,6 @@ public class Golem : MonoBehaviour, IDamage
         // 괴수는 항상 플레이어를 바라본다.
         transform.LookAt(player.transform.position);
 
-        // TODO : 골렘의 데미지 입히는 메소드 임시 테스트
-        if(Input.GetKeyDown(KeyCode.A))
-        {
-            DamageAble(10f);
-        }
-
         //  괴수는 라스트페이즈에 진입하면 PC를 향해 멈추지않고 다가오게 된다.
         if (golemCheck == Phase.PHASE_LAST)
         {
