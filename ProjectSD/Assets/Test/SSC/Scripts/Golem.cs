@@ -7,7 +7,7 @@ using System.Runtime.ExceptionServices;
 using UnityEditor;
 using UnityEngine;
 
-public class Golem : MonoBehaviour
+public class Golem : MonoBehaviour, IDamage
 {
     // {괴수의 페이즈를 체크할 enum 스테이트
     public enum Phase 
@@ -50,9 +50,8 @@ public class Golem : MonoBehaviour
     private Rigidbody golemRigid = default;     // 괴수의 속력을 입력할 컴포넌트
     private Animator golemAni = default;        // 괴수의 애니메이션을 관리할 컴포넌트
 
-    private IEnumerator throwball = default;    // 괴수의 공격 패턴 중 원거리 공격을 캐싱할 변수
-    private IEnumerator spawnminion = default;  // 괴수의 공격 패턴 중 졸개소환을 캐싱할 변수
-
+    private WaitForSeconds ballThrowcooltime = new WaitForSeconds(3f);
+    private WaitForSeconds minionSpawncooltime = new WaitForSeconds(5f);
     // Start is called before the first frame update
     void Start()
     {
@@ -61,7 +60,7 @@ public class Golem : MonoBehaviour
         golemCheck = Phase.READY;       // 괴수의 시작 스테이트패턴 READY : 유저의 게임 시작 입력 전까지는 대기를 취함
         golemRigid = GetComponent<Rigidbody>();     // 괴수의 리지드바디
         golemAni = GetComponent<Animator>();        // 괴수의 애니메이터
-        currentHp = golemMaxHp;                     //  괴수의 초기 체력은 설정한 Max체력값 
+        Initilize();
 
         target = (player.transform.position - transform.position).normalized;       // 괴수의 진행할 방향을 체크하기 위한 노말라이즈
         firstPos = Vector3.Distance(transform.position, player.transform.position); // 괴수의 초기 위치와 PC의 거리 체크
@@ -97,7 +96,7 @@ public class Golem : MonoBehaviour
         // TODO : 골렘의 데미지 입히는 메소드 임시 테스트
         if(Input.GetKeyDown(KeyCode.A))
         {
-            OnDamageble(10f);
+            DamageAble(10f);
         }
 
         //  괴수는 라스트페이즈에 진입하면 PC를 향해 멈추지않고 다가오게 된다.
@@ -342,19 +341,19 @@ public class Golem : MonoBehaviour
     // 공격애니메이션이 끝나고 지정할 대기 시간
     IEnumerator FireCooltime()
     {
-        yield return new WaitForSeconds(3f);
+        yield return ballThrowcooltime;
         isAttack = false;
     }
 
     IEnumerator MinionCollTime()
     {
-        yield return new WaitForSeconds(1f);
+        yield return minionSpawncooltime;
         isAttack = false;
     }
 
     // 괴수에게 데미지를 입히는 메소드
     // TODO : 다른 클라이언트들의 공격체에 괴수 접촉시 Golem 스크립트를 가져와서 해당 메소드를 실행 요청
-    private void OnDamageble(float damage)
+    public void DamageAble(float damage)
     {
         currentHp -= damage;
 
@@ -363,7 +362,14 @@ public class Golem : MonoBehaviour
         {
             StopAllCoroutines();
             golemCheck = Phase.GAMEOVER;
+            golemAni.SetTrigger("isAttackStop");
         }
+        
+    }
+
+    public void Initilize()
+    {
+         currentHp = golemMaxHp;                     //  괴수의 초기 체력은 설정한 Max체력값 
     }
 
     // LEGACY : 개발일지에 쓰일 공격패턴 애니메이션 설정 오류부분 (애니메이션 이벤트가 아닌 코루틴으로 접근하려 했음)
