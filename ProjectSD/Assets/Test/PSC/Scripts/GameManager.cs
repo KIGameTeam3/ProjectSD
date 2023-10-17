@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
         if (timeSinceLastUpdate >= updateInterval)
         {
             currentGold += 10;
-            Debug.Log("골드 값 증가: " + currentGold);
+            
             timeSinceLastUpdate = 0.0f; // 재설정
             if (goldText != null)
             {

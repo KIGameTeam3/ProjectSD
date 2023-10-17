@@ -47,14 +47,14 @@ public class LaserPoint : MonoBehaviour
 
         //레이캐스트
         //ray와 충돌할 Layer설정
-        //뒤에 + 로 계속 더하면 된다.
-        int colliderMask = GlobalFunction.GetLayerMask("Floor");
+        int colliderMask = GlobalFunction.GetLayerMask("Floor", "Monster", "Boss", "BossBullet");
+        //Debug.Log(colliderMask);
         if (Physics.Raycast(ray, out hit, LASER_LENGTH, colliderMask))
         {
             //조준점 보임
             hitPointer.SetActive(true);
             //조준점 거리에 비례해서 크기조절
-            hitPointer.transform.localScale = Vector3.one * Vector3.Distance(_startPos, hit.point) * 0.1f;
+            hitPointer.transform.localScale = Vector3.one * Vector3.Distance(_startPos, hit.point) * 0.01f;
             //조준점 위치 변경
             hitPointer.transform.position = hit.point;
             //lineRenderer의 끝부분 위치 변경
@@ -78,8 +78,6 @@ public class LaserPoint : MonoBehaviour
         {
             lineRenderer.material.ChangeMaterialColor(laserMaterials[(int)LaserColor.IDLE].color);
         }
-
-        Debug.Log(_startPos + "/" + _endPos);
 
         //조준선 길이 설정
         lineRenderer.SetPosition(0, _startPos);

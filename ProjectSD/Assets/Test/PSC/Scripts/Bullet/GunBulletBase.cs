@@ -34,7 +34,7 @@ public class GunBulletBase : MonoBehaviour
 
     public void Move(Vector3 direction)
     {
-        bulletRigidbody.velocity = direction * status.bulletSpeed*0.2f;
+        bulletRigidbody.velocity = direction * status.bulletSpeed*0.3f;
     }
 
     protected void Remove()
@@ -55,7 +55,6 @@ public class GunBulletBase : MonoBehaviour
     {
         if (!isAttack)
         {
-            isAttack = true;
             Remove();
         }
     }
@@ -93,8 +92,8 @@ public class GunBulletBase : MonoBehaviour
         IHitObject enemy = other.GetComponent<IHitObject>();
         if (enemy != null && !isAttack)
         {
-            AttackReaction();
             enemy.Hit(GetDamage(!other.gameObject.CompareTag("Untagged")));
+            AttackReaction();
         }
     }
 }
