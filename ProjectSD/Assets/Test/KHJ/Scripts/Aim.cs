@@ -22,15 +22,15 @@ public class Aim : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MouseDetect();
-        //if (isLeftHand)
-        //{
-        //    DetectL();
-        //}       // if : 왼쪽 핸드 기준으로 레이저 포인터 만들기
-        //else
-        //{
-        //    DetectR();
-        //}
+        //MouseDetect();
+        if (isLeftHand)
+        {
+            DetectL();
+        }       // if : 왼쪽 핸드 기준으로 레이저 포인터 만들기
+        else
+        {
+            DetectR();
+        }
     } //Update()
 
     void MouseDetect()
@@ -89,6 +89,16 @@ public class Aim : MonoBehaviour
                     hitObject?.HitUI();
                 }
             }
+            else if (hitInfo.collider.tag == "Respawn")
+            {
+                UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    // 컨트롤러의 진동 재생
+                    //ARAVRInput.PlayVibration(ARAVRInput.Controller.RTouch);
+                    hitObject?.HitUI();
+                }
+            }
         }
         // 충돌이 없다면?
         else
@@ -131,6 +141,16 @@ public class Aim : MonoBehaviour
                     hitObject?.HitUI();
                 }
             }
+            else if (hitInfo.collider.tag == "Respawn")
+            {
+                UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    // 컨트롤러의 진동 재생
+                    //ARAVRInput.PlayVibration(ARAVRInput.Controller.RTouch);
+                    hitObject?.HitUI();
+                }
+            }
         }
         // 충돌이 없다면?
         else
@@ -138,7 +158,7 @@ public class Aim : MonoBehaviour
             lineRenderer.SetPosition(0, ray.origin);
             lineRenderer.SetPosition(1, ray.origin + ARAVRInput.RHandDirection * lrMaxDistance);
 
-            UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
+            //UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
 
             if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger))
             {
