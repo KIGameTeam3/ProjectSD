@@ -15,5 +15,5 @@ MonoBehaviour:
   unitName: Unit 1
   unitPrice: 100
   unitPower: 100
-  unitLifeTime: 100
-  bulletPointNum: 2
+  unitLifeTime: 10
+  bulletPointNum: 1
