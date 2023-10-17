@@ -8,12 +8,19 @@ public class GunBase : MonoBehaviour
     public GunBulletBase enhanceBullet;
     public HandPosition handPosition;
     public LaserPoint point;
+    public GunStatus status;
 
     private AudioSource gunAudioSource;
     private ParticleSystem gunParticle;
     private ARAVRInput.Controller controller;
     private bool isEnhance = false;
     private bool canShot = true;
+
+
+
+    private const float VIBRATION_TIME = 0.1f;
+    private const float VIBRATION_FREQUENCY = 5F;
+    private const float VIBRATION_AMPLITUDE = 5F;
 
     private void Awake()
     {
@@ -22,11 +29,11 @@ public class GunBase : MonoBehaviour
 
     private void Update()
     {
-        if (ARAVRInput.GetDown(ARAVRInput.Button.One))
+        if (ARAVRInput.GetDown(ARAVRInput.Button.One, controller))
         {
             ChangeWeaponMode(true);
         }
-        else if (ARAVRInput.GetUp(ARAVRInput.Button.One))
+        else if (ARAVRInput.GetUp(ARAVRInput.Button.One, controller))
         {
             ChangeWeaponMode(false);
         }
@@ -83,7 +90,7 @@ public class GunBase : MonoBehaviour
 
     private void AttackReaction()
     {
-        ARAVRInput.PlayVibration(controller);
+        ARAVRInput.PlayVibration(VIBRATION_TIME, VIBRATION_FREQUENCY, VIBRATION_AMPLITUDE, controller);
         gunAudioSource.Play();
         gunParticle.Play();
     }

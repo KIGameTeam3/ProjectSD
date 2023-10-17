@@ -9,13 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddc9cdab44e3710458ef74c769a1b49d, type: 3}
-  m_Name: NormalBullet
+  m_Script: {fileID: 11500000, guid: 2c755a82d4483d145a3a38b962c6ac50, type: 3}
+  m_Name: Player
   m_EditorClassIdentifier: 
-  ID: 10
-  context: "\uAE30\uBCF8 \uCD1D\uC54C"
-  fireRate: 0.2
-  bulletDamage: 1
-  bulletSpeed: 50
-  criticalRate: 0
-  lifeTime: 3
+  ID: 100
+  context: PC
+  health: 100
+  weaponID: 1000
+  weaponPowerID: 2000
