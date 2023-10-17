@@ -48,9 +48,6 @@ public class TestBullet : MonoBehaviour
             // 접촉한 오브젝트에 연결된 리지드바디 오브젝트를 담고 (이때 담기는 오브젝트는 최상위 몬스터 오브젝트임)
             GameObject obj = other.attachedRigidbody.gameObject;
 
-            // 해당 오브젝트에서 데미지 인터페이스 실행
-            obj.GetComponent<IHitObject>().Hit(10f * 1.5f);
-
             // 약점위치 변경하는 메소드 실행 (이때 접촉한 약점 게임오브젝트를 매개변수로 보내줘야함)
             obj.GetComponent<LuckyPointController>().ChangePoint(other.gameObject);
 

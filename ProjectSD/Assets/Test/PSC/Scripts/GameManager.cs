@@ -137,6 +137,7 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
+
         InitManager();
     }
 

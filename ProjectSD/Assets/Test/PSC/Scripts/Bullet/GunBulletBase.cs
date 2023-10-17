@@ -89,11 +89,29 @@ public class GunBulletBase : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        IHitObject enemy = other.GetComponent<IHitObject>();
-        if (enemy != null && !isAttack)
+        if (other.attachedRigidbody == null)
         {
-            enemy.Hit(GetDamage(!other.gameObject.CompareTag("Untagged")));
+            Debug.Log(other.gameObject);
+            return;
+        }
+
+        IHitObject enemy = other.attachedRigidbody.GetComponent<IHitObject>();
+
+        if (enemy != null && !isAttack && (other.CompareTag("HitPoint") || other.CompareTag("LuckyPoint")))
+        {
+            enemy.Hit(GetDamage(other.gameObject.CompareTag("LuckyPoint")));
+
+            if(other.CompareTag("LuckyPoint"))
+            {
+                GameObject obj = other.attachedRigidbody.gameObject;
+
+                // 약점위치 변경하는 메소드 실행 (이때 접촉한 약점 게임오브젝트를 매개변수로 보내줘야함)
+                obj.GetComponent<LuckyPointController>().ChangePoint(other.gameObject);
+
+            }
+
             AttackReaction();
         }
+
     }
 }
