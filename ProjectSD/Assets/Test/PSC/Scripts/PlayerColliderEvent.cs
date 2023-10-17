@@ -2,10 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerColliderEvent : MonoBehaviour
+public class PlayerColliderEvent : MonoBehaviour, IHitObject
 {
-    private void OnCollisionEnter(Collision collision)
+    PlayerBase player;
+
+    public void Hit(float damage)
     {
-        
+        player.Hit(damage);
     }
+
+    private void Awake()
+    {
+        Init();
+    }
+
+    void Init()
+    {
+        player = transform.parent.GetComponent<PlayerBase>();
+    }
+
 }

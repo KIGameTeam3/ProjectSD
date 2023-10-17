@@ -14,7 +14,6 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     private Vector3 mousePosition = default;
     private Vector3 unitPosition = default;
     private int price = default;    // 유닛 가격
-    public bool installable = false;
     #endregion
 
     #region 구매
@@ -22,6 +21,8 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     public Text _name;
     #endregion
 
+    public GameObject preview = default;
+    public int previewIdx = default;
     public GameObject gameManager = default;
 
     public void Start()
@@ -34,35 +35,39 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
 
     public void OnPointerDown(PointerEventData eventData)   // 버튼을 눌렀을 때
     {
-        if (gameObject.CompareTag("UnitBtn") && unitPrefab != null) // 유닛 생성 조건
+        if (gameObject.CompareTag("UnitBtn") && unitPrefab != null) // 프리뷰 생성 조건
         {
             ScreentoWorld();
 
-            gameManager.GetComponent<GameManager>().SubtractGold(price);    // 재화 소모 메서드 호출
-
-            // 유닛을 생성
-            unitObj = Instantiate(unitPrefab.gameObject, unitPosition, Quaternion.identity);
-
-            unitObj.GetComponent<UnitBase>().PlaceCheck();
+            preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(true);  // 프리뷰 활성화
+            preview.GetComponent<PreviewBase>().PlaceCheck();   // 설치가능 체크 코루틴 켜기
         }
     }
 
     public void OnDrag(PointerEventData eventData)  // 드래그 중일 때
     {
-        ScreentoWorld();
+        //ScreentoWorld();
+        // 프리뷰 오브젝트를 마우스 위치로 이동
 
-        // 유닛을 마우스 위치로 이동
-        unitObj.transform.position = unitPosition;
+        preview.transform.position = gameManager.GetComponent<GameManager>().hitPosition;
     }
 
     public void OnPointerUp(PointerEventData eventData) // 유닛 설치: 클릭 중인 버튼에서 손을 뗄 때
     {
-        //unitObj.transform.GetChild(1).GetChild().GetComponent<BulletSpawner>().unitActive = true;  // bullet 발사 활성화
+        gameManager.GetComponent<GameManager>().SubtractGold(price);    // 재화 소모 메서드 호출
         Debug.Log("버튼에서 손 뗌");
+        preview.GetComponent<PreviewBase>().StopPlaceCheck();   // 설치가능 체크 코루틴 끄기
+        preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(false); // 프리뷰 비활성화
 
-        unitObj.GetComponent<UnitBase>().StopPlaceCheck();
+        // 유닛을 생성
+        if (preview.GetComponent<PreviewBase>().installable == true)
+        {
+            unitObj = Instantiate(unitPrefab.gameObject, gameManager.GetComponent<GameManager>().hitPosition, Quaternion.identity);
+            Debug.Log("유닛 설치");
+            Destroy(unitObj, unitDestroy);  // 설치 후 일정 시간이 지나면 파괴
+        }
+        else { Debug.Log("설치 불가능 지역"); }
 
-        Destroy(unitObj, unitDestroy);  // 설치 후 일정 시간이 지나면 파괴
     }
 
     private void ScreentoWorld()    // 마우스 좌표 설정 메서드
@@ -70,5 +75,11 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         mousePosition = Input.mousePosition;
         unitPosition = Camera.main.ScreenToWorldPoint(mousePosition + new Vector3(0, 0, 10.0f));
         unitPosition.y = 0;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Gizmos.DrawRay(ray);
     }
 }
