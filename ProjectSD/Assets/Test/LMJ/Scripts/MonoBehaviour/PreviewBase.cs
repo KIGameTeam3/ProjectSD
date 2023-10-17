@@ -11,6 +11,10 @@ public class PreviewBase : MonoBehaviour
     public bool installable = false;    // 설치 가능여부 bool값
     #endregion
 
+    private void Start()
+    {
+        transform.GetChild(2).GetComponent<MeshRenderer>().material.color = Color.clear;
+    }
 
     public void PlaceCheck()
     {
@@ -18,6 +22,7 @@ public class PreviewBase : MonoBehaviour
     }
     public void StopPlaceCheck()
     {
+        transform.GetChild(2).GetComponent<MeshRenderer>().material.color = Color.clear;
         StopCoroutine(placeCheckCoroutine);
     }
 
@@ -41,6 +46,7 @@ public class PreviewBase : MonoBehaviour
             {
                 Debug.Log("설치 가능함");
                 installable = true;
+                transform.GetChild(2).GetComponent<MeshRenderer>().material.color = Color.green;
             }
             else
             {
@@ -48,6 +54,7 @@ public class PreviewBase : MonoBehaviour
                 {
                     Debug.Log("설치 불가능" + collider.name);
                     installable = false;
+                    transform.GetChild(2).GetComponent<MeshRenderer>().material.color = Color.red;
                 }
             }
 

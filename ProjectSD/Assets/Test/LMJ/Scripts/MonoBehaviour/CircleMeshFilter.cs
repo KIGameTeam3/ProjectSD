@@ -48,5 +48,10 @@ public class CircleMeshFilter : MonoBehaviour
 
         // 메시 필터에 메시 설정.
         meshFilter.mesh = circleMesh;
+
+        GetComponent<MeshRenderer>().material.renderQueue = 3100;   // 제일 마지막에 렌더링해서 다른 오브젝트 렌더링한테 안먹히게 하려고
     }
+
+    
+
 }

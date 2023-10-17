@@ -11,9 +11,9 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     public UnitBase unitPrefab;   // 생성할 유닛 프리팹
     private GameObject unitObj;  // 드래그 중인 유닛을 저장할 변수
     private float unitDestroy = default; // 유닛 파괴 시간
-    private Vector3 mousePosition = default;
-    private Vector3 unitPosition = default;
     private int price = default;    // 유닛 가격
+    //private Vector3 mousePosition = default;
+    //private Vector3 unitPosition = default;
     #endregion
 
     #region 구매
@@ -37,8 +37,6 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     {
         if (gameObject.CompareTag("UnitBtn") && unitPrefab != null) // 프리뷰 생성 조건
         {
-            ScreentoWorld();
-
             preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(true);  // 프리뷰 활성화
             preview.GetComponent<PreviewBase>().PlaceCheck();   // 설치가능 체크 코루틴 켜기
         }
@@ -46,15 +44,11 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
 
     public void OnDrag(PointerEventData eventData)  // 드래그 중일 때
     {
-        //ScreentoWorld();
-        // 프리뷰 오브젝트를 마우스 위치로 이동
-
         preview.transform.position = gameManager.GetComponent<GameManager>().hitPosition;
     }
 
     public void OnPointerUp(PointerEventData eventData) // 유닛 설치: 클릭 중인 버튼에서 손을 뗄 때
     {
-        gameManager.GetComponent<GameManager>().SubtractGold(price);    // 재화 소모 메서드 호출
         Debug.Log("버튼에서 손 뗌");
         preview.GetComponent<PreviewBase>().StopPlaceCheck();   // 설치가능 체크 코루틴 끄기
         preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(false); // 프리뷰 비활성화
@@ -65,17 +59,19 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
             unitObj = Instantiate(unitPrefab.gameObject, gameManager.GetComponent<GameManager>().hitPosition, Quaternion.identity);
             Debug.Log("유닛 설치");
             Destroy(unitObj, unitDestroy);  // 설치 후 일정 시간이 지나면 파괴
+            gameManager.GetComponent<GameManager>().SubtractGold(price);    // 재화 소모 메서드 호출
         }
         else { Debug.Log("설치 불가능 지역"); }
 
     }
 
-    private void ScreentoWorld()    // 마우스 좌표 설정 메서드
-    {
-        mousePosition = Input.mousePosition;
-        unitPosition = Camera.main.ScreenToWorldPoint(mousePosition + new Vector3(0, 0, 10.0f));
-        unitPosition.y = 0;
-    }
+    // LEGACY:
+    //private void ScreentoWorld()    // 마우스 좌표 설정 메서드
+    //{
+    //    mousePosition = Input.mousePosition;
+    //    unitPosition = Camera.main.ScreenToWorldPoint(mousePosition + new Vector3(0, 0, 10.0f));
+    //    unitPosition.y = 0;
+    //}
 
     private void OnDrawGizmos()
     {
