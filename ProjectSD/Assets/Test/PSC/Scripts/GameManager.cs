@@ -67,11 +67,9 @@ public class GameManager : MonoBehaviour
         RaycastHit hitPoint;
         if (Physics.Raycast(ray, out hitPoint, 90000, LayerMask.GetMask("Floor")))
         {
-            Debug.Log(hitPoint.transform.name);
             if (hitPoint.transform.CompareTag("Ground"))
             {
                 hitPosition = hitPoint.point;
-                Debug.Log(hitPosition);
             }
         }
 
@@ -83,8 +81,8 @@ public class GameManager : MonoBehaviour
         if (timeSinceLastUpdate >= updateInterval)
         {
             currentGold += 10;
-            
             timeSinceLastUpdate = 0.0f; // 재설정
+
             if (goldText != null)
             {
                 goldText.text = currentGold.ToString(); // 텍스트에 현재 재화 할당
