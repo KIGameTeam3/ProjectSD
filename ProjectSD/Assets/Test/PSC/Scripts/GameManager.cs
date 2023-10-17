@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -35,7 +37,9 @@ public class GameManager : MonoBehaviour
 
     #region public 변수
     public PlayerState playerState = PlayerState.READY;     //현재 게임 상태
-    public int gold = 0;                                    //플레이어 골드
+    public int gold = 0;//플레이어 골드
+
+    public Vector3 hitPosition;
     #endregion
 
     #region 재화 변수
@@ -56,9 +60,21 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // [이미정] 231013 초당 재화 증가
+    // [이미정] 231016 raycast hitPosition 추가
     private void Update()
     {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitPoint;
+        if (Physics.Raycast(ray, out hitPoint, 90000, LayerMask.GetMask("Floor")))
+        {
+            Debug.Log(hitPoint.transform.name);
+            if (hitPoint.transform.CompareTag("Ground"))
+            {
+                hitPosition = hitPoint.point;
+                Debug.Log(hitPosition);
+            }
+        }
+
         // 매 프레임마다 deltaTime 값을 누적
         timeSinceLastUpdate += Time.deltaTime;
 
