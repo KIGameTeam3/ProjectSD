@@ -8,7 +8,7 @@ public class MeleeAttack : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            Debug.Log("PC 히트");
+
         }
     }
 }

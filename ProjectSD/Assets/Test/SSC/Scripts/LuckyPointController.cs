@@ -7,6 +7,10 @@ public class LuckyPointController : MonoBehaviour
 {
     // 럭키 포인트 지점 오브젝트들을 인스펙터창에서 직접 할당
     [SerializeField] private GameObject[] luckyPoint;
+
+    // 약점이 바뀌는데 걸릴 시간
+    private WaitForSeconds changeTime = new WaitForSeconds(3f);
+
     private void Start()
     {
         int i = 0;
@@ -33,20 +37,28 @@ public class LuckyPointController : MonoBehaviour
     // Bullet으로부터 실행요청 약점바꾸는 메소드
     public void ChangePoint(GameObject obj)
     {
-        // Bullet이 부딪힌 오브젝트를 전달받고 해당 약점 콜라이더 비활성화 및 색상 변경
+        StartCoroutine(Test(obj));
+    }
+
+    public IEnumerator Test(GameObject obj)
+    {
         obj.GetComponent<Collider>().enabled = false;
         obj.GetComponent<MeshRenderer>().materials[0].color = Color.white;
 
+        yield return changeTime;
+
+        // Bullet이 부딪힌 오브젝트를 전달받고 해당 약점 콜라이더 비활성화 및 색상 변경
+
         int rand = 0;
 
-        while(true)
+        while (true)
         {
             rand = Random.Range(0, luckyPoint.Length);
 
             // 이후 새로 활성화할 약점 찾기
             // 1. 전달받은 오브젝트와 이름이 일치하거나
             // 2. 새로 뽑은 인데스의 오브젝트가 이미 활성화 중이라면 새로뽑기
-            if(obj.name == luckyPoint[rand].name ||
+            if (obj.name == luckyPoint[rand].name ||
                 luckyPoint[rand].GetComponent<Collider>().enabled == true)
             {
                 continue;
@@ -59,6 +71,6 @@ public class LuckyPointController : MonoBehaviour
         // 전달된 랜덤값의 인덱스로 해당 약점 활성화
         luckyPoint[rand].GetComponent<Collider>().enabled = true;
         luckyPoint[rand].GetComponent<MeshRenderer>().materials[0].color = Color.blue;
-
+        
     }
 }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 63381298}
   m_Layer: 9
   m_Name: LP_R_Leg_D_2
-  m_TagString: Untagged
+  m_TagString: LuckyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 338180207}
   m_Layer: 9
   m_Name: LP_R_Arm_1
-  m_TagString: Untagged
+  m_TagString: LuckyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 525180741}
   m_Layer: 9
   m_Name: LP_R_Leg_U_2
-  m_TagString: Untagged
+  m_TagString: LuckyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -305,7 +305,7 @@ GameObject:
   - component: {fileID: 541183144}
   m_Layer: 9
   m_Name: LP_Chest
-  m_TagString: Untagged
+  m_TagString: LuckyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -402,7 +402,7 @@ GameObject:
   - component: {fileID: 552660110}
   m_Layer: 9
   m_Name: LP_Body
-  m_TagString: Untagged
+  m_TagString: LuckyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -499,7 +499,7 @@ GameObject:
   - component: {fileID: 611587914}
   m_Layer: 9
   m_Name: LP_R_Leg_D_1
-  m_TagString: Untagged
+  m_TagString: LuckyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -627,7 +627,7 @@ GameObject:
   - component: {fileID: 728176559}
   m_Layer: 9
   m_Name: LP_L_Arm_2
-  m_TagString: Untagged
+  m_TagString: LuckyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -724,7 +724,7 @@ GameObject:
   - component: {fileID: 768463573}
   m_Layer: 9
   m_Name: LP_R_Leg_U_1
-  m_TagString: Untagged
+  m_TagString: LuckyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -821,7 +821,7 @@ GameObject:
   - component: {fileID: 799906633}
   m_Layer: 9
   m_Name: LP_Head
-  m_TagString: Untagged
+  m_TagString: LuckyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -918,7 +918,7 @@ GameObject:
   - component: {fileID: 1305760470}
   m_Layer: 9
   m_Name: LP_R_Leg_U_1
-  m_TagString: Untagged
+  m_TagString: LuckyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1015,7 +1015,7 @@ GameObject:
   - component: {fileID: 1471165188}
   m_Layer: 9
   m_Name: LP_R_Arm_2
-  m_TagString: Untagged
+  m_TagString: LuckyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1112,7 +1112,7 @@ GameObject:
   - component: {fileID: 1721262824}
   m_Layer: 9
   m_Name: LP_R_Leg_D_1
-  m_TagString: Untagged
+  m_TagString: LuckyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1209,7 +1209,7 @@ GameObject:
   - component: {fileID: 1741154282}
   m_Layer: 9
   m_Name: LP_R_Leg_U_2
-  m_TagString: Untagged
+  m_TagString: LuckyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1292,6 +1292,37 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1993478929
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1993478930}
+  m_Layer: 9
+  m_Name: DistanceCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1993478930
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993478929}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8588035327547512545}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2092285325
 GameObject:
   m_ObjectHideFlags: 0
@@ -1306,7 +1337,7 @@ GameObject:
   - component: {fileID: 2092285327}
   m_Layer: 9
   m_Name: LP_R_Leg_D_2
-  m_TagString: Untagged
+  m_TagString: LuckyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1403,7 +1434,7 @@ GameObject:
   - component: {fileID: 2098792930}
   m_Layer: 9
   m_Name: LP_L_Arm_1
-  m_TagString: Untagged
+  m_TagString: LuckyPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1659,6 +1690,7 @@ Transform:
   - {fileID: 8588697281550679295}
   - {fileID: 8588034294108663585}
   - {fileID: 699890170}
+  - {fileID: 1993478930}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1711,16 +1743,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 220639b4ba82ced4bbcea790d5447078, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  golemMaxHp: 300
+  golemMaxHp: 100000
   startTime: 5
-  phase1Ratio: 0.7
-  phase1Time: 30
-  phase2Ratio: 0.4
-  phase2Time: 14
-  golemSpeed: 2.5
+  phase1Time: 10
+  phase2Hp: 0.8
+  phase2Distance: 0.8
+  phase2Time: 10
+  phase3Hp: 0.6
+  phase3Distance: 0.6
+  phase3Time: 120
+  phase4Hp: 0.4
+  phase4Distance: 0.4
+  phase4Time: 120
+  golemSpeed: 3.2
   RHandBomb: {fileID: 5166264764944802303}
   LHandBomb: {fileID: 7001935931858071105}
   MinionSpawn: {fileID: 699890170}
+  distance: {fileID: 1993478930}
 --- !u!114 &881433364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1761,7 +1800,7 @@ GameObject:
   - component: {fileID: 61493691}
   m_Layer: 9
   m_Name: Lower_Arm_R
-  m_TagString: Untagged
+  m_TagString: HitPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1840,7 +1879,7 @@ GameObject:
   - component: {fileID: 48285471}
   m_Layer: 9
   m_Name: Head
-  m_TagString: Untagged
+  m_TagString: HitPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1919,7 +1958,7 @@ GameObject:
   - component: {fileID: 822762207}
   m_Layer: 9
   m_Name: Upper_Arm_L
-  m_TagString: Untagged
+  m_TagString: HitPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1998,7 +2037,7 @@ GameObject:
   - component: {fileID: 2062564019}
   m_Layer: 9
   m_Name: Index_Proximal_R
-  m_TagString: Untagged
+  m_TagString: HitPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2077,7 +2116,7 @@ GameObject:
   - component: {fileID: 1483811013}
   m_Layer: 9
   m_Name: Hand_L
-  m_TagString: Untagged
+  m_TagString: HitPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2156,7 +2195,7 @@ GameObject:
   - component: {fileID: 1384517403}
   m_Layer: 9
   m_Name: Upper_Arm_R
-  m_TagString: Untagged
+  m_TagString: HitPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2350,7 +2389,7 @@ GameObject:
   - component: {fileID: 534997467}
   m_Layer: 9
   m_Name: Foot_R
-  m_TagString: Untagged
+  m_TagString: HitPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2464,7 +2503,7 @@ GameObject:
   - component: {fileID: 1336836325}
   m_Layer: 9
   m_Name: Foot_L
-  m_TagString: Untagged
+  m_TagString: HitPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

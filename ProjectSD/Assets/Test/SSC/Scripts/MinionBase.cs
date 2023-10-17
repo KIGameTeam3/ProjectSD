@@ -61,6 +61,7 @@ public class MinionBase : MonoBehaviour
         if(isDetected == true)
         {
             myAni.SetBool("isWalk", true);
+            target.y = 0f;
             myRigid.velocity = target * minionSpeed;
         }
     }

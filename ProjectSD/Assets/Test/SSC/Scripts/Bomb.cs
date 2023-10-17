@@ -2,27 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bomb : MonoBehaviour, IDamage
+public class Bomb : MonoBehaviour, IHitObject
 {
     private Transform target;           // 타겟 위치
     public float initialAngle = 30f;    // 처음 날라가는 각도
     private Rigidbody rb;               // Rigidbody
 
-    private float maxHp = 20f;
+    public float maxHp = 50f;
     private float currentHp = default;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         target = GameObject.FindWithTag("Player").GetComponent<Transform>();
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.A))
-        {
-            DamageAble(10f);
-        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -40,15 +32,12 @@ public class Bomb : MonoBehaviour, IDamage
         Vector3 shoot = GetVelocity(transform.position, target.transform.position, initialAngle);
         rb.velocity = shoot;
     }
-
-    // { IDamage 인터페이스 구성
     public void Initilize()
     {
         // 생성 되었을 시 체력 세팅
         currentHp = maxHp;
     }
-
-    public void DamageAble(float damage)
+    public void Hit(float damage)
     {
         // 데미지받는 처리
         currentHp -= damage;
@@ -58,7 +47,6 @@ public class Bomb : MonoBehaviour, IDamage
             ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.BOMB);
         }
     }
-    // } IDamage 인터페이스 구성
 
     public Vector3 GetVelocity(Vector3 startPos, Vector3 target, float initialAngle)
     {
@@ -129,5 +117,5 @@ public class Bomb : MonoBehaviour, IDamage
 
         return finalVelocity;
     }
-    
+
 }
