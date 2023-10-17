@@ -53,6 +53,7 @@ public class KHJUIManager : MonoBehaviour
     [Header("ShopCanvas")]
    
     [SerializeField] private GameObject shopPanel; //상점 캔버스 하위 패널
+    public bool isOpenShop = false;
 
     [Header("ResultCanvas")]
     [SerializeField] private GameObject resultPanel;
@@ -266,7 +267,11 @@ public class KHJUIManager : MonoBehaviour
     }
     //}메시지 창에 띄울 함수입니다.
 
-
+    public void OpenShop()
+    {
+        shopPanel.SetActive(true);
+        isOpenShop = true;
+    }
 
     public void GetUnit()
     {
