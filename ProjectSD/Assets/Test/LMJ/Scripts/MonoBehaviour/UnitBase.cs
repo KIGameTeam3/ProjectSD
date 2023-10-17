@@ -32,14 +32,17 @@ public class UnitBase : MonoBehaviour
         {
             timeAfterSpawn = 0f;    // 생성 시간 초기화
 
+            BulletSpawn();
+        }
+    }
 
-            for (int i = 0; i < bulletPoints.Length; i++)
-            {
-                GameObject bullet = Instantiate(bulletPrefab, bulletPoints[i].transform.position, transform.rotation);
-                bullet.transform.SetParent(bulletPoints[i].transform); // spawner 하위에 생성
-                bullet.transform.LookAt(target);    // Bullet의 정면방향이 target 향하도록 회전
-            }
-
+    protected virtual void BulletSpawn()
+    {
+        for (int i = 0; i < bulletPoints.Length; i++)
+        {
+            GameObject bullet = Instantiate(bulletPrefab, bulletPoints[i].transform.position, transform.rotation);
+            bullet.transform.SetParent(bulletPoints[i].transform); // spawner 하위에 생성
+            bullet.transform.LookAt(target);    // Bullet의 정면방향이 target 향하도록 회전
         }
     }
 }
