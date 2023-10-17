@@ -12,10 +12,4 @@ public class UIHitCollider : MonoBehaviour
         //gameObject.SetActive(false);
 
     }
-
-
-    public void Test()
-    {
-        Debug.Log("START 눌림");
-    }
 }
