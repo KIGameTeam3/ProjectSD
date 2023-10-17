@@ -519,7 +519,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1869866671135521870}
   - component: {fileID: 1869866671142409124}
-  - component: {fileID: 428191351591645650}
   - component: {fileID: 8886337974404402339}
   - component: {fileID: 6035314711198153692}
   m_Layer: 13
@@ -568,25 +567,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &428191351591645650
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1869866671135023214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f647deaf11e45a34aa2b66b4871535e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unitData: {fileID: 11400000, guid: cc0aa6f46707c7c44bfe4d2fd3659d46, type: 2}
-  unitHead: {fileID: 1869866671135023202}
-  bulletPoints:
-  - {fileID: 1203774801076989810}
-  - {fileID: 1230482318157915976}
-  bulletPrefab: {fileID: 4344226775905457457, guid: e51fe7cf5e436a6429f8d561aee97ccf, type: 3}
-  spawnRate: 2
 --- !u!135 &8886337974404402339
 SphereCollider:
   m_ObjectHideFlags: 0
