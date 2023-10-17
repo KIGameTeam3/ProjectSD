@@ -29,23 +29,27 @@ public class PlayerBase : MonoBehaviour
         {
             if(GameManager.Instance.playerState == PlayerState.PLAY)
             {
-                GameManager.Instance.playerState = PlayerState.SHOP;
-                gun[0].gameObject.SetActive(false);
-                gun[1].gameObject.SetActive(false);
-                hand[0].gameObject.SetActive(true);
-                hand[1].gameObject.SetActive(true);
+                GameManager.Instance.playerState = PlayerState.SHOP; 
+                ChangeHand(true);
+
                 //SHOP UI로 넘어감
             }
             else if (GameManager.Instance.playerState == PlayerState.SHOP)
             {
-                GameManager.Instance.playerState = PlayerState.PLAY;
-                gun[0].gameObject.SetActive(true);
-                gun[1].gameObject.SetActive(true);
-                hand[0].gameObject.SetActive(false);
-                hand[1].gameObject.SetActive(false);
+                GameManager.Instance.playerState = PlayerState.PLAY; 
+                ChangeHand(false);
                 //PLAY UI로 넘어감
             }
         }
+    }
+
+    public void ChangeHand(bool isHand)
+    {
+        gun[0].gameObject.SetActive(!isHand);
+        gun[1].gameObject.SetActive(!isHand);
+        hand[0].gameObject.SetActive(isHand);
+        hand[1].gameObject.SetActive(isHand);
+
     }
 
     private void Init()

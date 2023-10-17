@@ -213,7 +213,8 @@ public class KHJUIManager : MonoBehaviour
         endPanel.SetActive(false);
         pUiPivot.SetActive(true);
         shopPanel.SetActive(true);
-        
+
+        GameManager.Instance.StartGame();
     }
 
     public void ChangeCoinText()
