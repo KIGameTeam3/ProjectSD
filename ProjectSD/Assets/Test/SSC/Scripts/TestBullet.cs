@@ -11,7 +11,7 @@ public class TestBullet : MonoBehaviour
     void Start()
     {
         myRigid = GetComponent<Rigidbody>();
-        myRigid.velocity = Camera.main.transform.forward * 30f;
+        myRigid.velocity = Camera.main.transform.forward * 50f;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -19,36 +19,60 @@ public class TestBullet : MonoBehaviour
         // 몬스터들의 히트 포인트에 총알이 닿으면
         if(other.CompareTag("HitPoint"))
         {
-            // 해당 게임오브젝트를 담고
-            GameObject tempObj = other.gameObject;
+            GameObject obj = other.attachedRigidbody.gameObject;
+            obj.GetComponent<IHitObject>().Hit(10f);
 
-            // 해당 게임오브젝트에 IDamage 인터페이스를 체크하고 (몬스터마다 최상위 스크립트에 있음) 
-            while(tempObj.GetComponent<IDamage>() == null)
-            {
-                // 없다면 부모 게임오브젝트를 담는다
-                // 이를 IDamage 찾을때까지 반복
-                tempObj = tempObj.transform.parent.gameObject;
-            }
 
-            // IDamage인터페이스 게임오브젝트를 찾으면 데미지 메소드 실행
-            tempObj.GetComponent<IDamage>().DamageAble(10f);
+            // ============ TODO : 개발일지 혹은 기술문서에 개선사항으로 기술하기 ================
+
+            //// 해당 게임오브젝트를 담고
+            //GameObject tempObj = other.gameObject;
+
+            //// 해당 게임오브젝트에 IDamage 인터페이스를 체크하고 (몬스터마다 최상위 스크립트에 있음) 
+            //while(tempObj.GetComponent<IHitObject>() == null)
+            //{
+            //    // 없다면 부모 게임오브젝트를 담는다
+            //    // 이를 IDamage 찾을때까지 반복
+            //    tempObj = tempObj.transform.parent.gameObject;
+            //}
+
+            //// IDamage인터페이스 게임오브젝트를 찾으면 데미지 메소드 실행
+            //tempObj.GetComponent<IHitObject>().Hit(10f);
+
+            // ============ TODO : 개발일지 혹은 기술문서에 개선사항으로 기술하기 ================
+
         }
 
-        if(other.CompareTag("LuckyPoint"))
+        if (other.CompareTag("LuckyPoint"))
         {
-            // 해당 게임오브젝트를 담고
-            GameObject tempObj = other.gameObject;
+            // 접촉한 오브젝트에 연결된 리지드바디 오브젝트를 담고 (이때 담기는 오브젝트는 최상위 몬스터 오브젝트임)
+            GameObject obj = other.attachedRigidbody.gameObject;
 
-            while (tempObj.GetComponent<LuckyPointController>() == null)
-            {
-                // 없다면 부모 게임오브젝트를 담는다
-                // 이를 IDamage 찾을때까지 반복
-                tempObj = tempObj.transform.parent.gameObject;
-            }
+            // 해당 오브젝트에서 데미지 인터페이스 실행
+            obj.GetComponent<IHitObject>().Hit(10f * 1.5f);
 
-            // IDamage인터페이스 게임오브젝트를 찾으면 데미지 메소드 실행
-            tempObj.GetComponent<LuckyPointController>().ChangePoint(other.gameObject);
-            tempObj.GetComponent<IDamage>().DamageAble(10 * 1.5f);
+            // 약점위치 변경하는 메소드 실행 (이때 접촉한 약점 게임오브젝트를 매개변수로 보내줘야함)
+            obj.GetComponent<LuckyPointController>().ChangePoint(other.gameObject);
+
+
+            // ============ TODO : 개발일지 혹은 기술문서에 개선사항으로 기술하기 ================
+
+            //// 해당 게임오브젝트를 담고
+            //GameObject tempObj = other.gameObject;
+
+            //while (tempObj.GetComponent<LuckyPointController>() == null)
+            //{
+            //    // 없다면 부모 게임오브젝트를 담는다
+            //    // 이를 IDamage 찾을때까지 반복
+            //    tempObj = tempObj.transform.parent.gameObject;
+            //}
+
+            //// 약점 변경 메소드 실행 및 데미지 처리
+            //tempObj.GetComponent<LuckyPointController>().ChangePoint(other.gameObject);
+            //tempObj.GetComponent<IHitObject>().Hit(10f * 1.5f);
+
+            // ============ TODO : 개발일지 혹은 기술문서에 개선사항으로 기술하기 ================
+
         }
     }
 }

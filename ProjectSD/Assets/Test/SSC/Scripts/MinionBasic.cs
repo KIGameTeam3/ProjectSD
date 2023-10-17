@@ -4,7 +4,7 @@ using UnityEditor.TextCore.Text;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
-public class MinionBasic : MinionBase, IDamage
+public class MinionBasic : MinionBase, IHitObject
 {
     public float attackSpeed = 1f;              // 일반졸개 근접공격 시작 타이머
     private float timeReset = 0f;               // 근접공격 시작 체크값
@@ -84,8 +84,12 @@ public class MinionBasic : MinionBase, IDamage
         atkReset = false;
     }
 
-    // { IDamage 인터페이스 
-    public void DamageAble(float damage)
+    public void Initilize()
+    {
+        currentHp = maxHp;
+    }
+
+    public void Hit(float damage)
     {
         currentHp -= damage;
 
@@ -94,10 +98,4 @@ public class MinionBasic : MinionBase, IDamage
             ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BASIC);
         }
     }
-
-    public void Initilize()
-    {
-        currentHp = maxHp;
-    }
-    // } IDamage 인터페이스 
 }

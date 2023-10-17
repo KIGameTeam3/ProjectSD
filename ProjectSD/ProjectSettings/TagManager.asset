@@ -6,6 +6,9 @@ TagManager:
   tags:
   - UnitBtn
   - Unit
+  - HitPoint
+  - LuckyPoint
+  - DeadZone
   layers:
   - Default
   - TransparentFX

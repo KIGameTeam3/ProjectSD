@@ -1,40 +1,38 @@
+using Meta.WitAi;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MinionBomb : MinionBase, IDamage
+public class MinionBomb : MinionBase, IHitObject
 {
     public float maxHp = 50f;               // 자폭졸개 초기체력 세팅값
-    public float currentHp = default;       // 자폭졸개 현재 체력 체크
     public float attackSpeed = 3f;          // 자폭졸개 자폭 실행할 시간
+    private float currentHp = default;      // 자폭졸개 현재 체력 체크
     private float timeReset = 0f;           // 자폭실행 시간 체크
-   // private bool attackStart = false;       // 
+    public float explosiveDamage = 10f;     // 자폭 데미지
+    public float explosionArea = 10f;       // 자폭 범위
+
+    public enum State { ALIVE, DIE }            // 자폭졸개의 스테이트 상태
+    public State state {  get; private set; }   // 스테이트 프로퍼티
+
+    private bool atkReset = false;              // 공격 제한조건
 
     protected override void Update()
     {
         base.Update();
 
+        // 부모클래스에서 공격진입에 들어갔다면
         if(isAttack == true)
         {
+            // 자폭실행시간까지 시간 누적      
             timeReset += Time.deltaTime;
 
             // 자폭실행 시간에 도달하면
-            if (attackSpeed <= timeReset)
+            if (attackSpeed <= timeReset && atkReset == false)
             {
-                Debug.Log("자폭 실행");
-
-                // 자폭졸개 위치 기준으로 일정크기의 Sphere 형태의 레이를 쏘고
-                RaycastHit[] hit = Physics.SphereCastAll(transform.position, 10, Vector3.up);
-
-                foreach(RaycastHit obj in hit)
-                {
-                    // 레이를 맞은 오브젝트에 IDamage 인터페이스가 구현되어 있다면
-                    if(obj.transform.GetComponent<IDamage>() != null)
-                    {
-                        // 해당 오브젝트들에게 데미지를 입힌다.
-                        obj.transform.GetComponent<IDamage>().DamageAble(50f);
-                    }
-                }
+                timeReset = 0f;     // 자폭 시간 초기화 (풀링오브젝트라 값이 남아있음)
+                atkReset = true;    // 자폭진입 제한
+                Explosive();        // 자폭실행 메소드
             }
         }
 
@@ -51,6 +49,24 @@ public class MinionBomb : MinionBase, IDamage
         }
     }
 
+    // 자폭실행
+    private void Explosive()
+    {
+        // 자신을 기준으로 일정범위 구체크기만큼 충돌 감지하여 
+        Collider[] hitObj = Physics.OverlapSphere(transform.position, explosionArea);
+
+        foreach (Collider info in hitObj)
+        {
+            if (info.GetComponent<IHitObject>() != null)
+            {
+                info.GetComponent<IHitObject>().Hit(explosiveDamage);
+            }
+        }
+
+        ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BOMB);
+    }
+
+
     // 풀링 오브젝트에 의한 활성화시 초기값 세팅
     protected override void OnEnable()
     {
@@ -58,36 +74,23 @@ public class MinionBomb : MinionBase, IDamage
         Initilize();
     }
 
-
     public void Initilize()
     {
+        state = State.ALIVE;
+        atkReset = false;
         currentHp = maxHp;
     }
 
-    public void DamageAble(float damage)
+    public void Hit(float damage)
     {
-
         currentHp -= damage;
 
-        if (currentHp <= 0)
+        // 제한조건을 안달아두면 스택 오버플로우가 발생했었음 => 스테이트 패턴으로 조건문 진입제한을 두겠음.
+        if (currentHp <= 0 && state == State.ALIVE)
         {
-            // TODO : 자폭졸개는 사망시에도 자폭을 해야한다. 현재 자폭 기능을 똑같이 가져왔는데 해당 로직이 추가된 후 유니티의 렉이 심해짐
-                     
-            //RaycastHit[] hit = Physics.SphereCastAll(transform.position, 10, Vector3.up);
-
-            //foreach (RaycastHit obj in hit)
-            //{
-            //    // 레이를 맞은 오브젝트에 IDamage 인터페이스가 구현되어 있다면
-            //    if (obj.transform.GetComponent<IDamage>() != null)
-            //    {
-            //        // 해당 오브젝트들에게 데미지를 입힌다.
-            //        obj.transform.GetComponent<IDamage>().DamageAble(50f);
-            //    }
-            //}
-
-            //Debug.Log("죽었을시 자폭실행");
+            state = State.DIE;
+            Explosive();
             ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BOMB);
-
         }
     }
 }
