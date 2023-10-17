@@ -9,6 +9,7 @@ TagManager:
   - HitPoint
   - LuckyPoint
   - DeadZone
+  - Ground
   layers:
   - Default
   - TransparentFX

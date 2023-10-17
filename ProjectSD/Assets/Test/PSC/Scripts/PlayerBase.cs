@@ -6,7 +6,101 @@ public class PlayerBase : MonoBehaviour
 {
 
     public LaserPoint[] gun;
+    public Aim[] hand;
+    public PlayerStatus status;
+    public OVRScreenFade bloodEffect;
+    public GameObject centerCamera;
+    AudioSource audioSource;
+    public bool canEffect = true;
 
+    private const float VIBRATION_TIME = 0.2f;
+    private const float VIBRATION_FREQUENCY = 10F;
+    private const float VIBRATION_AMPLITUDE = 2F;
+    private const float EFFECT_TIME = 1.5F;
+
+    private void Awake()
+    {
+        Init();
+    }
+
+    private void Update()
+    {
+        if ((ARAVRInput.GetDown(ARAVRInput.Button.One)|| ARAVRInput.GetDown(ARAVRInput.Button.Two)))
+        {
+            if(GameManager.Instance.playerState == PlayerState.PLAY)
+            {
+                GameManager.Instance.playerState = PlayerState.SHOP;
+                gun[0].gameObject.SetActive(false);
+                gun[1].gameObject.SetActive(false);
+                hand[0].gameObject.SetActive(true);
+                hand[1].gameObject.SetActive(true);
+                //SHOP UI로 넘어감
+            }
+            else if (GameManager.Instance.playerState == PlayerState.SHOP)
+            {
+                GameManager.Instance.playerState = PlayerState.PLAY;
+                gun[0].gameObject.SetActive(true);
+                gun[1].gameObject.SetActive(true);
+                hand[0].gameObject.SetActive(false);
+                hand[1].gameObject.SetActive(false);
+                //PLAY UI로 넘어감
+            }
+        }
+    }
+
+    private void Init()
+    {
+        status = Instantiate(status);
+        audioSource = GetComponent<AudioSource>();
+        Invoke("SetBloodEffect", 0.5f);
+        
+    }
+    private void SetBloodEffect()
+    {
+        bloodEffect.transform.SetParent(centerCamera.transform);
+        bloodEffect.transform.localPosition = Vector3.zero;
+        bloodEffect.transform.localRotation = Quaternion.identity;
+    }
+
+    public void Hit(float damage)
+    {
+        HitReaction();
+        status.health -= (int)Mathf.Round(damage);
+        if (status.health <= 0)
+        {
+            Invoke("Die", 2);
+        }
+    }
+
+    private void Die()
+    {
+        GameManager.Instance.EndGame();
+        //게임오버 ui
+    }
+
+    private void HitReaction()
+    {
+        //피격처리
+        ARAVRInput.PlayVibration(VIBRATION_TIME, VIBRATION_FREQUENCY, VIBRATION_AMPLITUDE, ARAVRInput.Controller.RTouch);
+        ARAVRInput.PlayVibration(VIBRATION_TIME, VIBRATION_FREQUENCY, VIBRATION_AMPLITUDE, ARAVRInput.Controller.LTouch);
+        if(audioSource!=null && audioSource.clip!=null)
+        {
+            audioSource.Play();
+        }
+        if (canEffect)
+        {
+            StartCoroutine(DelayEffectRoutine());
+            bloodEffect.fadeTime = EFFECT_TIME;
+            bloodEffect.FadeIn();
+        }
+    }
+
+    IEnumerator DelayEffectRoutine()
+    {
+        canEffect = false;
+        yield return new WaitForSeconds(EFFECT_TIME);
+        canEffect = true;
+    }
 
 
 }
