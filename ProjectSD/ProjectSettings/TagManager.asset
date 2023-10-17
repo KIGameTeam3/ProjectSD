@@ -10,6 +10,8 @@ TagManager:
   - LuckyPoint
   - DeadZone
   - Ground
+  - UiBtn
+  - PlayerUi
   layers:
   - Default
   - TransparentFX

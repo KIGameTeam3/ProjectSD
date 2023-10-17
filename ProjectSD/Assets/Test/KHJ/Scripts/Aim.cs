@@ -60,7 +60,7 @@ public class Aim : MonoBehaviour
             lineRenderer.SetPosition(0, ray.origin);
             lineRenderer.SetPosition(1, hitInfo.point);
             Debug.Log(hitInfo.collider.tag);
-            if (hitInfo.collider.tag == "Finish")
+            if (hitInfo.collider.tag == "UiBtn")
             {
                 Debug.Log(Input.GetAxis("Fire1"));
                 UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
@@ -73,7 +73,7 @@ public class Aim : MonoBehaviour
                     hitObject?.HitUI();
                 }
             }
-            else if(hitInfo.collider.tag == "Respawn")
+            else if(hitInfo.collider.tag == "PlayerUi")
             {
                 UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
                 if (Input.GetButtonDown("Fire1"))
@@ -96,7 +96,7 @@ public class Aim : MonoBehaviour
         if (Physics.Raycast(ray, out hitInfo))
         {
             endPos = hitInfo.point;
-            if (hitInfo.collider.tag == "Finish")
+            if (hitInfo.collider.tag == "UiBtn")
             {
                 UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
                 if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger))
@@ -106,7 +106,7 @@ public class Aim : MonoBehaviour
                     hitObject?.HitUI();
                 }
             }
-            else if (hitInfo.collider.tag == "Respawn")
+            else if (hitInfo.collider.tag == "PlayerUi")
             {
                 UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
                 if (Input.GetButtonDown("Fire1"))
@@ -146,7 +146,7 @@ public class Aim : MonoBehaviour
         if (Physics.Raycast(ray, out hitInfo))
         {
             endPos = hitInfo.point;
-            if (hitInfo.collider.tag == "Finish")
+            if (hitInfo.collider.tag == "UiBtn")
             {
                 UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
 
@@ -157,7 +157,7 @@ public class Aim : MonoBehaviour
                     hitObject?.HitUI();
                 }
             }
-            else if (hitInfo.collider.tag == "Respawn")
+            else if (hitInfo.collider.tag == "PlayerUi")
             {
                 UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
                 if (Input.GetButtonDown("Fire1"))
