@@ -721,6 +721,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1339932085860060577, guid: 8e53e007d765a5c4290cf437d76e86f9, type: 3}
+      propertyPath: m_Name
+      value: buffImg
+      objectReference: {fileID: 0}
+    - target: {fileID: 1339932085860060577, guid: 8e53e007d765a5c4290cf437d76e86f9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1339932085860060582, guid: 8e53e007d765a5c4290cf437d76e86f9, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -812,6 +820,10 @@ PrefabInstance:
     - target: {fileID: 1339932086530501172, guid: 8e53e007d765a5c4290cf437d76e86f9, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1339932086530501175, guid: 8e53e007d765a5c4290cf437d76e86f9, type: 3}
+      propertyPath: m_Name
+      value: SpeedUpImg
       objectReference: {fileID: 0}
     - target: {fileID: 1339932086546898386, guid: 8e53e007d765a5c4290cf437d76e86f9, type: 3}
       propertyPath: m_Camera
@@ -932,6 +944,10 @@ PrefabInstance:
     - target: {fileID: 1339932087008272396, guid: 8e53e007d765a5c4290cf437d76e86f9, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4285938270
+      objectReference: {fileID: 0}
+    - target: {fileID: 1339932087214428334, guid: 8e53e007d765a5c4290cf437d76e86f9, type: 3}
+      propertyPath: m_Name
+      value: AttackUpImg
       objectReference: {fileID: 0}
     - target: {fileID: 1339932087214428335, guid: 8e53e007d765a5c4290cf437d76e86f9, type: 3}
       propertyPath: m_AnchorMax.y
