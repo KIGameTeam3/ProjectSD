@@ -1,14 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class Unit_2 : UnitBase
 {
-
-    protected override void BulletSpawn()
-    {
-        Debug.Log("자식 미미미");
-        base.BulletSpawn();
-
-    }
 }

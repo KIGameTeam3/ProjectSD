@@ -12,6 +12,8 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     private GameObject unitObj;  // 드래그 중인 유닛을 저장할 변수
     private float unitDestroy = default; // 유닛 파괴 시간
     private int price = default;    // 유닛 가격
+
+    private float installMaxDis = 10f;    // 유닛 최대 설치 거리
     //private Vector3 mousePosition = default;
     //private Vector3 unitPosition = default;
     #endregion
@@ -46,7 +48,11 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
 
     public void OnDrag(PointerEventData eventData)  // 드래그 중일 때
     {
-        preview.transform.position = gameManager.GetComponent<GameManager>().hitPosition;
+        if (gameManager.GetComponent<GameManager>().hitPosition.z >= installMaxDis)    // 유닛 배치 최대 거리 제한
+        {
+            gameManager.GetComponent<GameManager>().hitPosition.z = installMaxDis;
+        }
+            preview.transform.position = gameManager.GetComponent<GameManager>().hitPosition;
     }
 
     public void OnPointerUp(PointerEventData eventData) // 유닛 설치: 클릭 중인 버튼에서 손을 뗄 때
@@ -58,8 +64,12 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         // 유닛을 생성
         if (preview.GetComponent<PreviewBase>().installable == true)
         {
-            unitObj = Instantiate(unitPrefab.gameObject, gameManager.GetComponent<GameManager>().hitPosition, Quaternion.identity);
             Debug.Log("유닛 설치");
+            if(gameManager.GetComponent<GameManager>().hitPosition.z >= installMaxDis)    // 유닛 배치 최대 거리 제한
+            {
+                gameManager.GetComponent<GameManager>().hitPosition.z = installMaxDis;
+            }
+            unitObj = Instantiate(unitPrefab.gameObject, gameManager.GetComponent<GameManager>().hitPosition, Quaternion.identity);
             Destroy(unitObj, unitDestroy);  // 설치 후 일정 시간이 지나면 파괴
             gameManager.GetComponent<GameManager>().SubtractGold(price);    // 재화 소모 메서드 호출
         }
