@@ -24,7 +24,6 @@ public class LaserPoint : MonoBehaviour
 
     void Awake()
     {
-        GameManager.Instance.playerState = PlayerState.PLAY;
         Init();
     }
 

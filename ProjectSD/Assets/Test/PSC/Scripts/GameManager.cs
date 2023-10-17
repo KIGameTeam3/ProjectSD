@@ -139,6 +139,7 @@ public class GameManager : MonoBehaviour
         }
 
         InitManager();
+        FindObjectOfType<PlayerBase>().ChangeHand(false);
     }
 
     //게임 종료시 불러온다
@@ -150,6 +151,7 @@ public class GameManager : MonoBehaviour
             return;
         }
         StopManager();
+        FindObjectOfType<PlayerBase>().ChangeHand(true);
     }
 
 

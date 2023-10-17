@@ -30,21 +30,21 @@ public class Aim : MonoBehaviour
     {
         lineRenderer = GetComponent<LineRenderer>();
         //width 수정
-        lineRenderer.startWidth = 0.1f;
-        lineRenderer.endWidth = 0.1f;
+        lineRenderer.startWidth = 0.01f;
+        lineRenderer.endWidth = 0.01f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        MouseDetect();
+        //MouseDetect();
         if (isLeftHand)
         {
-           // DetectL();
+            DetectL();
         }       // if : 왼쪽 핸드 기준으로 레이저 포인터 만들기
         else
         {
-           // DetectR();
+            DetectR();
         }
     } //Update()
 
@@ -87,100 +87,81 @@ public class Aim : MonoBehaviour
     }
     void DetectL()
     {
-        // 왼쪽 컨트롤러 기준으로 Ray를 만든다.
-        Ray ray = new Ray(ARAVRInput.LHandPosition, ARAVRInput.LHandDirection);
-        RaycastHit hitInfo;
-
-        Vector3 endPos = ray.origin + ARAVRInput.LHandDirection * lrMaxDistance; 
-        // 충돌이 있다면?
-        if (Physics.Raycast(ray, out hitInfo))
+        Vector3 startPos = ARAVRInput.LHandPosition;
+        Vector3 endPos = startPos + ARAVRInput.LHandDirection * lrMaxDistance;
+        if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch))
         {
-            endPos = hitInfo.point;
-            if (hitInfo.collider.tag == "UiBtn")
+            // 왼쪽 컨트롤러 기준으로 Ray를 만든다.
+            Ray ray = new Ray(startPos, ARAVRInput.LHandDirection);
+            RaycastHit hitInfo;
+
+            // 충돌이 있다면?
+            if (Physics.Raycast(ray, out hitInfo, lrMaxDistance, GlobalFunction.GetLayerMask("UI")))
             {
+                endPos = hitInfo.point;
                 UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
-                if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger))
+                if (hitInfo.collider.tag == "UiBtn")
                 {
                     // 컨트롤러의 진동 재생
-                    ARAVRInput.PlayVibration(ARAVRInput.Controller.RTouch);
+                    ARAVRInput.PlayVibration(ARAVRInput.Controller.LTouch);
                     hitObject?.HitUI();
                 }
-            }
-            else if (hitInfo.collider.tag == "PlayerUi")
-            {
-                UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
-                if (Input.GetButtonDown("Fire1"))
+               /* else if (hitInfo.collider.tag == "PlayerUi")
                 {
-                    // 컨트롤러의 진동 재생
-                    //ARAVRInput.PlayVibration(ARAVRInput.Controller.RTouch);
-                    hitObject?.HitUI();
-                }
-            }
-        }
-        // 충돌이 없다면?
-        else
-        {
-            UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
-
-            if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger))
-            {
-                // 컨트롤러의 진동 재생
-                //ARAVRInput.PlayVibration(ARAVRInput.Controller.RTouch);
-                //hitObject?.Test();
-                Debug.Log("현재 충돌 없습니다.");
-            }
+                    if (Input.GetButtonDown("Fire1"))
+                    {
+                        // 컨트롤러의 진동 재생
+                        //ARAVRInput.PlayVibration(ARAVRInput.Controller.RTouch);
+                        hitObject?.HitUI();
+                    }
+                }*/
+            } 
 
         }
         // Ray가 부딪힌 지점에 라인 그리기
-        lineRenderer.SetPosition(0, ray.origin);
+        lineRenderer.SetPosition(0, startPos);
         lineRenderer.SetPosition(1, endPos);
+
     }
     void DetectR()
     {
-        // 오른쪽 컨트롤러 기준으로 Ray를 만든다.
-        Ray ray = new Ray(ARAVRInput.RHandPosition, ARAVRInput.RHandDirection);
-        RaycastHit hitInfo;
 
-        Vector3 endPos = ray.origin + ARAVRInput.LHandDirection * lrMaxDistance;
-        // 충돌이 있다면?
-        if (Physics.Raycast(ray, out hitInfo))
+        Vector3 startPos = ARAVRInput.RHandPosition;
+        Vector3 endPos = startPos + ARAVRInput.RHandDirection * lrMaxDistance;
+        if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.RTouch))
         {
-            endPos = hitInfo.point;
-            if (hitInfo.collider.tag == "UiBtn")
-            {
-                UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
 
-                if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger))
+
+            // 왼쪽 컨트롤러 기준으로 Ray를 만든다.
+            Ray ray = new Ray(startPos, ARAVRInput.RHandDirection);
+            RaycastHit hitInfo;
+
+            // 충돌이 있다면?
+            if (Physics.Raycast(ray, out hitInfo, lrMaxDistance, GlobalFunction.GetLayerMask("UI")))
+            {
+                Debug.Log(hitInfo.transform.tag);
+                endPos = hitInfo.point;
+                UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
+                if (hitInfo.collider.tag == "UiBtn")
                 {
                     // 컨트롤러의 진동 재생
                     ARAVRInput.PlayVibration(ARAVRInput.Controller.RTouch);
                     hitObject?.HitUI();
                 }
-            }
-            else if (hitInfo.collider.tag == "PlayerUi")
-            {
-                UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
-                if (Input.GetButtonDown("Fire1"))
+                /*else if (hitInfo.collider.tag == "PlayerUi")
                 {
-                    // 컨트롤러의 진동 재생
-                    //ARAVRInput.PlayVibration(ARAVRInput.Controller.RTouch);
-                    hitObject?.HitUI();
-                }
+                    if (Input.GetButtonDown("Fire1"))
+                    {
+                        // 컨트롤러의 진동 재생
+                        //ARAVRInput.PlayVibration(ARAVRInput.Controller.RTouch);
+                        hitObject?.HitUI();
+                    }
+                }*/
             }
-        }
-        // 충돌이 없다면?
-        else
-        {
-            if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger))
-            {
-                // 컨트롤러의 진동 재생
-                //ARAVRInput.PlayVibration(ARAVRInput.Controller.RTouch);
-                //hitObject?.Test();
-                Debug.Log("현재 충돌 없습니다.");
-            }
+
         }
         // Ray가 부딪힌 지점에 라인 그리기
-        lineRenderer.SetPosition(0, ray.origin);
-        lineRenderer.SetPosition(1, hitInfo.point);
+        lineRenderer.SetPosition(0, startPos);
+        lineRenderer.SetPosition(1, endPos);
     }       // else : 오른쪽 핸드 기준으로 레이저 포인터 만들기
 }
