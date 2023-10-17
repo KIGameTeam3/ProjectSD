@@ -38,14 +38,14 @@ public class Aim : MonoBehaviour
     void Update()
     {
         MouseDetect();
-        //if (isLeftHand)
-        //{
-        //    DetectL();
-        //}       // if : 왼쪽 핸드 기준으로 레이저 포인터 만들기
-        //else
-        //{
-        //    DetectR();
-        //}
+        if (isLeftHand)
+        {
+           // DetectL();
+        }       // if : 왼쪽 핸드 기준으로 레이저 포인터 만들기
+        else
+        {
+           // DetectR();
+        }
     } //Update()
 
     void MouseDetect()
@@ -59,12 +59,15 @@ public class Aim : MonoBehaviour
             // Ray가 부딪힌 지점에 라인 그리기
             lineRenderer.SetPosition(0, ray.origin);
             lineRenderer.SetPosition(1, hitInfo.point);
+            Debug.Log(hitInfo.collider.tag);
             if (hitInfo.collider.tag == "UiBtn")
             {
+                Debug.Log(Input.GetAxis("Fire1"));
                 UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
 
-                if (Input.GetButtonDown("Fire1"))
+                if (Input.GetAxisRaw("Fire1")==1)
                 {
+                    Debug.Log("파이어1");
                     // 컨트롤러의 진동 재생
                     //ARAVRInput.PlayVibration(ARAVRInput.Controller.RTouch);
                     hitObject?.HitUI();
