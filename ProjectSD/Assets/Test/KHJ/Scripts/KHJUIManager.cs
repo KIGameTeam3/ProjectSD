@@ -23,37 +23,37 @@ public class KHJUIManager : MonoBehaviour
     //{플레이어 관련 UI
     //[SerializeField] private GameObject playerUi;
     [SerializeField] private GameObject pUiPivot; //playerUi 하위 패널입니다.
+
+    [Header("TopPanel")]
+    [SerializeField] private GameObject topPanel;
     
-
-    [Header("RightPanel")]
-    [SerializeField] private GameObject rightPanel; // 채팅과 버프 이미지 있는 패널
-    
-    public GameObject buffImg; //버프 이미지 오브젝트
-
-    public TMP_Text[] chatText;  // 팝업 알림 텍스트 리스트 
-
-    //유닛 리스트
-    public GameObject unit;
-    List<GameObject> unitList = new List<GameObject>(); 
+    //[SerializeField] private GameObject rightPanel; // 채팅과 버프 이미지 있는 패널
 
     [Header("LeftPanel")]
     [SerializeField] private GameObject leftPanel; // 코인과 시간 체력 있는 패널
+    public GameObject buffImg; //버프 이미지 오브젝트
+    
+    [Header("UnitDestroyMsg")]
+    public TMP_Text[] chatText;  // 팝업 알림 텍스트 리스트 
+    public GameObject msgPanel;
+
     //체력
     [SerializeField] private GameObject healthObj;
     [SerializeField] private Image currentHpImg; // 변동하는 이미지
     [SerializeField] private TMP_Text healthText; //체력 수치 텍스트
-    //코인
-    [SerializeField] private GameObject coinObj; 
-    [SerializeField] private TMP_Text coinText; // 코인 수치 텍스트
     //시간
+    public GameObject timePanel;
     [SerializeField] private GameObject timeObj;
-    [SerializeField] private TMP_Text timeText; // 시간 수치 텍스트
+    public TMP_Text timeText; // 시간 수치 텍스트
     //}플레이어 관련 UI
 
     [Header("ShopCanvas")]
    
     [SerializeField] private GameObject shopPanel; //상점 캔버스 하위 패널
     public bool isOpenShop = false;
+    //코인
+    [SerializeField] private GameObject coinObj; 
+    [SerializeField] private TMP_Text coinText; // 코인 수치 텍스트
 
     [Header("ResultCanvas")]
     [SerializeField] private GameObject resultPanel;
@@ -62,9 +62,15 @@ public class KHJUIManager : MonoBehaviour
     [SerializeField] private GameObject rKillObj;
 
     [Header("Boss")]
+    [SerializeField] private GameObject bossPanel;
     [SerializeField] private GameObject bossHpObj;
     [SerializeField] private Image currentBossImg; // 변동하는 이미지
     [SerializeField] private TMP_Text bossHpText; //체력 수치 텍스트
+
+    //유닛 리스트
+    public GameObject unit;
+    List<GameObject> unitList = new List<GameObject>();
+
 
     // Start is called before the first frame update
     void Awake()
@@ -83,34 +89,30 @@ public class KHJUIManager : MonoBehaviour
         restartHit = restartPanel.GetComponent<UIHitCollider>();
         //} 시작 종료 재시작 캔버스
 
-        //{플레이어 
+        //{PlayerUICanvas 
         GameObject playerUi = GameObject.Find("PlayerUICanvas");
         pUiPivot = playerUi.transform.GetChild(0).gameObject;
+
+        //leftPanel
         leftPanel = pUiPivot.transform.GetChild(0).gameObject;
+        buffImg = leftPanel.transform.GetChild(0).gameObject;
 
-
+        //topPanel
+        topPanel = pUiPivot.transform.GetChild(1).gameObject;  
         //{체력
-        healthObj = leftPanel.transform.GetChild(1).gameObject;
+        healthObj = topPanel.transform.GetChild(1).gameObject;
         currentHpImg = healthObj.GetComponent<Image>();
         healthText = healthObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
         
-        //코인 변수
-        coinObj = leftPanel.transform.GetChild(3).gameObject;
-        coinText = coinObj.GetComponent<TMP_Text>();
-        
-        //시간 변수
-        timeObj = leftPanel.transform.GetChild(4).gameObject;
-        timeText = timeObj.GetComponent<TMP_Text>();
-
-        //{오른쪽 패널
-        rightPanel = pUiPivot.transform.GetChild(1).gameObject;
-        buffImg = rightPanel.transform.GetChild(0).gameObject;
-        
-        //}오른쪽 패널
+        //}PlayerUICanvas 
 
         //{shopCanvas 관련 변수
         GameObject shopCanvas = GameObject.Find("ShopCanvas");
         shopPanel = shopCanvas.transform.GetChild(0).gameObject;
+        //코인 변수
+        GameObject coinPanel = shopPanel.transform.GetChild(1).gameObject;  
+        coinObj = coinPanel.transform.GetChild(0).gameObject;
+        coinText = coinObj.GetComponent<TMP_Text>();
         //}shopCanvas 관련 변수
 
         //{resultCanvas 관련 변수
@@ -123,24 +125,34 @@ public class KHJUIManager : MonoBehaviour
         rKillObj = resultPanel.transform.GetChild(2).gameObject;
         //}resultCanvas 관련 변수
 
-        ////boss 관련
-        //GameObject bossCanvas = GameObject.Find("bossCanvas");
-        //bossHpObj = bossCanvas.transform.GetChild(1).gameObject;
-        //currentBossImg = bossHpObj.GetComponent<Image>();
-        //bossHpText = bossHpObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
+        //시간 변수
+        GameObject timeCanvas = GameObject.Find("TimeCanvas");
+        timePanel = timeCanvas.transform.GetChild(0).gameObject;
+        timeObj = timePanel.transform.GetChild(0).gameObject;
+        timeText = timeObj.GetComponent<TMP_Text>();
+        //boss 관련
+        GameObject bossCanvas = GameObject.Find("BossCanvas");
+        bossPanel = bossCanvas.transform.GetChild(0).gameObject;
+        bossHpObj = bossPanel.transform.GetChild(1).gameObject;
+        currentBossImg = bossHpObj.GetComponent<Image>();
+        bossHpText = bossHpObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
 
+        //버프 종료 알림 텍스트 관련
+        GameObject msgCanvas = GameObject.Find("MsgCanvas");
+        msgPanel = msgCanvas.transform.GetChild(0).gameObject;
     }
     private void Start()
     {
         startHit.OnHit.AddListener(() => UIStartGame()); //함수 연결
         endHit.OnHit.AddListener(() => UIExitGame());
         restartHit.OnHit.AddListener(() => UIRestart());
-        
 
+        bossPanel.SetActive(false);
         restartPanel.SetActive(false);
         pUiPivot.SetActive(false);
         shopPanel.SetActive(false);
         resultPanel.SetActive(false);
+        timePanel.SetActive(false);
     }
 
     // Update is called once per frame
@@ -179,7 +191,8 @@ public class KHJUIManager : MonoBehaviour
         startPanel.SetActive(false);
         endPanel.SetActive(false);
         pUiPivot.SetActive(true);
-        shopPanel.SetActive(true);
+        bossPanel.SetActive(true);
+        timePanel.SetActive(true);
 
         GameManager.Instance.StartGame();
         
@@ -190,11 +203,17 @@ public class KHJUIManager : MonoBehaviour
         Application.Quit();
     }//종료 버튼 함수도 완료
 
+    public void UIGameOver()
+    {
+        //TODO 게임 오버 패널 켜주고 2초뒤 리스타트 버튼 활성화 혹은 
+        PopUpResult();
+    }
     //결과창 띄우는 함수입니다.
     public void PopUpResult()
     {
         Debug.Log("게임 결과창 출력");
         pUiPivot.SetActive(false);
+
         shopPanel.SetActive(false);
         resultPanel.SetActive(true);
         restartPanel.SetActive(true);
@@ -212,7 +231,7 @@ public class KHJUIManager : MonoBehaviour
         resultPanel.SetActive(false);
         endPanel.SetActive(false);
         pUiPivot.SetActive(true);
-        shopPanel.SetActive(true);
+        bossPanel.SetActive(true);
 
         GameManager.Instance.StartGame();
     }
@@ -228,12 +247,12 @@ public class KHJUIManager : MonoBehaviour
         //healthText.text = "" + playerHP;
     }
 
-
     public void ChangeBossHpText()
     {
         //TODO hp 추가를 해줘야 합니다.
         //bossHpText.text = "" + bossHP;
     }
+
 
     //텍스트 00:00 형식으로 보여주는 함수 
     public void DisplayTime(float timeToDisplay)
@@ -243,6 +262,7 @@ public class KHJUIManager : MonoBehaviour
         float seconds = Mathf.FloorToInt(timeToDisplay % 60);
         timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
+
 
     //{메시지 창에 띄울 함수입니다.
     public void PopUpMsg(string msg)
@@ -268,12 +288,22 @@ public class KHJUIManager : MonoBehaviour
     }
     //}메시지 창에 띄울 함수입니다.
 
+    public void ShowBuff()
+    {
+        buffImg.SetActive(true);
+
+    }
+
     public void OpenShop()
     {
         shopPanel.SetActive(true);
         isOpenShop = true;
     }
-
+    public void CloseShop()
+    {
+        shopPanel.SetActive(false);
+        isOpenShop = false;
+    }
     public void GetUnit()
     {
         //unitList.Add(unit);

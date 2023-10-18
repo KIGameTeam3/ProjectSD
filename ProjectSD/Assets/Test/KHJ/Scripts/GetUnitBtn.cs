@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GetUnitScript : MonoBehaviour
+public class GetUnitBtn : MonoBehaviour
 {
+    [SerializeField] private GameObject btnPrefab;
     // Start is called before the first frame update
     void Start()
     {
