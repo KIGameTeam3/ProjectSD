@@ -30,7 +30,7 @@ public class LaserPoint : MonoBehaviour
     void Update()
     {
         //플레이 모드가 아니면 비활성화
-        if(GameManager.Instance.playerState != PlayerState.PLAY)
+        if(!GameManager.Instance.CheckPlayingGame())
         {
             return;
         }

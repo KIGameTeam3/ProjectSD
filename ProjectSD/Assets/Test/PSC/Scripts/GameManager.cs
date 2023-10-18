@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
@@ -156,7 +155,7 @@ public class GameManager : MonoBehaviour
 
 
     //게임중인지 아닌지 판단
-    private bool CheckPlayingGame()
+    public bool CheckPlayingGame()
     {
         return playerState == PlayerState.PLAY || playerState == PlayerState.SHOP;
     }

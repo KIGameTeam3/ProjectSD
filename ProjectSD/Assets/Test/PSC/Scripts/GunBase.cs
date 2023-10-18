@@ -29,14 +29,13 @@ public class GunBase : MonoBehaviour
 
     private void Update()
     {
-        if (ARAVRInput.GetDown(ARAVRInput.Button.One, controller))
+
+        //플레이 모드가 아니면 비활성화
+        if (!GameManager.Instance.CheckPlayingGame())
         {
-            ChangeWeaponMode(true);
+            return;
         }
-        else if (ARAVRInput.GetUp(ARAVRInput.Button.One, controller))
-        {
-            ChangeWeaponMode(false);
-        }
+
 
         if ((ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, controller) || ARAVRInput.Get(ARAVRInput.Button.IndexTrigger, controller)) && canShot)
         {

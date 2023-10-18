@@ -1,12 +1,11 @@
-using Oculus.Interaction.PoseDetection.Debug.Editor.Generated;
+
 using Oculus.Platform.Models;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net.Http.Headers;
-using System.Runtime.CompilerServices;
-using System.Runtime.ExceptionServices;
-using Unity.VisualScripting;
-using UnityEditor;
+
+
+
+
 using UnityEngine;
 using UnityEngine.UI;
 
