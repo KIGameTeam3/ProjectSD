@@ -28,11 +28,15 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
 
     public void Start()
     {
-        _name.text = unitPrefab.GetComponent<UnitBase>().unitData.unitName;
-        _price.text = unitPrefab.GetComponent<UnitBase>().unitData.unitPrice.ToString();
-        price = unitPrefab.GetComponent<UnitBase>().unitData.unitPrice;
-        unitDestroy = unitPrefab.GetComponent<UnitBase>().unitData.unitLifeTime;
+        _name.text = unitPrefab.unitData.unitName;
+        _price.text = unitPrefab.unitData.unitPrice.ToString();
+        price = unitPrefab.unitData.unitPrice;
+        unitDestroy = unitPrefab.unitData.unitLifeTime;
+
+        preview = FindObjectOfType<PreviewBase>().gameObject;
+    
     }
+
 
     public void OnPointerDown(PointerEventData eventData)   // 버튼을 눌렀을 때
     {

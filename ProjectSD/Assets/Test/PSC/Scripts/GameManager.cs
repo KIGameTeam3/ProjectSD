@@ -175,7 +175,7 @@ public class GameManager : MonoBehaviour
 
 
     //게임중인지 아닌지 판단
-    private bool CheckPlayingGame()
+    public bool CheckPlayingGame()
     {
         return playerState == PlayerState.PLAY || playerState == PlayerState.SHOP;
     }
