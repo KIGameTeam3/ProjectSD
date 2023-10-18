@@ -72,9 +72,24 @@ public class KHJUIManager : MonoBehaviour
     List<GameObject> unitList = new List<GameObject>();
 
 
+    #region 싱글톤 변수
+    //싱글턴으로 관리한다.
+    private static KHJUIManager instance;
+    public static KHJUIManager Instance
+    {
+        get
+        {
+            return instance;
+        }
+
+        private set { instance = value; }
+    }
+    #endregion
     // Start is called before the first frame update
     void Awake()
     {
+        instance = this;
+
         //{시작 종료 재시작 캔버스
         GameObject startCanvas = GameObject.Find("StartCanvas");
         startPanel = startCanvas.transform.GetChild(0).gameObject;
