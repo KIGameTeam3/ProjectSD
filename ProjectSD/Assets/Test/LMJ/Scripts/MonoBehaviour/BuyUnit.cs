@@ -122,48 +122,20 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
             preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(true);  // 프리뷰 활성화
             preview.GetComponent<PreviewBase>().PlaceCheck();   // 설치가능 체크 코루틴 켜기
 
-            // [KHJ] 231018 수정: 
+            //골드 감소 함수 불러오기
+            GameManager.Instance.SubtractGold(price);
+
+            // [KHJ] 231018 수정: 상점 닫기
             KHJUIManager.Instance.CloseShop();
+            //타워 고르기 bool값 true로 
+            Aim.isChooseTower = true;
 
             // [PSH] 231018 수정: GetComponent말고 Istance로
-            preview.transform.position = GameManager.Instance.hitPosition;
-            
-            while(GameManager.Instance.playerState == PlayerState.SHOP)
-            {
-                // [PSH] 231018 수정 {
-                Vector3 currCursorPos = GameManager.Instance.hitPosition;
-                Vector3 cursorPosNoY = new Vector3(currCursorPos.x, 0, currCursorPos.z);
-                if (cursorPosNoY.magnitude >= installMaxDis)    // 유닛 배치 최대 거리 제한
-                {
-                    preview.transform.position = (cursorPosNoY.normalized * installMaxDis) + (Vector3.up * currCursorPos.y);
-                }
-                preview.transform.position = currCursorPos;
-                // } [PSH] 231018 수정
-
-                if ( ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger,ARAVRInput.Controller.LTouch))
-                {
-                    ClickUnitUp();
-                    break;
-                }
-            }
-
+            //preview.transform.position = GameManager.Instance.hitPosition;
         }
     }
 
-    public void DragUnit()  // 드래그 중일 때
-    {
-        //// [PSH] 231018 수정 {
-        //Vector3 currCursorPos = GameManager.Instance.hitPosition;
-        //Vector3 cursorPosNoY = new Vector3(currCursorPos.x, 0, currCursorPos.z);
-        //if (cursorPosNoY.magnitude >= installMaxDis)    // 유닛 배치 최대 거리 제한
-        //{
-        //    preview.transform.position = (cursorPosNoY.normalized * installMaxDis) + (Vector3.up * currCursorPos.y);
-        //}
-        //preview.transform.position = currCursorPos;
-        //// } [PSH] 231018 수정
-    }
-
-    public void ClickUnitUp() // 유닛 설치: 클릭 중인 버튼에서 손을 뗄 때
+    public void SetInUnit() // 유닛 설치: 클릭 중인 버튼에서 손을 뗄 때
     {
         Debug.Log("버튼에서 손 뗌");
         preview.GetComponent<PreviewBase>().StopPlaceCheck();   // 설치가능 체크 코루틴 끄기
@@ -181,7 +153,8 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
             }
             unitObj = Instantiate(unitPrefab.gameObject, GameManager.Instance.hitPosition, Quaternion.identity);
             Destroy(unitObj, unitDestroy);  // 설치 후 일정 시간이 지나면 파괴
-            GameManager.Instance.SubtractGold(price);    // 재화 소모 메서드 호출
+            //KHJ 감소하는 함수 주석처리
+            //GameManager.Instance.SubtractGold(price);    // 재화 소모 메서드 호출
             // } [PSH] 231018 수정
         }
         else { Debug.Log("설치 불가능 지역"); }

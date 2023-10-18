@@ -1,6 +1,7 @@
 using Oculus.Interaction;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
 
@@ -12,10 +13,12 @@ public class Aim : MonoBehaviour
     LineRenderer lineRenderer;
     // 레이저 포인터의 최대 거리
     [SerializeField]
-    private float lrMaxDistance = 200f;
+    private float lrMaxDistance = 3f;
 
     //{커브 라인렌더러 변수 관련
-    public bool isChooseTower = false;
+    public static bool isChooseTower = false;
+
+    private PreviewBase preview;
 
     //public int lineSmooth = 40;
     //public float lrCurveLength = 50f;
@@ -32,20 +35,67 @@ public class Aim : MonoBehaviour
         //width 수정
         lineRenderer.startWidth = 0.01f;
         lineRenderer.endWidth = 0.01f;
+
+        preview = FindObjectOfType<PreviewBase>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //MouseDetect();
-        if (isLeftHand)
+        if (!isChooseTower)
         {
-            DetectL();
-        }       // if : 왼쪽 핸드 기준으로 레이저 포인터 만들기
+            //MouseDetect();
+            if (isLeftHand)
+            {
+                DetectL();
+            }       // if : 왼쪽 핸드 기준으로 레이저 포인터 만들기
+            else
+            {
+                DetectR();
+            }
+        } 
         else
         {
-            DetectR();
+            //left
+            Vector3 startPos = ARAVRInput.LHandPosition;
+            Vector3 pos = ARAVRInput.LHandDirection;
+            pos.y = 0;
+            Vector3 endPos = (startPos + (pos.normalized * lrMaxDistance));
+            endPos.y = 0;
+
+            // 왼쪽 컨트롤러 기준으로 Ray를 만든다.
+            Ray ray = new Ray(startPos, ARAVRInput.LHandDirection);
+            RaycastHit hitInfo;
+
+            // 충돌이 있다면?
+            if (Physics.Raycast(ray, out hitInfo, lrMaxDistance, GlobalFunction.GetLayerMask("Floor")))
+            {
+                endPos = hitInfo.point;
+            }
+            else
+            {
+                //예외처리
+                //1. 아무것도 감지 못했을때 그 최대치의 바닥이 floor가 아닐때
+                //2. Vector3.up이나 Vector3.down일때 위치
+                
+                
+                if(hitInfo.transform.transform.gameObject)
+                
+            }
+
+            preview.transform.position = endPos;
+
+            // Ray가 부딪힌 지점에 라인 그리기
+            lineRenderer.SetPosition(0, startPos);
+            lineRenderer.SetPosition(1, endPos);
+            
+            //TODO 설치하는 함수 실행
+            if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch))
+            {
+
+            }
         }
+    
     } //Update()
 
     void MouseDetect()

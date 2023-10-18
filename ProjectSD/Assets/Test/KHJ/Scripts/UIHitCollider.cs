@@ -5,15 +5,15 @@ using UnityEngine.Events;
 public class UIHitCollider : MonoBehaviour
 {
     public UnityEvent OnHit;
-    public UnityEvent HitUp;
+    //public UnityEvent HitUp;
     public void HitUI()
     {
         OnHit?.Invoke();
         //gameObject.SetActive(false);
 
     }
-    public void UpHitUi()
-    {
-        HitUp?.Invoke();
-    }
+    //public void UpHitUi()
+    //{
+    //    HitUp?.Invoke();
+    //}
 }
