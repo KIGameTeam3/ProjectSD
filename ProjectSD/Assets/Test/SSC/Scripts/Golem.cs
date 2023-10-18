@@ -77,7 +77,8 @@ public class Golem : MonoBehaviour, IHitObject
     [SerializeField] private GameObject LHandBomb;    // 괴수의 원거리공격 투사체 소환 포지션 : 왼손
     [SerializeField] private Transform MinionSpawn;   // 졸개 소환 위치
     [SerializeField] private Transform distance;      // 괴수의 피벗 위치가 안맞아 실제 거리체크할 오브젝트     
-    [SerializeField] private Transform[] spawners;
+    [SerializeField] private Transform[] spawners;    // 졸개들 소환 위치를 담을 오브젝트
+    [SerializeField] private KHJUIManager bossUi;     // UI 매니저를 담을 오브젝트  
 
     // }괴수의 각종 변수
 
@@ -572,8 +573,7 @@ public class Golem : MonoBehaviour, IHitObject
     public void Hit(float damage)
     {
         currentHp -= damage;
-
-        Debug.Log($"괴수 현재 체력 : {currentHp}");
+        bossUi.ChangeBossHpText(currentHp, golemMaxHp);
 
         if (currentHp <= 0)
         {
