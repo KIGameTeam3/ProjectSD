@@ -54,7 +54,11 @@ public class PlayerBase : MonoBehaviour
 
     private void Init()
     {
+        /* PlayerStatus originStatus = Resources.Load("/"+status.name) as PlayerStatus;
+         status = Instantiate(originStatus);*/
+
         status = Instantiate(status);
+
         audioSource = GetComponent<AudioSource>();
         Invoke("SetBloodEffect", 0.5f);
         
