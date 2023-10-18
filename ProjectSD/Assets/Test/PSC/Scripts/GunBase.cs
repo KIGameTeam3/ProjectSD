@@ -14,7 +14,10 @@ public class GunBase : MonoBehaviour
     private ParticleSystem gunParticle;
     private ARAVRInput.Controller controller;
     private bool isEnhance = false;
-    private bool canShot = true;
+    private bool canShot {
+        get { return canShot && GameManager.Instance.playerState == PlayerState.PLAY; }
+        set { canShot = value; }
+    }
 
 
 
@@ -29,14 +32,6 @@ public class GunBase : MonoBehaviour
 
     private void Update()
     {
-
-        //플레이 모드가 아니면 비활성화
-        if (!GameManager.Instance.CheckPlayingGame())
-        {
-            return;
-        }
-
-
         if ((ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, controller) || ARAVRInput.Get(ARAVRInput.Button.IndexTrigger, controller)) && canShot)
         {
             Shot();
