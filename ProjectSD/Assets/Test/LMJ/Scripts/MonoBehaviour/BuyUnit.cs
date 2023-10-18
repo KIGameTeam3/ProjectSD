@@ -41,12 +41,14 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
             preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(true);  // 프리뷰 활성화
             preview.GetComponent<PreviewBase>().PlaceCheck();   // 설치가능 체크 코루틴 켜기
 
-            preview.transform.position = GameManager.Instance.hitPosition;
+            // [PSH] 231018 수정: GetComponent말고 Istance로
+            preview.transform.position = GameManager.Instance.hitPosition;  
         }
     }
 
     public void OnDrag(PointerEventData eventData)  // 드래그 중일 때
     {
+        // [PSH] 231018 수정 {
         Vector3 currCursorPos = GameManager.Instance.hitPosition;
         Vector3 cursorPosNoY = new Vector3(currCursorPos.x, 0, currCursorPos.z);
         if (cursorPosNoY.magnitude >= installMaxDis)    // 유닛 배치 최대 거리 제한
@@ -54,6 +56,7 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
             preview.transform.position = (cursorPosNoY.normalized * installMaxDis) + (Vector3.up * currCursorPos.y);
         }
         preview.transform.position = currCursorPos;
+        // } [PSH] 231018 수정
     }
 
     public void OnPointerUp(PointerEventData eventData) // 유닛 설치: 클릭 중인 버튼에서 손을 뗄 때
@@ -66,13 +69,16 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         if (preview.GetComponent<PreviewBase>().installable == true)
         {
             Debug.Log("유닛 설치");
-            if(GameManager.Instance.hitPosition.z >= installMaxDis)    // 유닛 배치 최대 거리 제한
+
+            // [PSH] 231018 수정 {
+            if (GameManager.Instance.hitPosition.z >= installMaxDis)    // 유닛 배치 최대 거리 제한
             {
                 GameManager.Instance.hitPosition.z = installMaxDis;
             }
             unitObj = Instantiate(unitPrefab.gameObject, GameManager.Instance.hitPosition, Quaternion.identity);
             Destroy(unitObj, unitDestroy);  // 설치 후 일정 시간이 지나면 파괴
             GameManager.Instance.SubtractGold(price);    // 재화 소모 메서드 호출
+            // } [PSH] 231018 수정
         }
         else { Debug.Log("설치 불가능 지역"); }
 

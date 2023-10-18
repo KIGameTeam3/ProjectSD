@@ -83,6 +83,8 @@ public class GameManager : MonoBehaviour
         {
             currentGold += 10;
             timeSinceLastUpdate = 0.0f; // 재설정
+
+            // [PSH] 231018 수정
             KHJUIManager.Instance?.ChangeCoinText();
         }
     }
@@ -90,6 +92,8 @@ public class GameManager : MonoBehaviour
     public void SetGold(int unitPrice)
     {
         currentGold = unitPrice;
+
+        // [PSH] 231018 수정
         KHJUIManager.Instance?.ChangeCoinText();
 
     }
@@ -99,6 +103,8 @@ public class GameManager : MonoBehaviour
     {
         currentGold -= unitPrice;
         Debug.Log("유닛 구매: " + currentGold);
+
+        // [PSH] 231018 수정
         KHJUIManager.Instance?.ChangeCoinText();
     }
 
@@ -107,6 +113,8 @@ public class GameManager : MonoBehaviour
     {
         currentGold += 50;
         Debug.Log("골드 50추가");
+
+        // [PSH] 231018 수정
         KHJUIManager.Instance?.ChangeCoinText();
     }
 
