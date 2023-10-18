@@ -21,6 +21,7 @@ public class Bomb : MonoBehaviour, IHitObject
     {
         if(other.CompareTag("Player"))
         {
+            other.gameObject.GetComponent<IHitObject>().Hit(10f);
             ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.BOMB);
         }
     }

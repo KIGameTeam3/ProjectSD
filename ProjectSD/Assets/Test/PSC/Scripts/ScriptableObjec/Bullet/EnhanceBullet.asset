@@ -18,4 +18,4 @@ MonoBehaviour:
   bulletDamage: 5
   bulletSpeed: 50
   criticalRate: 0
-  lifeTime: 3
+  lifeTime: 5

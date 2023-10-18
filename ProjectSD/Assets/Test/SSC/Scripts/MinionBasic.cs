@@ -20,8 +20,13 @@ public class MinionBasic : MinionBase, IHitObject
     {
         base.Update();
 
+        if(Golem.G_insance.minionRestart == true)
+        {
+            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BASIC);
+        }
+
         // 부모클래스상에서 추적을 멈추고 공격범위에 들어섰다면
-        if (isAttack == true)
+        if (isAttack == true && Golem.G_insance.restart == false)
         {
             // 공격 시간 누적
             timeReset += Time.deltaTime;
@@ -69,11 +74,16 @@ public class MinionBasic : MinionBase, IHitObject
     }
 
     // 애니메이션 이벤트 호출 메소드 (공격 발생)
-    private void Attack()
+    // 일반 메소드시 콜라이더가 인식을 못함 발생, 코루틴으로 1프레임이라도 딜레이를 줘봤음
+    IEnumerator Attack()
     {
         // 팔을 휘두르는 모션이 나오면 근접공격 콜라이더를 활성화, 비활성화
         atkRange.enabled = true;
+
+        yield return null;
+
         atkRange.enabled = false;
+
     }
 
     // 애니메이션 이벤트 호출 메소드 (공격이 끝난 뒤)
@@ -87,6 +97,7 @@ public class MinionBasic : MinionBase, IHitObject
     public void Initilize()
     {
         currentHp = maxHp;
+        atkReset = false;
     }
 
     public void Hit(float damage)

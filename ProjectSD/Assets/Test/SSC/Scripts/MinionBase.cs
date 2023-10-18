@@ -9,7 +9,7 @@ public class MinionBase : MonoBehaviour
     private WaitForSeconds readyTime = new WaitForSeconds(1f);      // PC 추적을 시작할 대기 시간
     private WaitForSeconds coolingTime = new WaitForSeconds(3f);    // DeadZone 트리거시 오브젝트 풀 반환 시간
     public float minionSpeed = 5f;                                  // 졸개의 이동속도
-    private float distance = default;                               // PC와의 거리 (생성 되었을시 캐싱)
+    private float firstDistance = default;                          // PC와의 거리 (생성 되었을시 캐싱)
     private bool isDetected = false;                                // 추적활성화 불값
     public bool isAttack = false;                                   // 하위 클래스에서 참조할 공격 실행 불값
     private bool isLimit = false;                                   // DeadZone 트리거시 Update상 동작 방지용 불값
@@ -26,7 +26,7 @@ public class MinionBase : MonoBehaviour
         myRigid = GetComponent<Rigidbody>();
 
         // 처음 생성되었을시 PC 와의 거리 캐싱 ( PC가 고정되어 있어서 Start시에만 캐싱하면 된다. )
-        distance = Vector3.Distance(transform.position, player.transform.position);
+        firstDistance = Vector3.Distance(transform.position, player.transform.position);
 
 
     }
@@ -34,12 +34,13 @@ public class MinionBase : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        // 졸개들은 리미트 지점에 닿으면 모든 행동을 멈추고 오브젝트 풀에 반환
-        if (isLimit == true)
+        // TODO : 졸개들은 리미트 지점에 닿으면 모든 행동을 멈추고 오브젝트 풀에 반환
+        if (isLimit == true || Golem.G_insance.restart == true)
         {
+            myAni.SetBool("isWalk", false);
             return;
         }
-        
+
         // 항상 플레이어를 바라본다.
         transform.LookAt(player.transform.position);
 
@@ -47,7 +48,7 @@ public class MinionBase : MonoBehaviour
         Vector3 target = (player.transform.position - transform.position).normalized;
 
         // 생성 되었을시 플레이어의 거리를 저장해둬서 해당 거리의 비율을 비교해 플레이어에게 도달한것을 인지
-        if (Vector3.Distance(transform.position, player.transform.position) <= distance * 0.13f)
+        if (Vector3.Distance(transform.position, player.transform.position) <= 1.5f)
         {
             myRigid.velocity = Vector3.zero;        // PC에게 도달하면 속도값 0
             //myRigid.isKinematic = true;
