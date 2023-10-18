@@ -20,8 +20,7 @@ public class MinionBasic : MinionBase, IHitObject
     {
         base.Update();
 
-        // 플레이어가 대기상태 == 게임 시작이든 재시작이든 리셋상태이므로 소환된 졸개들은 오브젝트 풀 반환
-        if(GameManager.Instance.playerState == PlayerState.READY)
+        if(Golem.G_insance.minionRestart == true)
         {
             ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BASIC);
         }

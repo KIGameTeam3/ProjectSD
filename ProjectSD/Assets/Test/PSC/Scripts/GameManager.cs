@@ -143,11 +143,6 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        // [신성창] 231018 게임 재시작시 괴수 리셋, 랜덤약점 및 약점활성화 유닛 리셋
-        Golem.G_insance.Initilize();
-        LuckyPointController.instance.Initialize();
-        // [신성창] 231018 게임 재시작시 괴수 리셋, 랜덤약점 및 약점활성화 유닛 리셋
-
         InitManager();
         FindObjectOfType<PlayerBase>().ChangeHand(false);
     }
@@ -162,12 +157,6 @@ public class GameManager : MonoBehaviour
         }
 
         InitManager();
-
-        // [신성창] 231018 게임 시작시 괴수 행동시작
-        Golem.G_insance.GolemStart();
-        // [신성창] 231018 게임 시작시 괴수 행동시작
-
-
         FindObjectOfType<PlayerBase>().ChangeHand(false);
     }
 

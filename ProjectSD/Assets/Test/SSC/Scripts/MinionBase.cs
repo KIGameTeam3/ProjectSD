@@ -34,11 +34,8 @@ public class MinionBase : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        // 졸개들은 공통적으로
-        // 1. 절벽을 넘어섰을 때
-        // 2. 플레이어가 죽었을 때 행동을 멈춘다
-        if (isLimit == true || 
-            GameManager.Instance.playerState == PlayerState.DEAD)
+        // TODO : 졸개들은 리미트 지점에 닿으면 모든 행동을 멈추고 오브젝트 풀에 반환
+        if (isLimit == true || Golem.G_insance.restart == true)
         {
             myAni.SetBool("isWalk", false);
             return;
