@@ -52,6 +52,13 @@ public class GunBase : MonoBehaviour
         {
             controller = ARAVRInput.Controller.LTouch;
         }
+        isEnhance = false;
+        ResetSetting();
+    }
+
+    public void ResetSetting()
+    {
+        canShot = true;
     }
 
     private void Shot()

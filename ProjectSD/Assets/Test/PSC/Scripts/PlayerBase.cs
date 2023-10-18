@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerBase : MonoBehaviour
 {
+    public static PlayerBase instance;
 
     public LaserPoint[] gun;
     public Aim[] hand;
@@ -13,6 +14,7 @@ public class PlayerBase : MonoBehaviour
     AudioSource audioSource;
     public bool canEffect = true;
 
+    private float maxHP = 100;
     private const float VIBRATION_TIME = 0.2f;
     private const float VIBRATION_FREQUENCY = 10F;
     private const float VIBRATION_AMPLITUDE = 2F;
@@ -38,6 +40,7 @@ public class PlayerBase : MonoBehaviour
             {
                 GameManager.Instance.playerState = PlayerState.PLAY; 
                 ChangeHand(false);
+
                 //PLAY UI로 넘어감
             }
         }
@@ -47,6 +50,11 @@ public class PlayerBase : MonoBehaviour
     {
         gun[0].gameObject.SetActive(!isHand);
         gun[1].gameObject.SetActive(!isHand);
+        if (!isHand)
+        {
+            gun[0].GetComponent<GunBase>().ResetSetting();
+            gun[1].GetComponent<GunBase>().ResetSetting();
+        }
         hand[0].gameObject.SetActive(isHand);
         hand[1].gameObject.SetActive(isHand);
 
@@ -54,9 +62,10 @@ public class PlayerBase : MonoBehaviour
 
     private void Init()
     {
+        instance = this;
         /* PlayerStatus originStatus = Resources.Load("/"+status.name) as PlayerStatus;
          status = Instantiate(originStatus);*/
-
+        maxHP = status.health;
         status = Instantiate(status);
 
         audioSource = GetComponent<AudioSource>();
@@ -72,8 +81,8 @@ public class PlayerBase : MonoBehaviour
 
     public void Hit(float damage)
     {
-        HitReaction();
         status.health -= (int)Mathf.Round(damage);
+        HitReaction();
         if (status.health <= 0)
         {
             Invoke("Die", 2);
@@ -101,6 +110,7 @@ public class PlayerBase : MonoBehaviour
             bloodEffect.fadeTime = EFFECT_TIME;
             bloodEffect.FadeIn();
         }
+        KHJUIManager.Instance?.ChangeHpText(status.health, maxHP);
     }
 
     IEnumerator DelayEffectRoutine()
