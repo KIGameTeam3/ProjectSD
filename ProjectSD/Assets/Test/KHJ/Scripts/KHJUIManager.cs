@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using Meta.Voice.Samples.BuiltInTimer;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -158,9 +159,9 @@ public class KHJUIManager : MonoBehaviour
     }
     private void Start()
     {
-        startHit.OnHit.AddListener(() => UIStartGame()); //함수 연결
-        endHit.OnHit.AddListener(() => UIExitGame());
-        restartHit.OnHit.AddListener(() => UIRestart());
+        startHit.OnHit.AddListener(() => ClickStartGame()); //함수 연결
+        endHit.OnHit.AddListener(() => ClickExitGame());
+        restartHit.OnHit.AddListener(() => ClickReStart());
 
         bossPanel.SetActive(false);
         restartPanel.SetActive(false);
@@ -175,6 +176,12 @@ public class KHJUIManager : MonoBehaviour
     {
         //코루틴으로 뺼 예정
         ClearMsg();
+
+        if(GameManager.Instance.CheckPlayingGame())
+        {
+            DisplayTime(GameManager.Instance.GetPlayTime());
+        }
+
     }
   
     public void SendMsg()
@@ -200,7 +207,7 @@ public class KHJUIManager : MonoBehaviour
         }
     } //메시지가 2초뒤에 사라질 수 있도록 하는 함수입니다.
     //}메시지 차에 띄울 함수입니다.
-    public void UIStartGame()
+    public void ClickStartGame()
     {
         Debug.Log("게임을 시작합니다");
         startPanel.SetActive(false);
@@ -208,17 +215,17 @@ public class KHJUIManager : MonoBehaviour
         pUiPivot.SetActive(true);
         bossPanel.SetActive(true);
         timePanel.SetActive(true);
-
         GameManager.Instance.StartGame();
-        
+
+
     }//시작 함수는 완료
-    public void UIExitGame()
+    public void ClickExitGame()
     {
         Debug.Log("게임을 종료합니다");
         Application.Quit();
     }//종료 버튼 함수도 완료
 
-    public void UIGameOver()
+    public void OnGameOver()
     {
         //TODO 게임 오버 패널 켜주고 2초뒤 리스타트 버튼 활성화 혹은 
         PopUpResult();
@@ -239,14 +246,14 @@ public class KHJUIManager : MonoBehaviour
         rKillObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "킬 결과";
     }
 
-    public void UIRestart()
+    public void ClickReStart() //재시작 버튼을 누르면 활성화될 것들 혹은 비활성화 될 것들 해줍니다.
     {
         Debug.Log("게임 재시작 되나?");
-        restartPanel.SetActive(false);
-        resultPanel.SetActive(false);
-        endPanel.SetActive(false);
-        pUiPivot.SetActive(true);
-        bossPanel.SetActive(true);
+        restartPanel.SetActive(false); //재시작 캔버스 패널
+        resultPanel.SetActive(false); // 결과찬 캔버스 패널
+        endPanel.SetActive(false); //종료 버튼 
+        pUiPivot.SetActive(true); // 플레이어 ui 관련 패널
+        bossPanel.SetActive(true); //보스 체력 ui 패널 
 
         GameManager.Instance.StartGame();
     }
@@ -256,20 +263,22 @@ public class KHJUIManager : MonoBehaviour
         coinText.text = "" + GameManager.Instance.currentGold;
     }
 
-    public void ChangeHpText()
+    public void ChangeHpText(float pHp, float pMaxHp )
     {
         //TODO hp 추가를 해줘야 합니다.
-        //healthText.text = "" + playerHP;
+        currentHpImg.fillAmount = pHp / pMaxHp;
+        healthText.text = string.Format("{0}", pHp); 
     }
 
-    public void ChangeBossHpText()
+    public void ChangeBossHpText(float bHp, float bMaxHp) //Boss hp
     {
         //TODO hp 추가를 해줘야 합니다.
-        //bossHpText.text = "" + bossHP;
+        currentBossImg.fillAmount = bHp / bMaxHp;
+        bossHpText.text = string.Format("{0}", bHp); 
     }
 
 
-    //텍스트 00:00 형식으로 보여주는 함수 
+    //시간 텍스트 00:00 형식으로 보여주는 함수 
     public void DisplayTime(float timeToDisplay)
     {
         timeToDisplay += 1;
@@ -306,10 +315,9 @@ public class KHJUIManager : MonoBehaviour
     public void ShowBuff()
     {
         buffImg.SetActive(true);
-
     }
 
-    public void OpenShop()
+    public void OpenShop() //상점을 켜줍니다.
     {
         shopPanel.SetActive(true);
         isOpenShop = true;
@@ -318,7 +326,7 @@ public class KHJUIManager : MonoBehaviour
     {
         shopPanel.SetActive(false);
         isOpenShop = false;
-    }
+    } //상점을 꺼줍니다.
     public void GetUnit()
     {
         //unitList.Add(unit);
