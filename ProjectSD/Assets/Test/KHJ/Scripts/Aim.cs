@@ -106,6 +106,13 @@ public class Aim : MonoBehaviour
                     ARAVRInput.PlayVibration(ARAVRInput.Controller.LTouch);
                     hitObject?.HitUI();
                 }
+                else if(hitInfo.collider.tag == "UnitBtn")
+                {
+                    
+                        Debug.Log("UnitBtn 핸드 트리거 찍히나요?");
+                        hitObject?.HitUI();
+                    
+                }
                /* else if (hitInfo.collider.tag == "PlayerUi")
                 {
                     if (Input.GetButtonDown("Fire1"))
@@ -130,8 +137,6 @@ public class Aim : MonoBehaviour
         Vector3 endPos = startPos + ARAVRInput.RHandDirection * lrMaxDistance;
         if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.RTouch))
         {
-
-
             // 왼쪽 컨트롤러 기준으로 Ray를 만든다.
             Ray ray = new Ray(startPos, ARAVRInput.RHandDirection);
             RaycastHit hitInfo;
@@ -158,9 +163,28 @@ public class Aim : MonoBehaviour
                     }
                 }*/
             }
-
         }
         // Ray가 부딪힌 지점에 라인 그리기
+        else if(ARAVRInput.GetDown(ARAVRInput.Button.HandTrigger, ARAVRInput.Controller.RTouch))
+        {
+            Ray ray = new Ray(startPos, ARAVRInput.RHandDirection);
+            RaycastHit hitInfo;
+
+            // 충돌이 있다면?
+            if (Physics.Raycast(ray, out hitInfo, lrMaxDistance, GlobalFunction.GetLayerMask("UI")))
+            {
+                Debug.Log(hitInfo.transform.tag);
+                endPos = hitInfo.point;
+                UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
+                if (hitInfo.collider.tag == "UnitBtn")
+                {
+                    Debug.Log("HandTrigger입니다");
+                    // 컨트롤러의 진동 재생
+                    ARAVRInput.PlayVibration(ARAVRInput.Controller.RTouch);
+                    hitObject?.HitUI();
+                }
+            }
+        }
         lineRenderer.SetPosition(0, startPos);
         lineRenderer.SetPosition(1, endPos);
     }       // else : 오른쪽 핸드 기준으로 레이저 포인터 만들기
