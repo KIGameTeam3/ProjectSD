@@ -15,6 +15,11 @@ public class GunBulletBase : MonoBehaviour
     private bool isAttack = false;
 
 
+    [SerializeField]
+    private DamageText damageText;
+
+    public float textSize = 0.1f;
+
     private void Awake()
     {
         Init();
@@ -43,9 +48,25 @@ public class GunBulletBase : MonoBehaviour
         Destroy(gameObject, 1f);
     }
 
-    protected void AttackReaction()
+    protected void AttackReaction(int damage)
     {
+
+        damageText.gameObject.SetActive(true);
+        GameObject obj = new GameObject();
+        obj.transform.position = damageText.transform.position;
+        damageText.transform.SetParent(obj.transform);
+        damageText.SetDamage(damage);
+        float distance = Vector3.Distance(transform.position, PlayerBase.instance.transform.position);
+        //damageText.transform.localScale = damageText.transform.localScale * textSize * (Mathf.Abs(distance)+1);
+        damageText.SetTextSize(distance);
+
         isAttack = true;
+        bulletRigidbody.velocity = Vector3.zero;
+        transform.localScale = Vector3.zero;
+
+        ARAVRInput.PlayVibration(ARAVRInput.Controller.LTouch);
+        ARAVRInput.PlayVibration(ARAVRInput.Controller.RTouch);
+
         bulletAudioSource.Play();
         bulletParticle.Play();
         Remove();
@@ -99,7 +120,8 @@ public class GunBulletBase : MonoBehaviour
 
         if (enemy != null && !isAttack && (other.CompareTag("HitPoint") || other.CompareTag("LuckyPoint")))
         {
-            enemy.Hit(GetDamage(other.gameObject.CompareTag("LuckyPoint")));
+            int damage = (int)GetDamage(other.gameObject.CompareTag("LuckyPoint"));
+            enemy.Hit(damage);
 
             if(other.CompareTag("LuckyPoint"))
             {
@@ -110,7 +132,7 @@ public class GunBulletBase : MonoBehaviour
 
             }
 
-            AttackReaction();
+            AttackReaction(damage);
         }
 
     }
