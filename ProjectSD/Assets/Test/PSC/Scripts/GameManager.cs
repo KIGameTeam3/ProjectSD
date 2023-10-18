@@ -63,7 +63,9 @@ public class GameManager : MonoBehaviour
     // [이미정] 231016 raycast hitPosition 추가
     private void Update()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //KHJ 23.10.18 마우스 포지션을 VR 컨트롤러로 변경
+        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(ARAVRInput.RHandDirection);
         RaycastHit hitPoint;
         if (Physics.Raycast(ray, out hitPoint, 90000, LayerMask.GetMask("Floor")))
         {

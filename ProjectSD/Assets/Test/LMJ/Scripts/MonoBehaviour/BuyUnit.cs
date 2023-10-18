@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -19,9 +20,16 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     #endregion
 
     #region 구매
-    public Text _price;
-    public Text _name;
+    //{23.10.18 14:55 KHJ: TMP 텍스트로 사용하기 위해 잠시 변환합니다
+    public TMP_Text _price;
+    public TMP_Text _name;
+    public TMP_Text _info;
+    //public Text _price;
+    //public Text _name;
+    //} KHJ 변경
     #endregion
+    //KHJ 콜라이더 체크 넣기 위한 이벤트 추가
+    
 
     public GameObject preview = default;
     public int previewIdx = default;
@@ -34,7 +42,7 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         unitDestroy = unitPrefab.unitData.unitLifeTime;
 
         preview = FindObjectOfType<PreviewBase>().gameObject;
-    
+
     }
 
 
@@ -45,10 +53,12 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
             preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(true);  // 프리뷰 활성화
             preview.GetComponent<PreviewBase>().PlaceCheck();   // 설치가능 체크 코루틴 켜기
 
+            
             // [PSH] 231018 수정: GetComponent말고 Istance로
             preview.transform.position = GameManager.Instance.hitPosition;  
         }
     }
+   
 
     public void OnDrag(PointerEventData eventData)  // 드래그 중일 때
     {
@@ -101,4 +111,80 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         Gizmos.DrawRay(ray);
     }
+
+
+    //KHJ 테스트를 위해 복사해서 사용해봅니다.
+    //{KHJ 메서드 변환 테스트
+    public void ClickUnit()   // 버튼을 눌렀을 때
+    {
+        if (gameObject.CompareTag("UnitBtn") && unitPrefab != null) // 프리뷰 생성 조건
+        {
+            preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(true);  // 프리뷰 활성화
+            preview.GetComponent<PreviewBase>().PlaceCheck();   // 설치가능 체크 코루틴 켜기
+
+            // [KHJ] 231018 수정: 
+            KHJUIManager.Instance.CloseShop();
+
+            // [PSH] 231018 수정: GetComponent말고 Istance로
+            preview.transform.position = GameManager.Instance.hitPosition;
+            
+            while(GameManager.Instance.playerState == PlayerState.SHOP)
+            {
+                // [PSH] 231018 수정 {
+                Vector3 currCursorPos = GameManager.Instance.hitPosition;
+                Vector3 cursorPosNoY = new Vector3(currCursorPos.x, 0, currCursorPos.z);
+                if (cursorPosNoY.magnitude >= installMaxDis)    // 유닛 배치 최대 거리 제한
+                {
+                    preview.transform.position = (cursorPosNoY.normalized * installMaxDis) + (Vector3.up * currCursorPos.y);
+                }
+                preview.transform.position = currCursorPos;
+                // } [PSH] 231018 수정
+
+                if ( ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger,ARAVRInput.Controller.LTouch))
+                {
+                    ClickUnitUp();
+                    break;
+                }
+            }
+
+        }
+    }
+
+    public void DragUnit()  // 드래그 중일 때
+    {
+        //// [PSH] 231018 수정 {
+        //Vector3 currCursorPos = GameManager.Instance.hitPosition;
+        //Vector3 cursorPosNoY = new Vector3(currCursorPos.x, 0, currCursorPos.z);
+        //if (cursorPosNoY.magnitude >= installMaxDis)    // 유닛 배치 최대 거리 제한
+        //{
+        //    preview.transform.position = (cursorPosNoY.normalized * installMaxDis) + (Vector3.up * currCursorPos.y);
+        //}
+        //preview.transform.position = currCursorPos;
+        //// } [PSH] 231018 수정
+    }
+
+    public void ClickUnitUp() // 유닛 설치: 클릭 중인 버튼에서 손을 뗄 때
+    {
+        Debug.Log("버튼에서 손 뗌");
+        preview.GetComponent<PreviewBase>().StopPlaceCheck();   // 설치가능 체크 코루틴 끄기
+        preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(false); // 프리뷰 비활성화
+
+        // 유닛을 생성
+        if (preview.GetComponent<PreviewBase>().installable == true)
+        {
+            Debug.Log("유닛 설치");
+
+            // [PSH] 231018 수정 {
+            if (GameManager.Instance.hitPosition.z >= installMaxDis)    // 유닛 배치 최대 거리 제한
+            {
+                GameManager.Instance.hitPosition.z = installMaxDis;
+            }
+            unitObj = Instantiate(unitPrefab.gameObject, GameManager.Instance.hitPosition, Quaternion.identity);
+            Destroy(unitObj, unitDestroy);  // 설치 후 일정 시간이 지나면 파괴
+            GameManager.Instance.SubtractGold(price);    // 재화 소모 메서드 호출
+            // } [PSH] 231018 수정
+        }
+        else { Debug.Log("설치 불가능 지역"); }
+    }
+
 }

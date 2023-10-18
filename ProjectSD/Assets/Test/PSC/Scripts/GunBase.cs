@@ -14,7 +14,7 @@ public class GunBase : MonoBehaviour
     private ParticleSystem gunParticle;
     private ARAVRInput.Controller controller;
     private bool isEnhance = false;
-    private bool canShot=true;
+    private bool canShot = true;
 
 
 
