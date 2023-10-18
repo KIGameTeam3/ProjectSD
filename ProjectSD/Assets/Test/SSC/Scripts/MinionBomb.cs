@@ -21,6 +21,12 @@ public class MinionBomb : MinionBase, IHitObject
     {
         base.Update();
 
+        // TODO : 게임 재시작과 이어야함, 현재 임시 불값으로 테스트중
+        if(Golem.G_insance.minionRestart == true)
+        {
+            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BOMB);
+        }
+
         // 부모클래스에서 공격진입에 들어갔다면
         if(isAttack == true)
         {

@@ -301,7 +301,7 @@ GameObject:
   - component: {fileID: 7772760553277847305}
   - component: {fileID: 1513051938885138516}
   m_Layer: 0
-  m_Name: Minion_Bomb
+  m_Name: Minion_Boom
   m_TagString: HitPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -359,9 +359,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minionSpeed: 2
   isAttack: 0
+  pcDistance: 0.08
   myAni: {fileID: 3266876403279583778}
   maxHp: 50
-  currentHp: 0
   attackSpeed: 3
   explosiveDamage: 10
   explosionArea: 10

@@ -8,7 +8,7 @@ public class MeleeAttack : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-
+            other.GetComponent<IHitObject>().Hit(20f);
         }
     }
 }

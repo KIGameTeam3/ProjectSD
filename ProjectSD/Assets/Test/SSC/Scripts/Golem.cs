@@ -12,6 +12,16 @@ using UnityEngine.UI;
 
 public class Golem : MonoBehaviour, IHitObject
 {
+    public static Golem G_insance = default;
+
+    public bool restart = false;
+    public bool minionRestart = false;
+    void Awake()
+    {
+        G_insance = this;
+    }
+
+
     // {괴수의 페이즈를 체크할 enum 스테이트
     public enum Phase 
     {  
@@ -35,10 +45,9 @@ public class Golem : MonoBehaviour, IHitObject
 
     // {괴수의 각종 변수
 
-    public float golemMaxHp = 100f;         // 괴수의 초기 체력
+    private Vector3 firstPos = Vector3.zero;
+    public float golemMaxHp = 100000f;         // 괴수의 초기 체력
     private float currentHp = default;      // 괴수의 현재 체력    
-    public float startTime = 5f;            // 게임 시작시간 체크
-                                            // TODO : 추후에는 게임시작 버튼을 누를시 괴수가 행동진입 예정
 
     private float currentTime = default;    // 페이즈별로 캐싱할 현재 시간
     public float phase1Time = 120f;         // 페이즈 1 제한시간
@@ -56,18 +65,20 @@ public class Golem : MonoBehaviour, IHitObject
     public float phase5Time = 120f;         // 페이즈 5 제한시간
     public float phase6Hp = 0.05f;          // 페이즈 6 진입하는 HP 비율
     public float phase6Distance = 0.05f;     // 페이즈 6 진입하는 거리비율 = 플레이어로부터 40% 지점
-    public float phase6Time = 120f;         // 페이즈 6 제한시간
+    public float phase6Time = 30f;         // 페이즈 6 제한시간
 
+    private IEnumerator currentCoroutine = null;
     private Transform player = default;     // 플레이어를 캐싱할 변수
-    private float firstPos = default;       // 괴수와 플레이어의 최초 거리 캐싱할 변수
+    private float firstDistnance = default;       // 괴수와 플레이어의 최초 거리 캐싱할 변수
     public float golemSpeed = 5f;           // 괴수의 PC 추적 속도
 
     private Vector3 target = default;
 
-    [SerializeField] private GameObject RHandBomb = default;     // 괴수의 원거리공격 투사체 소환 포지션 : 오른손
-    [SerializeField] private GameObject LHandBomb = default;     // 괴수의 원거리공격 투사체 소환 포지션 : 왼손
-    [SerializeField] private Transform MinionSpawn = default;   // 졸개 소환 위치
-    [SerializeField] private Transform distance;
+    [SerializeField] private GameObject RHandBomb;    // 괴수의 원거리공격 투사체 소환 포지션 : 오른손
+    [SerializeField] private GameObject LHandBomb;    // 괴수의 원거리공격 투사체 소환 포지션 : 왼손
+    [SerializeField] private Transform MinionSpawn;   // 졸개 소환 위치
+    [SerializeField] private Transform distance;      // 괴수의 피벗 위치가 안맞아 실제 거리체크할 오브젝트     
+    [SerializeField] private Transform[] spawners;
 
     // }괴수의 각종 변수
 
@@ -76,63 +87,50 @@ public class Golem : MonoBehaviour, IHitObject
 
     private WaitForSeconds ballThrowcooltime = new WaitForSeconds(5f);
     private WaitForSeconds minionSpawncooltime = new WaitForSeconds(25f);
+
     // Start is called before the first frame update
     void Start()
     {
         // {게임 입장시 골렘이 가져올 정보들
         player = GameObject.FindWithTag("Player").GetComponent<Transform>();        // 플레이어 태그를 찾아 PC 위치정보 캐싱
-        golemCheck = Phase.READY;       // 괴수의 시작 스테이트패턴 READY : 유저의 게임 시작 입력 전까지는 대기를 취함
         golemRigid = GetComponent<Rigidbody>();     // 괴수의 리지드바디
         golemAni = GetComponent<Animator>();        // 괴수의 애니메이터
-        Initilize();
-
+        firstPos = transform.position;
         target = (player.transform.position - transform.position).normalized;       // 괴수의 진행할 방향을 체크하기 위한 노말라이즈
-        firstPos = Vector3.Distance(distance.position, player.transform.position); // 괴수의 초기 위치와 PC의 거리 체크
+        firstDistnance = Vector3.Distance(distance.position, player.transform.position); // 괴수의 초기 위치와 PC의 거리 체크
 
         // }게임 입장시 골렘이 가져올 정보들
 
-        currentTime = phase1Time;
 
+        // 게임 재시작에도 적용될 초기화 메소드
+        Initilize();
 
     }
 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    // 괴수가 PC에 닿는 순간 PC는 즉사처리
-    //    if (collision.collider.CompareTag("Player"))
-    //    {
-    //        // { 게임종료에 따른 괴수의 기능동작 정지 행동들
+    // { 게임 시작
+    public void GolemStart()
+    {
+        golemCheck = Phase.PHASE_1;
+        StartCoroutine(Phase1());
 
-    //        golemCheck = Phase.GAMEOVER;            // 스테이트 : 게임오버상태
-    //        golemRigid.velocity = Vector3.zero;     // 괴수는 그자리에서 정지
-    //        golemAni.SetBool("isWalk", false);      // 애니메이션은 IDLE로 돌아간다.
-
-    //        // } 게임종료에 따른 괴수의 기능동작 정지 행동들
-
-    //        Debug.Log("게임 종료");
-    //    }
-    //}
+    }
+    // } 게임 시작
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            // 현재 게임시작을 입력받았을시 정지해있던 골렘이 5초뒤에 골렘이 1페이즈 구간까지 이동하게 설계 해뒀음
-            golemCheck = Phase.PHASE_1;
-
-            StartCoroutine(Phase1());
-        }
-
+        minionRestart = false;
+        //Debug.Log($"골렘 페이즈 체크 : {golemCheck}");
         // 괴수는 항상 플레이어를 바라본다.
         transform.LookAt(player.transform.position);
 
         //  괴수는 라스트페이즈에 진입하면 PC를 향해 멈추지않고 다가오게 된다.
         if (golemCheck == Phase.PHASE_LAST)
         {
-            if(firstPos * 0.01f >= Vector3.Distance(distance.position, player.transform.position))
+            if(Vector3.Distance(distance.position, player.transform.position) <= 1f)
             {
                 // { 게임종료에 따른 괴수의 기능동작 정지 행동들
 
+                player.GetComponent<IHitObject>().Hit(100f);
                 golemCheck = Phase.GAMEOVER;            // 스테이트 : 게임오버상태
                 golemRigid.velocity = Vector3.zero;     // 괴수는 그자리에서 정지
                 golemAni.SetBool("isWalk", false);      // 애니메이션은 IDLE로 돌아간다.
@@ -147,14 +145,13 @@ public class Golem : MonoBehaviour, IHitObject
 
     }
 
+    #region 1페이즈
     IEnumerator Phase1()
     {
         // { 제한시간이 다 되거나 일정체력이 깎이면 1페이즈 탈출
         while(currentTime >= 0f && currentHp >= golemMaxHp * phase2Hp)
         {
             currentTime -= Time.deltaTime;
-            //Debug.Log($"1페이즈 진행중인 시간 : {currentTime}");
-            //TimeBar.fillAmount = (float)currnteTime / (float)phase1Time;
 
             // 1페이즈 공격패턴은 졸개 소환만
             if (isSpawnminion == false)
@@ -178,7 +175,7 @@ public class Golem : MonoBehaviour, IHitObject
         while (golemCheck == Phase.PHASE_1)
         {
             // 2페이즈 지점에 도달하게 되면
-            if (firstPos * phase2Distance >= Vector3.Distance(distance.position, player.transform.position))
+            if (firstDistnance * phase2Distance >= Vector3.Distance(distance.position, player.transform.position))
             {
                 // 골렘의 상태 변경
                 golemCheck = Phase.PHASE_2;
@@ -199,7 +196,9 @@ public class Golem : MonoBehaviour, IHitObject
 
         // } 2페이즈 돌입
     }
+    #endregion
 
+    #region 2페이즈
     IEnumerator Phase2()
     {
         // { 제한시간이 다 되거나 일정체력이 깎이면 2페이즈 탈출
@@ -226,54 +225,79 @@ public class Golem : MonoBehaviour, IHitObject
         }
         // } 제한시간이 다 되거나 일정체력이 깎이면 2페이즈 탈출
 
-        // 현재 본 클라인트의 임의대로 2페이즈가 끝나면 라스트 페이즈로 진입하게 되어
-        // 아무런 동작없이 플레이어를 향해 등속운동하게 설계되어 있음
-
-
-        // 라스트 페이즈는 업데이트상에서 플레이어를 향해 등속운동 하는것으로 동작함
-        // { 라스트 페이즈 진입
-        golemCheck = Phase.PHASE_LAST;
-        golemAni.SetBool("isWalk", true);
+        // { 다음 페이즈 돌입을 위한 현재 동작들 정지
+        isAttack = false;
+        LHandBomb.SetActive(false);
+        RHandBomb.SetActive(false);
         golemAni.SetTrigger("isAttackStop");
-        // } 라스트 페이즈 진입
-    }
+        // } 다음 페이즈 돌입을 위한 현재 동작들 정지
 
+        golemAni.SetBool("isWalk", true);
+
+        while (golemCheck == Phase.PHASE_2)
+        {
+            // 2페이즈 지점에 도달하게 되면
+            if (firstDistnance * phase3Distance >= Vector3.Distance(distance.position, player.transform.position))
+            {
+                // 골렘의 상태 변경
+                golemCheck = Phase.PHASE_3;
+            }
+
+            // 2페이즈 지점 도달 전까지는 플레이어 방향으로 등속운동 진행
+            golemRigid.velocity = target * golemSpeed;
+
+            yield return null;
+        }
+
+        currentTime = phase3Time;
+        golemRigid.velocity = Vector3.zero;
+        golemAni.SetBool("isWalk", false);
+        StartCoroutine(Phase3());
+    }
+    #endregion
+
+    #region 3페이즈
     IEnumerator Phase3()
     {
-
-        // { 제한시간이 다 되거나 일정체력이 깎이면 1페이즈 탈출
-        while (currentTime >= 0f && currentHp >= golemMaxHp * phase2Hp)
+        // { 제한시간이 다 되거나 일정체력이 깎이면 3페이즈 탈출
+        while (currentTime >= 0f && currentHp >= golemMaxHp * phase4Hp)
         {
             currentTime -= Time.deltaTime;
-            //Debug.Log($"1페이즈 진행중인 시간 : {currentTime}");
-            //TimeBar.fillAmount = (float)currnteTime / (float)phase1Time;
 
-            // 1페이즈 공격패턴은 졸개 소환만
-            if (isSpawnminion == false)
+            if (isSpawnminion == false && isAttack == false)
             {
                 isSpawnminion = true;
+                isAttack = true;
                 golemAni.SetTrigger("SpawnMinion");
+            }
+            else if (isThrow == false && isAttack == false)
+            {
+                isThrow = true;
+                isAttack = true;
+                ThrowBallStart();
             }
 
             yield return null;
         }
-        // } 제한시간이 다 되거나 일정체력이 깎이면 1페이즈 탈출
+        // } 제한시간이 다 되거나 일정체력이 깎이면 3페이즈 탈출
 
-        // { 2페이즈 돌입을 위한 현재 동작들 정지
+        // { 다음 페이즈 돌입을 위한 현재 동작들 정지
         isAttack = false;
+        LHandBomb.SetActive(false);
+        RHandBomb.SetActive(false);
         golemAni.SetTrigger("isAttackStop");
-        // } 2페이즈 돌입을 위한 현재 동작들 정지
+        // } 다음 페이즈 돌입을 위한 현재 동작들 정지
 
         golemAni.SetBool("isWalk", true);
 
         // { 1페이즈가 끝난 시점에서 2페이즈로 넘어가는 상태를 체크중
-        while (golemCheck == Phase.PHASE_1)
+        while (golemCheck == Phase.PHASE_3)
         {
             // 2페이즈 지점에 도달하게 되면
-            if (firstPos * phase2Distance >= Vector3.Distance(distance.position, player.transform.position))
+            if (firstDistnance * phase4Distance >= Vector3.Distance(distance.position, player.transform.position))
             {
                 // 골렘의 상태 변경
-                golemCheck = Phase.PHASE_2;
+                golemCheck = Phase.PHASE_4;
             }
 
             // 2페이즈 지점 도달 전까지는 플레이어 방향으로 등속운동 진행
@@ -283,15 +307,162 @@ public class Golem : MonoBehaviour, IHitObject
         }
         // } 1페이즈가 끝난 시점에서 2페이즈로 넘어가는 상태를 체크중
 
-        // { 2페이즈 돌입
-        currentTime = phase2Time;
+        // { 4페이즈 돌입
+        currentTime = phase4Time;
         golemRigid.velocity = Vector3.zero;
         golemAni.SetBool("isWalk", false);
-        StartCoroutine(Phase2());
+        StartCoroutine(Phase4());
 
-        // } 2페이즈 돌입
+        // } 4페이즈 돌입
     }
+    #endregion
 
+    #region 4페이즈
+    IEnumerator Phase4 ()
+    {
+        // { 제한시간이 다 되거나 일정체력이 깎이면 4페이즈 탈출
+        while (currentTime >= 0f && currentHp >= golemMaxHp * phase5Hp)
+        {
+            currentTime -= Time.deltaTime;
+
+            if (isSpawnminion == false && isAttack == false)
+            {
+                isSpawnminion = true;
+                isAttack = true;
+                golemAni.SetTrigger("SpawnMinion");
+            }
+            else if (isThrow == false && isAttack == false)
+            {
+                isThrow = true;
+                isAttack = true;
+                ThrowBallStart();
+            }
+
+            // } 상단에 기술한 1페이즈 공격패턴과 동일한 동작
+
+            yield return null;
+        }
+        // } 제한시간이 다 되거나 일정체력이 깎이면 4페이즈 탈출
+
+        // { 다음 페이즈 돌입을 위한 현재 동작들 정지
+        isAttack = false;
+        LHandBomb.SetActive(false);
+        RHandBomb.SetActive(false);
+        golemAni.SetTrigger("isAttackStop");
+        // } 다음 페이즈 돌입을 위한 현재 동작들 정지
+
+        golemAni.SetBool("isWalk", true);
+
+        // { 1페이즈가 끝난 시점에서 2페이즈로 넘어가는 상태를 체크중
+        while (golemCheck == Phase.PHASE_4)
+        {
+            // 2페이즈 지점에 도달하게 되면
+            if (firstDistnance * phase5Distance >= Vector3.Distance(distance.position, player.transform.position))
+            {
+                // 골렘의 상태 변경
+                golemCheck = Phase.PHASE_5;
+            }
+
+            // 2페이즈 지점 도달 전까지는 플레이어 방향으로 등속운동 진행
+            golemRigid.velocity = target * golemSpeed;
+
+            yield return null;
+        }
+        // } 1페이즈가 끝난 시점에서 2페이즈로 넘어가는 상태를 체크중
+
+        // { 다음 페이즈 진입
+        currentTime = phase5Time;
+        golemRigid.velocity = Vector3.zero;
+        golemAni.SetBool("isWalk", false);
+        StartCoroutine(Phase5());
+        // } 다음 페이즈 진입
+
+    }
+    #endregion
+
+    #region 5페이즈
+    IEnumerator Phase5 ()
+    {
+        // { 제한시간이 다 되거나 일정체력이 깎이면 3페이즈 탈출
+        while (currentTime >= 0f && currentHp >= golemMaxHp * phase6Hp)
+        {
+            currentTime -= Time.deltaTime;
+
+            if (isThrow == false)
+            {
+                isThrow = true;
+                ThrowBallStart();
+            }
+
+            // } 상단에 기술한 1페이즈 공격패턴과 동일한 동작
+
+            yield return null;
+        }
+        // } 제한시간이 다 되거나 일정체력이 깎이면 3페이즈 탈출
+
+        // { 3페이즈 돌입을 위한 현재 동작들 정지
+        isAttack = false;
+        LHandBomb.SetActive(false);
+        RHandBomb.SetActive(false);
+        golemAni.SetTrigger("isAttackStop");
+        // } 2페이즈 돌입을 위한 현재 동작들 정지
+
+        golemAni.SetBool("isWalk", true);
+
+        // { 1페이즈가 끝난 시점에서 2페이즈로 넘어가는 상태를 체크중
+        while (golemCheck == Phase.PHASE_5)
+        {
+            // 2페이즈 지점에 도달하게 되면
+            if (firstDistnance * phase6Distance >= Vector3.Distance(distance.position, player.transform.position))
+            {
+                // 골렘의 상태 변경
+                golemCheck = Phase.PHASE_6;
+            }
+
+            // 2페이즈 지점 도달 전까지는 플레이어 방향으로 등속운동 진행
+            golemRigid.velocity = target * golemSpeed;
+
+            yield return null;
+        }
+        // } 1페이즈가 끝난 시점에서 2페이즈로 넘어가는 상태를 체크중
+
+        // { 4페이즈 돌입
+        currentTime = phase6Time;
+        golemRigid.velocity = Vector3.zero;
+        golemAni.SetBool("isWalk", false);
+        StartCoroutine(Phase6());
+    }
+    #endregion
+
+    #region 6페이즈
+    IEnumerator Phase6()
+    {
+        // { 제한시간이 다 되거나 일정체력이 깎이면 6페이즈 탈출
+        while (currentTime >= 0f && currentHp >= golemMaxHp * phase5Hp)
+        {
+            // 페이즈 6부터는 공격패턴이 사라짐
+            currentTime -= Time.deltaTime;
+            yield return null;
+        }
+        // } 제한시간이 다 되거나 일정체력이 깎이면 6페이즈 탈출
+
+        // { 다음 페이즈 돌입을 위한 현재 동작들 정지
+        isAttack = false;
+        LHandBomb.SetActive(false);
+        RHandBomb.SetActive(false);
+        golemAni.SetTrigger("isAttackStop");
+        // } 다음 페이즈 돌입을 위한 현재 동작들 정지
+
+        golemAni.SetBool("isWalk", true);
+
+        // { 라스트 페이즈 돌입
+        golemCheck = Phase.PHASE_LAST;
+        golemAni.SetBool("isWalk", true);
+        golemAni.SetTrigger("isAttackStop");
+    }
+    #endregion 
+
+    // 원거리 공격 메소드 
     private void ThrowBallStart()
     {
         // 원거리 공격 중 왼팔,오른팔을 정할 랜덤값
@@ -318,49 +489,53 @@ public class Golem : MonoBehaviour, IHitObject
 
     }
 
+    // 왼손 애니메이션이 선택 되었을 때 (애니메이션 이벤트 함수)
     private void FireLeft()
     {
-        GameObject obj = null;
-        obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.BOMB);
+        GameObject obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.BOMB);
         obj.transform.position = LHandBomb.transform.position;
         obj.SetActive(true);
         LHandBomb.SetActive(false);
     }
 
+    // 오른손 애니메이션이 선택 되었을 때 (애니메이션 이벤트 함수)
     private void FireRight()
     {
-        GameObject obj = null;
-        obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.BOMB);
+        GameObject obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.BOMB);
         obj.transform.position = RHandBomb.transform.position;
         obj.SetActive(true);
         RHandBomb.SetActive(false);
     }
 
+    // 졸개 소환 (애니메이션 이벤트 함수)
     private void SpawnMinion()
     {
-        Vector3 spawnPoint = Vector3.zero;
-
         GameObject minion = null;
 
-        for (int i = 0; i < 10; i++)
-        {
-            int randomMinion = Random.Range(0, 2);
+        int bombCount = 0;
 
-            switch (randomMinion)
+        for(int i = 0; i < 10; i++)
+        {
+            int rand = Random.Range(0, 2);
+
+            if(bombCount >= 3)
+            {
+                rand = 0;
+            }
+
+            switch(rand)
             {
                 case 0:
                     minion = ObjectPoolManager.instance.GetPoolObj(PoolObjType.MINION_BASIC);
+                    minion.transform.position = spawners[i].position;
                     break;
                 case 1:
                     minion = ObjectPoolManager.instance.GetPoolObj(PoolObjType.MINION_BOMB);
+                    minion.transform.position = spawners[i].position;
+                    bombCount++;
                     break;
             }
 
-            spawnPoint.x = MinionSpawn.transform.position.x + Random.Range(-20f, 20f);
-            spawnPoint.z = MinionSpawn.transform.position.z + Random.Range(-3f, -1f);
-            spawnPoint.y = MinionSpawn.transform.position.y;
-
-            minion.transform.position = spawnPoint;
             minion.SetActive(true);
 
         }
@@ -383,7 +558,16 @@ public class Golem : MonoBehaviour, IHitObject
 
     public void Initilize()
     {
-         currentHp = golemMaxHp;                     //  괴수의 초기 체력은 설정한 Max체력값 
+        StopAllCoroutines();                        // 괴수가 가진 모든 코루틴 정지
+        golemAni.SetBool("isWalk", false);
+        isAttack = false;                           // 공격 코루틴 진입조건 초기화
+        isThrow = false;                            // ""
+        isSpawnminion = false;                      // ""
+        currentTime = phase1Time;                   // 페이즈 시간 초기화
+        currentHp = golemMaxHp;                     // 괴수의 초기 체력은 설정한 Max체력값
+        golemCheck = Phase.READY;                   // 골렘 스테이트 초기화
+        transform.position = firstPos;              // 골렘 위치 초기화
+
     }
 
     public void Hit(float damage)
@@ -391,11 +575,12 @@ public class Golem : MonoBehaviour, IHitObject
         currentHp -= damage;
 
         Debug.Log($"괴수 현재 체력 : {currentHp}");
+
         if (currentHp <= 0)
         {
             StopAllCoroutines();
             golemCheck = Phase.GAMEOVER;
-            golemAni.SetTrigger("isAttackStop");
+            golemAni.SetTrigger("isDie");
         }
     }
 
