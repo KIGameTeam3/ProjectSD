@@ -97,7 +97,7 @@ public class Aim : MonoBehaviour
             lineRenderer.SetPosition(1, endPos);
 
             //TODO 설치하는 함수 실행
-            if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch) && btn != null)
+            if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch) && btn != null && preview.installable)
             {
                 btn.SetInUnit(endPos);
             }
