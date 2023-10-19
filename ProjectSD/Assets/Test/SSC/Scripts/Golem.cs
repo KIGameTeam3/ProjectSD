@@ -118,6 +118,7 @@ public class Golem : MonoBehaviour, IHitObject
 
     private void Update()
     {
+
         minionRestart = false;
         //Debug.Log($"골렘 페이즈 체크 : {golemCheck}");
         // 괴수는 항상 플레이어를 바라본다.
@@ -567,14 +568,14 @@ public class Golem : MonoBehaviour, IHitObject
         currentHp = golemMaxHp;                     // 괴수의 초기 체력은 설정한 Max체력값
         golemCheck = Phase.READY;                   // 골렘 스테이트 초기화
         transform.position = firstPos;              // 골렘 위치 초기화
-        KHJUIManager.Instance.ChangeBossHpText(currentHp, golemMaxHp);
+        //KHJUIManager.Instance.ChangeBossHpText(currentHp, golemMaxHp);
 
     }
 
     public void Hit(float damage)
     {
         currentHp -= damage;
-        KHJUIManager.Instance.ChangeBossHpText(currentHp, golemMaxHp);
+        //KHJUIManager.Instance.ChangeBossHpText(currentHp, golemMaxHp);
         if (currentHp <= 0)
         {
             StopAllCoroutines();
