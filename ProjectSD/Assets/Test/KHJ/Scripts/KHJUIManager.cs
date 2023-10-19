@@ -32,7 +32,7 @@ public class KHJUIManager : MonoBehaviour
 
     [Header("LeftPanel")]
     [SerializeField] private GameObject leftPanel; // 코인과 시간 체력 있는 패널
-    public GameObject buffImg; //버프 이미지 오브젝트
+    //public GameObject buffImg; //버프 이미지 오브젝트
     
     [Header("UnitDestroyMsg")]
     public TMP_Text[] chatText;  // 팝업 알림 텍스트 리스트 
@@ -111,7 +111,7 @@ public class KHJUIManager : MonoBehaviour
 
         //leftPanel
         leftPanel = pUiPivot.transform.GetChild(0).gameObject;
-        buffImg = leftPanel.transform.GetChild(0).gameObject;
+        //buffImg = leftPanel.transform.GetChild(0).gameObject;
 
         //topPanel
         topPanel = pUiPivot.transform.GetChild(1).gameObject;  
@@ -310,10 +310,10 @@ public class KHJUIManager : MonoBehaviour
     }
     //}메시지 창에 띄울 함수입니다.
 
-    public void ShowBuff()
-    {
-        buffImg.SetActive(true);
-    }
+    //public void ShowBuff()
+    //{
+    //    buffImg.SetActive(true);
+    //}
 
     public void OpenShop() //상점을 켜줍니다.
     {
