@@ -426,7 +426,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minionSpeed: 3.5
   isAttack: 0
-  pcDistance: 0.08
   myAni: {fileID: 7078827637945275491}
   attackSpeed: 3
   maxHp: 30
@@ -896,7 +895,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 5}
+  m_Size: {x: 5, y: 5, z: 5}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &2795109098975217239
 MonoBehaviour:

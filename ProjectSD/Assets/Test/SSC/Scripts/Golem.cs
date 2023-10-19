@@ -109,6 +109,7 @@ public class Golem : MonoBehaviour, IHitObject
     // { 게임 시작
     public void GolemStart()
     {
+        Initilize();
         golemCheck = Phase.PHASE_1;
         StartCoroutine(Phase1());
 
@@ -566,15 +567,14 @@ public class Golem : MonoBehaviour, IHitObject
         currentHp = golemMaxHp;                     // 괴수의 초기 체력은 설정한 Max체력값
         golemCheck = Phase.READY;                   // 골렘 스테이트 초기화
         transform.position = firstPos;              // 골렘 위치 초기화
+        KHJUIManager.Instance.ChangeBossHpText(currentHp, golemMaxHp);
 
     }
 
     public void Hit(float damage)
     {
         currentHp -= damage;
-
-        Debug.Log($"괴수 현재 체력 : {currentHp}");
-
+        KHJUIManager.Instance.ChangeBossHpText(currentHp, golemMaxHp);
         if (currentHp <= 0)
         {
             StopAllCoroutines();
