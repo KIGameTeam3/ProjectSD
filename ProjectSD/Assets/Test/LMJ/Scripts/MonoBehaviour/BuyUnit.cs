@@ -34,7 +34,7 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     public GameObject preview = default;
     public int previewIdx = default;
 
-    public void Start()
+    public void Awake()
     {
         _name.text = unitPrefab.unitData.unitName;
         _price.text = unitPrefab.unitData.unitPrice.ToString();
@@ -42,7 +42,7 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         unitDestroy = unitPrefab.unitData.unitLifeTime;
 
         preview = FindObjectOfType<PreviewBase>().gameObject;
-
+        Debug.Log(gameObject.name+ " "+preview+"!!!!!");
     }
 
 
@@ -135,29 +135,39 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         }
     }
 
-    public void SetInUnit() // 유닛 설치: 클릭 중인 버튼에서 손을 뗄 때
+    public void SetInUnit(Vector3 pos) // 유닛 설치: 클릭 중인 버튼에서 손을 뗄 때
     {
-        Debug.Log("버튼에서 손 뗌");
+        Debug.Log(preview);
+        Debug.Log("설치 되는지 "+ preview.GetComponent<PreviewBase>());
         preview.GetComponent<PreviewBase>().StopPlaceCheck();   // 설치가능 체크 코루틴 끄기
         preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(false); // 프리뷰 비활성화
+
+        Debug.Log("진입하고 프리뷰 꺼지는지? (여기까지 오면 꺼지는");
 
         // 유닛을 생성
         if (preview.GetComponent<PreviewBase>().installable == true)
         {
             Debug.Log("유닛 설치");
-
-            // [PSH] 231018 수정 {
-            if (GameManager.Instance.hitPosition.z >= installMaxDis)    // 유닛 배치 최대 거리 제한
-            {
-                GameManager.Instance.hitPosition.z = installMaxDis;
-            }
-            unitObj = Instantiate(unitPrefab.gameObject, GameManager.Instance.hitPosition, Quaternion.identity);
-            Destroy(unitObj, unitDestroy);  // 설치 후 일정 시간이 지나면 파괴
-            //KHJ 감소하는 함수 주석처리
-            //GameManager.Instance.SubtractGold(price);    // 재화 소모 메서드 호출
-            // } [PSH] 231018 수정
+            unitObj = Instantiate(unitPrefab.gameObject, pos, Quaternion.identity);
+            Aim.isChooseTower = false;
+            GameManager.Instance.playerState = PlayerState.PLAY;
+            PlayerBase.instance.ChangeHand(false);
         }
-        else { Debug.Log("설치 불가능 지역"); }
-    }
+
+
+
+            //    // [PSH] 231018 수정 {
+            //    if (GameManager.Instance.hitPosition.z >= installMaxDis)    // 유닛 배치 최대 거리 제한
+            //    {
+            //        GameManager.Instance.hitPosition.z = installMaxDis;
+            //    }
+            //    unitObj = Instantiate(unitPrefab.gameObject, GameManager.Instance.hitPosition, Quaternion.identity);
+            //    Destroy(unitObj, unitDestroy);  // 설치 후 일정 시간이 지나면 파괴
+            //    //KHJ 감소하는 함수 주석처리
+            //    //GameManager.Instance.SubtractGold(price);    // 재화 소모 메서드 호출
+            //    // } [PSH] 231018 수정
+            //}
+            //else { Debug.Log("설치 불가능 지역"); }
+        }
 
 }

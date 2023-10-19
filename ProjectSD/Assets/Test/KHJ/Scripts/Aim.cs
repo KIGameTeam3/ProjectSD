@@ -13,10 +13,11 @@ public class Aim : MonoBehaviour
     LineRenderer lineRenderer;
     // 레이저 포인터의 최대 거리
     [SerializeField]
-    private float lrMaxDistance = 3f;
+    private float lrMaxDistance = 10f;
 
     //{커브 라인렌더러 변수 관련
     public static bool isChooseTower = false;
+    public BuyUnit btn;
 
     private PreviewBase preview;
 
@@ -42,6 +43,7 @@ public class Aim : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //타워를 설치하기 전
         if (!isChooseTower)
         {
             //MouseDetect();
@@ -54,6 +56,8 @@ public class Aim : MonoBehaviour
                 DetectR();
             }
         } 
+
+        //타워를 설치한 이후
         else
         {
             //left
@@ -77,10 +81,13 @@ public class Aim : MonoBehaviour
                 //예외처리
                 //1. 아무것도 감지 못했을때 그 최대치의 바닥이 floor가 아닐때
                 //2. Vector3.up이나 Vector3.down일때 위치
-                
-                
-                if(hitInfo.transform.transform.gameObject)
-                
+
+                lrMaxDistance = 30f;
+                if (pos.magnitude < 0)
+                {
+                    //endPos = 
+                }
+               
             }
 
             preview.transform.position = endPos;
@@ -88,11 +95,11 @@ public class Aim : MonoBehaviour
             // Ray가 부딪힌 지점에 라인 그리기
             lineRenderer.SetPosition(0, startPos);
             lineRenderer.SetPosition(1, endPos);
-            
-            //TODO 설치하는 함수 실행
-            if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch))
-            {
 
+            //TODO 설치하는 함수 실행
+            if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch) && btn != null)
+            {
+                btn.SetInUnit(endPos);
             }
         }
     
@@ -158,9 +165,9 @@ public class Aim : MonoBehaviour
                 }
                 else if(hitInfo.collider.tag == "UnitBtn")
                 {
-                    
-                        Debug.Log("UnitBtn 핸드 트리거 찍히나요?");
-                        hitObject?.HitUI();
+                    Debug.Log("UnitBtn 핸드 트리거 찍히나요?");
+                    hitObject?.HitUI();
+                    btn = hitInfo.collider.gameObject.GetComponent<BuyUnit>();
                     
                 }
                /* else if (hitInfo.collider.tag == "PlayerUi")
@@ -194,7 +201,7 @@ public class Aim : MonoBehaviour
             // 충돌이 있다면?
             if (Physics.Raycast(ray, out hitInfo, lrMaxDistance, GlobalFunction.GetLayerMask("UI")))
             {
-                Debug.Log(hitInfo.transform.tag);
+                //Debug.Log(hitInfo.transform.tag);
                 endPos = hitInfo.point;
                 UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
                 if (hitInfo.collider.tag == "UiBtn")
@@ -202,6 +209,13 @@ public class Aim : MonoBehaviour
                     // 컨트롤러의 진동 재생
                     ARAVRInput.PlayVibration(ARAVRInput.Controller.RTouch);
                     hitObject?.HitUI();
+                }
+                else if (hitInfo.collider.tag == "UnitBtn")
+                {
+                    Debug.Log("UnitBtn 핸드 트리거 찍히나요?");
+                    hitObject?.HitUI();
+                    btn = hitInfo.collider.gameObject.GetComponent<BuyUnit>();
+
                 }
                 /*else if (hitInfo.collider.tag == "PlayerUi")
                 {
