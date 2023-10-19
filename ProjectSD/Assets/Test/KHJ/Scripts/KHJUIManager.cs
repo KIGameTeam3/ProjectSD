@@ -228,22 +228,20 @@ public class KHJUIManager : MonoBehaviour
     public void OnGameOver()
     {
         //TODO 게임 오버 패널 켜주고 2초뒤 리스타트 버튼 활성화 혹은 
-        PopUpResult();
+        ShowResult();
+        restartPanel.SetActive(true);
+        endPanel.SetActive(true);
     }
     //결과창 띄우는 함수입니다.
-    public void PopUpResult()
+    public void ShowResult()
     {
         Debug.Log("게임 결과창 출력");
         pUiPivot.SetActive(false);
-
         shopPanel.SetActive(false);
         resultPanel.SetActive(true);
-        restartPanel.SetActive(true);
-        endPanel.SetActive(true);
-
-        rTimeObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "시간 결과";
-        rCoinObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "코인 결과";
-        rKillObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "킬 결과";
+        rTimeObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = string.Format("{0}", GameManager.Instance.GetPlayTime());
+        rCoinObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = string.Format("{0}",coinText);
+        rKillObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "?";
     }
 
     public void ClickReStart() //재시작 버튼을 누르면 활성화될 것들 혹은 비활성화 될 것들 해줍니다.
@@ -327,9 +325,21 @@ public class KHJUIManager : MonoBehaviour
         shopPanel.SetActive(false);
         isOpenShop = false;
     } //상점을 꺼줍니다.
-    public void GetUnit()
-    {
-        //unitList.Add(unit);
-    }
+    //public void GetUnit()
+    //{
+    //    //unitList.Add(unit);
+    //}
 
+    public void InitilizeUI()
+    {
+        //완전히 처음부터 시킬건지 아니면 바로 시작시킬건지
+        restartPanel.SetActive(false);
+        startPanel.SetActive(true);
+        endPanel.SetActive(true);
+        pUiPivot.SetActive(false);
+        shopPanel.SetActive(false);
+        bossPanel.SetActive(false);
+        timePanel.SetActive(false);
+        msgPanel.SetActive(false);
+    }
 }

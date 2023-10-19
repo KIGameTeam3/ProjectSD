@@ -45,7 +45,6 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         Debug.Log(gameObject.name+ " "+preview+"!!!!!");
     }
 
-
     public void OnPointerDown(PointerEventData eventData)   // 버튼을 눌렀을 때
     {
         if (gameObject.CompareTag("UnitBtn") && unitPrefab != null) // 프리뷰 생성 조건
@@ -59,7 +58,6 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         }
     }
    
-
     public void OnDrag(PointerEventData eventData)  // 드래그 중일 때
     {
         // [PSH] 231018 수정 {
@@ -137,13 +135,12 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
 
     public void SetInUnit(Vector3 pos) // 유닛 설치: 클릭 중인 버튼에서 손을 뗄 때
     {
-        Debug.Log(preview);
-        Debug.Log("설치 되는지 "+ preview.GetComponent<PreviewBase>());
+        //Debug.Log(preview);
+        //Debug.Log("설치 되는지 "+ preview.GetComponent<PreviewBase>());
         preview.GetComponent<PreviewBase>().StopPlaceCheck();   // 설치가능 체크 코루틴 끄기
         preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(false); // 프리뷰 비활성화
 
-        Debug.Log("진입하고 프리뷰 꺼지는지? (여기까지 오면 꺼지는");
-
+       
         // 유닛을 생성
         if (preview.GetComponent<PreviewBase>().installable == true)
         {
@@ -152,8 +149,8 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
             Aim.isChooseTower = false;
             GameManager.Instance.playerState = PlayerState.PLAY;
             PlayerBase.instance.ChangeHand(false);
+            Destroy(unitObj, unitDestroy);
         }
-
 
 
             //    // [PSH] 231018 수정 {
@@ -168,6 +165,16 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
             //    // } [PSH] 231018 수정
             //}
             //else { Debug.Log("설치 불가능 지역"); }
-        }
-
+    }
+    public void OnPreview()
+    {
+        preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(true);  // 프리뷰 활성화
+    }
+    public void OffPreview()
+    {
+        preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(false); // 프리뷰 비활성화
+    }
 }
+    
+
+
