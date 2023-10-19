@@ -101,6 +101,8 @@ public class Aim : MonoBehaviour
             }
         }
     }
+  
+    
     public void DetectL()
     {
         Vector3 startPos = ARAVRInput.LHandPosition;
@@ -173,6 +175,8 @@ public class Aim : MonoBehaviour
                 }
             }
         }
+
+
         // Ray가 부딪힌 지점에 라인 그리기
         else if(ARAVRInput.GetDown(ARAVRInput.Button.HandTrigger, ARAVRInput.Controller.RTouch))
         {
@@ -261,6 +265,8 @@ public class Aim : MonoBehaviour
             //btn.OffPreview();
         }
     }
+
+
     public void ControlInPlay()
     {
         //TODO 플레이어의 상태에 따라서 실행조건을 다르게 해줘야할 것 같습니다.

@@ -6,7 +6,8 @@ public class PlayerBase : MonoBehaviour
 {
     public static PlayerBase instance;
 
-    public LaserPoint[] gun;
+    //0 : left 1: right
+    public GunBase[] gun;
     public Aim[] hand;
     public PlayerStatus status;
     public OVRScreenFade bloodEffect;
@@ -27,11 +28,16 @@ public class PlayerBase : MonoBehaviour
 
     private void Update()
     {
-        if ((ARAVRInput.GetDown(ARAVRInput.Button.One)|| ARAVRInput.GetDown(ARAVRInput.Button.Two)))
+        if ((ARAVRInput.GetDown(ARAVRInput.Button.One, ARAVRInput.Controller.RTouch)||
+             ARAVRInput.GetDown(ARAVRInput.Button.Two, ARAVRInput.Controller.RTouch)||
+             ARAVRInput.GetDown(ARAVRInput.Button.One, ARAVRInput.Controller.LTouch)||
+             ARAVRInput.GetDown(ARAVRInput.Button.Two, ARAVRInput.Controller.LTouch))
+             && GameManager.Instance.CheckPlayingGame() && !Aim.isChooseTower) 
         {
             if(GameManager.Instance.playerState == PlayerState.PLAY)
             {
                 GameManager.Instance.playerState = PlayerState.SHOP; 
+                KHJUIManager.Instance.OpenShop();
                 ChangeHand(true);
 
                 //SHOP UI로 넘어감
@@ -39,11 +45,32 @@ public class PlayerBase : MonoBehaviour
             else if (GameManager.Instance.playerState == PlayerState.SHOP)
             {
                 GameManager.Instance.playerState = PlayerState.PLAY; 
+                KHJUIManager.Instance.CloseShop();
                 ChangeHand(false);
 
                 //PLAY UI로 넘어감
             }
         }
+
+        if (GameManager.Instance.playerState != PlayerState.PLAY)
+        {
+            return;
+        }
+
+        if ((
+            ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.RTouch) || 
+            ARAVRInput.Get(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.RTouch)))
+        {
+            gun[(int)HandPosition.RIGHT].Shot();
+        }
+
+        if ((
+            ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch) ||
+            ARAVRInput.Get(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch)))
+        {
+            gun[(int)HandPosition.LEFT].Shot();
+        }
+
     }
 
     public void ChangeHand(bool isHand)
@@ -52,8 +79,8 @@ public class PlayerBase : MonoBehaviour
         gun[1].gameObject.SetActive(!isHand);
         if (!isHand)
         {
-            gun[0].GetComponent<GunBase>().ResetSetting();
-            gun[1].GetComponent<GunBase>().ResetSetting();
+            gun[0].ResetSetting();
+            gun[1].ResetSetting();
         }
         hand[0].gameObject.SetActive(isHand);
         hand[1].gameObject.SetActive(isHand);
@@ -62,18 +89,38 @@ public class PlayerBase : MonoBehaviour
 
     private void Init()
     {
-        instance = this;
-        /* PlayerStatus originStatus = Resources.Load("/"+status.name) as PlayerStatus;
-         status = Instantiate(originStatus);*/
-        maxHP = status.health;
-        status = Instantiate(status);
+        if (instance == null)
+        {
+            instance = this;
+        }
+
 
         audioSource = GetComponent<AudioSource>();
-        Invoke("SetBloodEffect", 0.5f);
-        
+
+        InitRestart();
     }
+
+    public void InitRestart()
+    {
+        maxHP = status.health;
+
+        /* PlayerStatus originStatus = Resources.Load("/"+status.name) as PlayerStatus;
+         status = Instantiate(originStatus);*/
+
+        status = Instantiate(status);
+        status.health = 100;
+
+        ChangeHand(false);
+
+        KHJUIManager.Instance.ChangeHpText(100);
+        bloodEffect.transform.position = Vector3.down * -1000;
+        Invoke("SetBloodEffect", 0.5f);
+    }
+
+
     private void SetBloodEffect()
     {
+
         bloodEffect.transform.SetParent(centerCamera.transform);
         bloodEffect.transform.localPosition = Vector3.zero;
         bloodEffect.transform.localRotation = Quaternion.identity;
@@ -91,6 +138,7 @@ public class PlayerBase : MonoBehaviour
 
     private void Die()
     {
+        ChangeHand(true);
         GameManager.Instance.EndGame();
         //게임오버 ui
     }
@@ -119,6 +167,5 @@ public class PlayerBase : MonoBehaviour
         yield return new WaitForSeconds(EFFECT_TIME);
         canEffect = true;
     }
-
 
 }

@@ -27,17 +27,6 @@ public class GunBase : MonoBehaviour
         Init();
     }
 
-    private void Update()
-    {
-        if (GameManager.Instance.playerState != PlayerState.PLAY)
-        {
-            return;
-        }
-        if ((ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, controller) || ARAVRInput.Get(ARAVRInput.Button.IndexTrigger, controller)) && canShot)
-        {
-            Shot();
-        }
-    }
 
     private void Init()
     {
@@ -61,8 +50,15 @@ public class GunBase : MonoBehaviour
         canShot = true;
     }
 
-    private void Shot()
+    public void Shot()
     {
+
+        if (!canShot)
+        {
+            return;
+        }
+
+
         GunBulletBase currBullet;
         Vector3 direction;
         if (handPosition == HandPosition.RIGHT)
