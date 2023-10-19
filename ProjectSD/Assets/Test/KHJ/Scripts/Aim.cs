@@ -133,7 +133,7 @@ public class Aim : MonoBehaviour
         //손만 있는 상태에서 왼쪽 컨트롤러 Y 버튼 누르면 상점창 출력 / 죽었을때는  출력 못하게끔
         else if (ARAVRInput.GetDown(ARAVRInput.Button.Two, ARAVRInput.Controller.LTouch))
         {
-            OpenShopInPlay();
+            ControlInPlay();
         }
         // Ray가 부딪힌 지점에 라인 그리기
         lineRenderer.SetPosition(0, startPos);
@@ -240,11 +240,16 @@ public class Aim : MonoBehaviour
             btn.SetInUnit(endPos);
         }
     }
-    public void OpenShopInPlay()
+    public void ControlInPlay()
     {
-        if(GameManager.Instance.playerState != PlayerState.DEAD )
+        //TODO 플레이어의 상태에 따라서 실행조건을 다르게 해줘야할 것 같습니다.
+        if (KHJUIManager.Instance.isOpenShop == false) //&& GameManager.Instance.playerState == PlayerState.PLAY)
         {
             KHJUIManager.Instance.OpenShop();
+        }
+        else if (KHJUIManager.Instance.isOpenShop == true)
+        {
+            KHJUIManager.Instance.CloseShop();
         }
     }
 }
