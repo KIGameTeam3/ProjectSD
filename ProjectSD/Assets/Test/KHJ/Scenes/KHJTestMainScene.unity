@@ -257,7 +257,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0.5
+  m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -1500,7 +1500,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Boss 80/100
+  m_text: Boss 100/100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -4057,6 +4057,10 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.61180115
       objectReference: {fileID: 0}
+    - target: {fileID: 1089253440215219493, guid: 8e53e007d765a5c4290cf437d76e86f9, type: 3}
+      propertyPath: m_text
+      value: Health 100/100
+      objectReference: {fileID: 0}
     - target: {fileID: 1089253440221166043, guid: 8e53e007d765a5c4290cf437d76e86f9, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -4224,6 +4228,10 @@ PrefabInstance:
     - target: {fileID: 1089253441039443154, guid: 8e53e007d765a5c4290cf437d76e86f9, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1089253441263012752, guid: 8e53e007d765a5c4290cf437d76e86f9, type: 3}
+      propertyPath: m_FillAmount
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1089253441263012776, guid: 8e53e007d765a5c4290cf437d76e86f9, type: 3}
       propertyPath: m_Sources.Array.data[0].sourceTransform
