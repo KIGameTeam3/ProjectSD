@@ -14,6 +14,7 @@ public class LuckyPointController : MonoBehaviour
 
     // 럭키 포인트 지점 오브젝트들을 인스펙터창에서 직접 할당
     [SerializeField] private GameObject[] luckyPoint;
+    [SerializeField] private Material[] changeMat;
 
     // 약점이 바뀌는데 걸릴 시간
     public WaitForSeconds changeTime = new WaitForSeconds(5f);
@@ -29,11 +30,15 @@ public class LuckyPointController : MonoBehaviour
     public void Initialize()
     {
         StopAllCoroutines();
-        
-        for(int j = 0; j < luckyPoint.Length; j++)
+
+        // 약점 초기화
+        for (int j = 0; j < luckyPoint.Length; j++)
         {
-            luckyPoint[j].GetComponent<Collider>().enabled = false;
-            luckyPoint[j].GetComponent<MeshRenderer>().materials[0].color = Color.white;
+            for (int k = 0; k < luckyPoint[j].transform.childCount; k++)
+            {
+                luckyPoint[j].transform.GetChild(k).GetComponent<Collider>().enabled = false;
+                luckyPoint[j].transform.GetChild(k).GetComponent<MeshRenderer>().material = changeMat[0];
+            }
         }
 
         int i = 0;
@@ -44,14 +49,22 @@ public class LuckyPointController : MonoBehaviour
             int rand = Random.Range(0, luckyPoint.Length);
 
             // 랜덤으로 뽑은 약점이 이미 활성화 된 상태면 반복문 재진입
-            if (luckyPoint[rand].GetComponent<Collider>().enabled == true)
+            if (luckyPoint[rand].transform.GetChild(0).GetComponent<Collider>().enabled == true)
             {
                 continue;
             }
 
+            // 기존 약점 교체로직
+            //luckyPoint[rand].GetComponent<Collider>().enabled = true;
+            //luckyPoint[rand].GetComponent<MeshRenderer>().materials[0].color = Color.blue;
+
+
             // 중복되지 않은 랜덤값을 받았다면 해당하는 인덱스의 럭키포인트 콜라이더 활성화 및 색상 변경
-            luckyPoint[rand].GetComponent<Collider>().enabled = true;
-            luckyPoint[rand].GetComponent<MeshRenderer>().materials[0].color = Color.blue;
+            for (int j = 0; j < luckyPoint[rand].transform.childCount; j++)
+            {
+                luckyPoint[rand].transform.GetChild(j).GetComponent<Collider>().enabled = true;
+                luckyPoint[rand].transform.GetChild(j).GetComponent<MeshRenderer>().material = changeMat[1];
+            }
 
             i++;
         }
@@ -62,11 +75,11 @@ public class LuckyPointController : MonoBehaviour
     {
         int rand = 0;
 
-        while(true)
+        while (true)
         {
             rand = Random.Range(0, luckyPoint.Length);
 
-            if (luckyPoint[rand].GetComponent<Collider>().enabled == false)
+            if (luckyPoint[rand].transform.GetChild(1).GetComponent<Collider>().enabled == false)
             {
                 continue;
             }
@@ -74,13 +87,39 @@ public class LuckyPointController : MonoBehaviour
             break;
         }
 
-        luckyPoint[rand].GetComponent<MeshRenderer>().materials[0].color = Color.red;
+        // 기존 약점 교체 로직
+        //luckyPoint[rand].GetComponent<MeshRenderer>().materials[0].color = Color.red;
+
+        for (int j = 0; j < luckyPoint[rand].transform.childCount; j++)
+        {
+            luckyPoint[rand].transform.GetChild(j).GetComponent<MeshRenderer>().material = changeMat[2];
+        }
+
         unitPoint = luckyPoint[rand];
 
         yield return time;
 
-        luckyPoint[rand].GetComponent<Collider>().enabled = false;
-        luckyPoint[rand].GetComponent<MeshRenderer>().materials[0].color = Color.white;
+        // 기존 약점 교체로직
+        //luckyPoint[rand].GetComponent<Collider>().enabled = false;
+        //luckyPoint[rand].GetComponent<MeshRenderer>().materials[0].color = Color.white;
+
+
+        for (int j = 0; j < luckyPoint[rand].transform.childCount; j++)
+        {
+            luckyPoint[rand].transform.GetChild(j).GetComponent<Collider>().enabled = false;
+            luckyPoint[rand].transform.GetChild(j).GetComponent<MeshRenderer>().material = changeMat[0];
+        }
+
+
+        //for (int j = 0; j < luckyPoint.Length; j++)
+        //{
+        //    for (int k = 0; k < luckyPoint[j].transform.childCount; k++)
+        //    {
+        //        luckyPoint[j].transform.GetChild(k).GetComponent<Collider>().enabled = false;
+        //        luckyPoint[j].transform.GetChild(k).GetComponent<MeshRenderer>().material = changeMat[0];
+        //    }
+        //}
+
 
         while (true)
         {
@@ -89,7 +128,7 @@ public class LuckyPointController : MonoBehaviour
             // 이후 새로 활성화할 약점 찾기
             // 1. 전달받은 오브젝트와 이름이 일치하거나
             // 2. 새로 뽑은 인데스의 오브젝트가 이미 활성화 중이라면 새로뽑기
-            if (luckyPoint[rand].GetComponent<Collider>().enabled == true)
+            if (luckyPoint[rand].transform.GetChild(0).GetComponent<Collider>().enabled == true)
             {
                 continue;
             }
@@ -98,9 +137,15 @@ public class LuckyPointController : MonoBehaviour
             break;
         }
 
+        //luckyPoint[rand].GetComponent<Collider>().enabled = true;
+        //luckyPoint[rand].GetComponent<MeshRenderer>().materials[0].color = Color.blue;
+
         // 전달된 랜덤값의 인덱스로 해당 약점 활성화
-        luckyPoint[rand].GetComponent<Collider>().enabled = true;
-        luckyPoint[rand].GetComponent<MeshRenderer>().materials[0].color = Color.blue;
+        for (int j = 0; j < luckyPoint[rand].transform.childCount; j++)
+        {
+            luckyPoint[rand].transform.GetChild(j).GetComponent<Collider>().enabled = true;
+            luckyPoint[rand].transform.GetChild(j).GetComponent<MeshRenderer>().material = changeMat[1];
+        }
 
     }
 
@@ -114,14 +159,22 @@ public class LuckyPointController : MonoBehaviour
             int rand = Random.Range(0, luckyPoint.Length);
 
             // 랜덤으로 뽑은 약점이 이미 활성화 된 상태면 반복문 재진입
-            if (luckyPoint[rand].GetComponent<Collider>().enabled == true)
+            if (luckyPoint[rand].transform.GetChild(0).GetComponent<Collider>().enabled == true)
             {
                 continue;
             }
 
+            // 기존 약점 교체로직
+            //luckyPoint[rand].GetComponent<Collider>().enabled = true;
+            //luckyPoint[rand].GetComponent<MeshRenderer>().materials[0].color = Color.blue;
+
+
             // 중복되지 않은 랜덤값을 받았다면 해당하는 인덱스의 럭키포인트 콜라이더 활성화 및 색상 변경
-            luckyPoint[rand].GetComponent<Collider>().enabled = true;
-            luckyPoint[rand].GetComponent<MeshRenderer>().materials[0].color = Color.blue;
+            for (int j = 0; j < luckyPoint[rand].transform.childCount; j++)
+            {
+                luckyPoint[rand].transform.GetChild(j).GetComponent<Collider>().enabled = true;
+                luckyPoint[rand].transform.GetChild(j).GetComponent<MeshRenderer>().material = changeMat[1];
+            }
 
             i++;
         }
@@ -135,14 +188,20 @@ public class LuckyPointController : MonoBehaviour
 
     public IEnumerator Test(GameObject obj)
     {
-        if(obj != unitPoint)
+        if (obj != unitPoint)
         {
-            obj.GetComponent<Collider>().enabled = false;
-            obj.GetComponent<MeshRenderer>().materials[0].color = Color.white;
+            //obj.GetComponent<Collider>().enabled = false;
+            //obj.GetComponent<MeshRenderer>().materials[0].color = Color.white;
+
+            for (int i = 0; i < obj.transform.childCount; i++)
+            {
+                obj.transform.GetChild(i).GetComponent<Collider>().enabled = false;
+                obj.transform.GetChild(i).GetComponent<MeshRenderer>().material = changeMat[0];
+            }
 
             yield return changeTime;
 
-            // Bullet이 부딪힌 오브젝트를 전달받고 해당 약점 콜라이더 비활성화 및 색상 변경
+            //    // Bullet이 부딪힌 오브젝트를 전달받고 해당 약점 콜라이더 비활성화 및 색상 변경
 
             int rand = 0;
 
@@ -154,7 +213,7 @@ public class LuckyPointController : MonoBehaviour
                 // 1. 전달받은 오브젝트와 이름이 일치하거나
                 // 2. 새로 뽑은 인데스의 오브젝트가 이미 활성화 중이라면 새로뽑기
                 if (obj.name == luckyPoint[rand].name ||
-                    luckyPoint[rand].GetComponent<Collider>().enabled == true)
+                    luckyPoint[rand].transform.GetChild(0).GetComponent<Collider>().enabled == true)
                 {
                     continue;
                 }
@@ -164,9 +223,12 @@ public class LuckyPointController : MonoBehaviour
             }
 
             // 전달된 랜덤값의 인덱스로 해당 약점 활성화
-            luckyPoint[rand].GetComponent<Collider>().enabled = true;
-            luckyPoint[rand].GetComponent<MeshRenderer>().materials[0].color = Color.blue;
-        
+            for (int j = 0; j < luckyPoint[rand].transform.childCount; j++)
+            {
+                luckyPoint[rand].transform.GetChild(j).GetComponent<Collider>().enabled = true;
+                luckyPoint[rand].transform.GetChild(j).GetComponent<MeshRenderer>().material = changeMat[1];
+            }
+
         }
     }
 

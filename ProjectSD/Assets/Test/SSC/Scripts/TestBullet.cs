@@ -41,15 +41,20 @@ public class TestBullet : MonoBehaviour
 
             // ============ TODO : 개발일지 혹은 기술문서에 개선사항으로 기술하기 ================
 
+            Destroy(this.gameObject);
         }
 
         if (other.CompareTag("LuckyPoint"))
         {
+
             // 접촉한 오브젝트에 연결된 리지드바디 오브젝트를 담고 (이때 담기는 오브젝트는 최상위 몬스터 오브젝트임)
             GameObject obj = other.attachedRigidbody.gameObject;
 
             // 약점위치 변경하는 메소드 실행 (이때 접촉한 약점 게임오브젝트를 매개변수로 보내줘야함)
-            obj.GetComponent<LuckyPointController>().ChangePoint(other.gameObject);
+            obj.GetComponent<LuckyPointController>().ChangePoint(other.gameObject.transform.parent.gameObject);
+            Debug.Log(other.gameObject.transform.parent.gameObject);
+
+            Destroy(this.gameObject);
 
 
             // ============ TODO : 개발일지 혹은 기술문서에 개선사항으로 기술하기 ================

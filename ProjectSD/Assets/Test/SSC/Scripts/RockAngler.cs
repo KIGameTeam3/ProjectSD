@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class Bomb : MonoBehaviour, IHitObject
+public class RockAngler : MonoBehaviour
 {
     private Transform target;           // 타겟 위치
     public float initialAngle = 30f;    // 처음 날라가는 각도
@@ -18,48 +17,14 @@ public class Bomb : MonoBehaviour, IHitObject
         target = GameObject.FindWithTag("Player").GetComponent<Transform>();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.CompareTag("Player"))
-        {
-            other.gameObject.GetComponent<IHitObject>().Hit(10f);
-            Hit(50f);
-        }
-    }
-
     private void OnEnable()
     {
         // 풀링 오브젝트를 돌리기에 오브젝트가 활성화 될때마다 새로 세팅값을 해준다.
-        Initilize();
         Vector3 shoot = GetVelocity(transform.position, target.transform.position, initialAngle);
-        rb.velocity = shoot;
         rb.angularVelocity = shoot;
     }
-    public void Initilize()
-    {
-        // 생성 되었을 시 체력 세팅
-        currentHp = maxHp;
-    }
 
-    private void OnDisable()
-    {
-        GameObject obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.DESTROY_FX);
-        obj.transform.position = transform.position;
-        obj.transform.rotation = obj.transform.rotation;
-        obj.SetActive(true);
 
-    }
-
-    public void Hit(float damage)
-    {
-        // 데미지받는 처리
-        currentHp -= damage;
-
-        if (currentHp <= 0)
-        {
-            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.BOMB);
-        }
-    }
 
     public Vector3 GetVelocity(Vector3 startPos, Vector3 target, float initialAngle)
     {

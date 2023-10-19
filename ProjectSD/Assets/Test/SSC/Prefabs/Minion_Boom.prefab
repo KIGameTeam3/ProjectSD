@@ -359,7 +359,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minionSpeed: 2
   isAttack: 0
-  pcDistance: 0.08
   myAni: {fileID: 3266876403279583778}
   maxHp: 50
   attackSpeed: 3
