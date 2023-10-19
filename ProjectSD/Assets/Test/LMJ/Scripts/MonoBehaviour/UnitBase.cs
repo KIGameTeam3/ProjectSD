@@ -17,7 +17,7 @@ public class UnitBase : MonoBehaviour
 
     private void Start()
     {
-        target = GameObject.FindWithTag("Player").transform;    // player 태그를 가진 오브젝트 찾아 타겟으로 설정
+        target = FindObjectOfType<Golem>().transform;    // player 태그를 가진 오브젝트 찾아 타겟으로 설정
 
         for (int i = 0; i < bulletPoints.Length; i++)
         {
@@ -27,7 +27,7 @@ public class UnitBase : MonoBehaviour
 
     protected virtual void Update()
     {
-        unitHead.transform.LookAt(target);    // Bullet의 정면방향이 target 향하도록 회전
+        unitHead.transform.LookAt(target.position+Vector3.up*50);    // Bullet의 정면방향이 target 향하도록 회전
     }
 
     IEnumerator BulletSpawn(float delayTime, int bulletIdx)
