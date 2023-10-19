@@ -32,6 +32,7 @@ public class Bomb : MonoBehaviour, IHitObject
         Initilize();
         Vector3 shoot = GetVelocity(transform.position, target.transform.position, initialAngle);
         rb.velocity = shoot;
+        rb.angularVelocity = shoot;
     }
     public void Initilize()
     {
