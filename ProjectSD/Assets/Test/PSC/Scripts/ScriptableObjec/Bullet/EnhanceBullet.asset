@@ -15,7 +15,7 @@ MonoBehaviour:
   ID: 11
   context: "\uAC15\uD654 \uCD1D\uC54C"
   fireRate: 0.1
-  bulletDamage: 5
+  bulletDamage: 100
   bulletSpeed: 50
   criticalRate: 0
   lifeTime: 5

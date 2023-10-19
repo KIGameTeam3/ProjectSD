@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 // 호출하는 오브젝트의 타입을 구별하기위해 선언하는 enum
-public enum PoolObjType { BOMB, MINION_BASIC, MINION_BOMB }
+public enum PoolObjType { BOMB, MINION_BASIC, MINION_BOMB, DESTROY_FX }
 
 // 외부 인스펙터창에서 클래스 정보에 접근할수 있게 해주는 [Serializable]
 [Serializable]
