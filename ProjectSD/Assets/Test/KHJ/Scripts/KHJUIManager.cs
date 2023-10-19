@@ -330,7 +330,6 @@ public class KHJUIManager : MonoBehaviour
     //    //unitList.Add(unit);
     //}
 
-
     public void InitilizeUI()
     {
         //완전히 처음부터 시킬건지 아니면 바로 시작시킬건지

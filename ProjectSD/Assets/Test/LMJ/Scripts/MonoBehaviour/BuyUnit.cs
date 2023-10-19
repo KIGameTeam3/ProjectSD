@@ -45,7 +45,6 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         Debug.Log(gameObject.name+ " "+preview+"!!!!!");
     }
 
-
     public void OnPointerDown(PointerEventData eventData)   // 버튼을 눌렀을 때
     {
         if (gameObject.CompareTag("UnitBtn") && unitPrefab != null) // 프리뷰 생성 조건
@@ -59,7 +58,6 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         }
     }
    
-
     public void OnDrag(PointerEventData eventData)  // 드래그 중일 때
     {
         // [PSH] 231018 수정 {
@@ -155,7 +153,6 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         }
 
 
-
             //    // [PSH] 231018 수정 {
             //    if (GameManager.Instance.hitPosition.z >= installMaxDis)    // 유닛 배치 최대 거리 제한
             //    {
@@ -168,6 +165,16 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
             //    // } [PSH] 231018 수정
             //}
             //else { Debug.Log("설치 불가능 지역"); }
-        }
-
+    }
+    public void OnPreview()
+    {
+        preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(true);  // 프리뷰 활성화
+    }
+    public void OffPreview()
+    {
+        preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(false); // 프리뷰 비활성화
+    }
 }
+    
+
+
