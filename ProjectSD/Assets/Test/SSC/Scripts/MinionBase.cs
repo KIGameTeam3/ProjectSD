@@ -42,7 +42,10 @@ public class MinionBase : MonoBehaviour
         }
 
         // 항상 플레이어를 바라본다.
-        transform.LookAt(player.transform.position);
+
+        Vector3 reTarget = player.transform.position;
+        reTarget.y = transform.position.y;
+        transform.LookAt(reTarget);
 
         // 플레이어로 향하는 방향 연산
         Vector3 target = (player.transform.position - transform.position).normalized;
