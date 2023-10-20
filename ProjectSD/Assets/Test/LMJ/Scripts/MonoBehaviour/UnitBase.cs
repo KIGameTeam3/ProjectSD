@@ -17,7 +17,6 @@ public class UnitBase : MonoBehaviour
 
     private void Start()
     {
-        KHJUIManager.removeObject += Remove;
         target = FindObjectOfType<Golem>().transform;    // player 태그를 가진 오브젝트 찾아 타겟으로 설정
 
         for (int i = 0; i < bulletPoints.Length; i++)
@@ -33,7 +32,6 @@ public class UnitBase : MonoBehaviour
 
     private void OnDestroy()
     {
-        KHJUIManager.removeObject -= Remove;
     }
 
     protected virtual void Update()

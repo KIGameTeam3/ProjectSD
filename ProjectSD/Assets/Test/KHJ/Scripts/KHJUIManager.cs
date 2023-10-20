@@ -9,8 +9,6 @@ using UnityEngine.UI;
 
 public class KHJUIManager : MonoBehaviour
 {
-
-    public static UnityAction removeObject;
     float currentTime = 0f;
     float clearTime = 1.0f;
     //[SerializeField] private GameObject startCanvas;
@@ -234,7 +232,6 @@ public class KHJUIManager : MonoBehaviour
         ShowResult();
         restartPanel.SetActive(true);
         endPanel.SetActive(true);
-        removeObject.Invoke();
     }
     //결과창 띄우는 함수입니다.
     private void ShowResult()
@@ -344,7 +341,11 @@ public class KHJUIManager : MonoBehaviour
     private void FindUnitDestroy()
     {
 
-        //GameObject[] unitList = GameObject.FindGameObjectsWithTag("Unit");
+        UnitBase[] unitList = FindObjectsOfType<UnitBase>();
+        foreach (var unit in unitList)
+        {
+            Destroy(unit.gameObject);
+        }
     }
 
     public void InitilizeUI()
