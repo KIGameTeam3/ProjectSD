@@ -2,6 +2,7 @@ using Oculus.Interaction;
 using OVR.OpenVR;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.IMGUI.Controls;
 //using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
@@ -138,6 +139,7 @@ public class Aim : MonoBehaviour
                 }
             } 
         }
+        
         // Ray가 부딪힌 지점에 라인 그리기
         lineRenderer.SetPosition(0, startPos);
         lineRenderer.SetPosition(1, endPos);
@@ -210,59 +212,80 @@ public class Aim : MonoBehaviour
         Vector3 endPos = (startPos + (pos.normalized * lrMaxDistance));
         endPos.y = 0;
         //{TEST
-        storePos = (startPos + (pos.normalized * lrMaxDistance));
-        storePos.y = 0;
-        
+        storePos = endPos;
+
         //}TEST
         // 왼쪽 컨트롤러 기준으로 Ray를 만든다.
         Ray ray = new Ray(startPos, ARAVRInput.LHandDirection);
         RaycastHit hitInfo;
+
+        preview.transform.position = endPos;
+        preview.gameObject.SetActive(true);
 
         // 충돌이 있다면?
         if (Physics.Raycast(ray, out hitInfo, lrMaxDistance, GlobalFunction.GetLayerMask("Floor")))
         {
             endPos = hitInfo.point;
             storePos = hitInfo.point;
-            
+            Debug.Log(hitInfo.transform.name);
+            preview.transform.position = endPos;
         }
         else
         {
             //예외처리
             //1. 아무것도 감지 못했을때 그 최대치의 바닥이 floor가 아닐때
             //2. Vector3.up이나 Vector3.down일때 위치
-            lrMaxDistance = 30f;
+
             //{TEST KHJ
             Debug.LogFormat("{0} : 이건 LHNADDirection", ARAVRInput.LHandDirection);
-            
+
+            Ray checkRay = new Ray(preview.transform.position+Vector3.up, -Vector3.up);
+
+            //Debug.DrawRay(checkRay.origin, checkRay.direction * 200f,Color.red);
+
+            RaycastHit hitCheck;
+            if (Physics.Raycast(checkRay, out hitCheck, 100, GlobalFunction.GetLayerMask("Floor")))
+            {
+                //btn.OnPreview();
+                //TODO 설치하는 함수 실행
+            }
+            else
+            {
+                Debug.Log("사라짐");
+                preview.gameObject.SetActive(false);
+
+                //btn.OffPreview();
+            }
             //if(Physics.Raycast()
             //}TEST KHJ
         }
 
-        preview.transform.position = endPos;
 
         // Ray가 부딪힌 지점에 라인 그리기
         lineRenderer.SetPosition(0, startPos);
         lineRenderer.SetPosition(1, endPos);
 
-        Ray checkRay = new Ray(preview.transform.position, -Vector3.up);
-        Debug.DrawRay(checkRay.origin, checkRay.direction * 200f,Color.red);
-        RaycastHit hitCheck;
-        if(Physics.Raycast(checkRay, out hitCheck, 200f,GlobalFunction.GetLayerMask("Floor")))
+        if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch) && btn != null && preview.installable && preview.gameObject.activeSelf)
         {
+            btn.SetInUnit(endPos);
+     //   Ray checkRay = new Ray(preview.transform.position, -Vector3.up);
+       // Debug.DrawRay(checkRay.origin, checkRay.direction * 200f,Color.red);
+      //  RaycastHit hitCheck;
+       // if(Physics.Raycast(checkRay, out hitCheck, 200f,GlobalFunction.GetLayerMask("Floor")))
+        //{
 
-            preview.gameObject.SetActive(true);
-            //btn.OnPreview();
+            //preview.gameObject.SetActive(true);
+          //  btn.OnPreview();
             //TODO 설치하는 함수 실행
-            if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch) && btn != null && preview.installable)
-            {
-                btn.SetInUnit(endPos);
-            }
-        }
-        else
-        {
-            preview.gameObject.SetActive(false);
-
-            //btn.OffPreview();
+          //  if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch) && btn != null && preview.installable)
+          //  {
+          //      btn.SetInUnit(endPos);
+          //  }
+       // }
+       // else
+       // {
+            //preview.gameObject.SetActive(false);
+        //    btn.OffPreview();
         }
     }
 

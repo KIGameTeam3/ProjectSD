@@ -12,7 +12,9 @@ public class GetUnitBtn : MonoBehaviour
     private GridLayoutGroup grid;
 
     //[SerializeField] private GameObject btnPrefab;
-    
+
+    //TODO 동적 셀 할당
+
     void Awake()
     {
         unitBtnList = Resources.LoadAll<GameObject>("UnitBtnPrefabs/");

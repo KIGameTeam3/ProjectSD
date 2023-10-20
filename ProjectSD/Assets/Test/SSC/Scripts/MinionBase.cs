@@ -51,7 +51,7 @@ public class MinionBase : MonoBehaviour
         Vector3 target = (player.transform.position - transform.position).normalized;
 
         // 생성 되었을시 플레이어의 거리를 저장해둬서 해당 거리의 비율을 비교해 플레이어에게 도달한것을 인지
-        if (Vector3.Distance(transform.position, player.transform.position) <= 1.5f)
+        if (Vector3.Distance(transform.position, player.transform.position) <= 3.0f)
         {
             myRigid.velocity = Vector3.zero;        // PC에게 도달하면 속도값 0
             //myRigid.isKinematic = true;
