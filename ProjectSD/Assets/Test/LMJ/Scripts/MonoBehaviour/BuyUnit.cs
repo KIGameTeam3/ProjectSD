@@ -144,6 +144,10 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         // 유닛을 생성
         if (preview.GetComponent<PreviewBase>().installable == true)
         {
+            if(preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.activeSelf == true)
+            {
+                OffPreview();
+            }
             Debug.Log("유닛 설치");
             unitObj = Instantiate(unitPrefab.gameObject, pos, Quaternion.identity);
             Aim.isChooseTower = false;

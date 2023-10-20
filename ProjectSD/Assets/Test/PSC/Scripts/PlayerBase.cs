@@ -32,7 +32,7 @@ public class PlayerBase : MonoBehaviour
              ARAVRInput.GetDown(ARAVRInput.Button.Two, ARAVRInput.Controller.RTouch)||
              ARAVRInput.GetDown(ARAVRInput.Button.One, ARAVRInput.Controller.LTouch)||
              ARAVRInput.GetDown(ARAVRInput.Button.Two, ARAVRInput.Controller.LTouch))
-             && GameManager.Instance.CheckPlayingGame() && !Aim.isChooseTower) 
+             && GameManager.Instance.CheckPlayingGame() && Aim.isChooseTower == false) 
         {
             if(GameManager.Instance.playerState == PlayerState.PLAY)
             {
@@ -86,18 +86,21 @@ public class PlayerBase : MonoBehaviour
     {
         maxHP = status.health;
 
-        /* PlayerStatus originStatus = Resources.Load("/"+status.name) as PlayerStatus;
-         status = Instantiate(originStatus);*/
+        //PlayerStatus originStatus = Resources.Load("/"+status.name) as PlayerStatus;
+        //status = Instantiate(originStatus);
 
         status = Instantiate(status);
+
         status.health = 100;
+        maxHP = status.health;
         if (GameManager.Instance.playerState != PlayerState.READY)
         {
-
             ChangeHand(false);
         }
-
-        KHJUIManager.Instance.ChangeHpText(100);
+        //{KHJ추가
+        //10.20 KHJ 변경사항 : ChangeHpText (100) -> (100, 100)으로 변경
+        KHJUIManager.Instance.ChangeHpText(status.health,maxHP);
+        //}KHJ 추가
         bloodEffect.transform.position = Vector3.down * -1000;
         Invoke("SetBloodEffect", 0.5f);
     }

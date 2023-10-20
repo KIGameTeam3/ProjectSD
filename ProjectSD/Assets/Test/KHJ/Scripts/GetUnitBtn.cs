@@ -1,14 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GetUnitBtn : MonoBehaviour
 {
     public GameObject[] unitBtnList = default;
 
+    private float originWidth, originHeight;
+    private RectTransform parent;
+    private GridLayoutGroup grid;
 
     //[SerializeField] private GameObject btnPrefab;
-    
+
+    //TODO 동적 셀 할당
+
     void Awake()
     {
         unitBtnList = Resources.LoadAll<GameObject>("UnitBtnPrefabs/");

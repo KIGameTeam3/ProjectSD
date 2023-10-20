@@ -134,11 +134,11 @@ public class Aim : MonoBehaviour
                 }
             } 
         }
-        //손만 있는 상태에서 왼쪽 컨트롤러 Y 버튼 누르면 상점창 출력 / 죽었을때는  출력 못하게끔
+       /* //손만 있는 상태에서 왼쪽 컨트롤러 Y 버튼 누르면 상점창 출력 / 죽었을때는  출력 못하게끔
         else if (ARAVRInput.GetDown(ARAVRInput.Button.Two, ARAVRInput.Controller.LTouch))
         {
             ControlInPlay();
-        }
+        }*/
         // Ray가 부딪힌 지점에 라인 그리기
         lineRenderer.SetPosition(0, startPos);
         lineRenderer.SetPosition(1, endPos);
@@ -267,6 +267,24 @@ public class Aim : MonoBehaviour
         if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch) && btn != null && preview.installable && preview.gameObject.activeSelf)
         {
             btn.SetInUnit(endPos);
+     //   Ray checkRay = new Ray(preview.transform.position, -Vector3.up);
+       // Debug.DrawRay(checkRay.origin, checkRay.direction * 200f,Color.red);
+      //  RaycastHit hitCheck;
+       // if(Physics.Raycast(checkRay, out hitCheck, 200f,GlobalFunction.GetLayerMask("Floor")))
+        //{
+
+            //preview.gameObject.SetActive(true);
+          //  btn.OnPreview();
+            //TODO 설치하는 함수 실행
+          //  if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch) && btn != null && preview.installable)
+          //  {
+          //      btn.SetInUnit(endPos);
+          //  }
+       // }
+       // else
+       // {
+            //preview.gameObject.SetActive(false);
+        //    btn.OffPreview();
         }
     }
 
