@@ -27,6 +27,15 @@ public class Bomb : MonoBehaviour, IHitObject
         }
     }
 
+    private void Update()
+    {
+        if(GameManager.Instance.playerState == PlayerState.DEAD ||
+            GameManager.Instance.playerState == PlayerState.READY)
+        {
+            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.BOMB);
+        }
+    }
+
     private void OnEnable()
     {
         // 풀링 오브젝트를 돌리기에 오브젝트가 활성화 될때마다 새로 세팅값을 해준다.
@@ -43,10 +52,7 @@ public class Bomb : MonoBehaviour, IHitObject
 
     private void OnDisable()
     {
-        GameObject obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.DESTROY_FX);
-        obj.transform.position = transform.position;
-        obj.transform.rotation = obj.transform.rotation;
-        obj.SetActive(true);
+
 
     }
 
@@ -57,6 +63,11 @@ public class Bomb : MonoBehaviour, IHitObject
 
         if (currentHp <= 0)
         {
+            GameObject obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.DESTROY_FX);
+            obj.transform.position = transform.position;
+            obj.transform.rotation = obj.transform.rotation;
+            obj.SetActive(true);
+
             ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.BOMB);
         }
     }

@@ -568,20 +568,29 @@ public class Golem : MonoBehaviour, IHitObject
         currentHp = golemMaxHp;                     // 괴수의 초기 체력은 설정한 Max체력값
         golemCheck = Phase.READY;                   // 골렘 스테이트 초기화
         transform.position = firstPos;              // 골렘 위치 초기화
-        //KHJUIManager.Instance.ChangeBossHpText(currentHp, golemMaxHp);
+        KHJUIManager.Instance.ChangeBossHpText(currentHp, golemMaxHp);
 
     }
 
     public void Hit(float damage)
     {
         currentHp -= damage;
-        //KHJUIManager.Instance.ChangeBossHpText(currentHp, golemMaxHp);
+        KHJUIManager.Instance.ChangeBossHpText(currentHp, golemMaxHp);
         if (currentHp <= 0)
         {
             StopAllCoroutines();
+            golemRigid.velocity = Vector3.zero;
             golemCheck = Phase.GAMEOVER;
             golemAni.SetTrigger("isDie");
         }
+    }
+
+    public void GolemStop()
+    {
+        StopAllCoroutines();
+        golemRigid.velocity = Vector3.zero;
+        golemCheck = Phase.GAMEOVER;
+        golemAni.SetTrigger("isAttackStop");
     }
 
     // LEGACY : 개발일지에 쓰일 공격패턴 애니메이션 설정 오류부분 (애니메이션 이벤트가 아닌 코루틴으로 접근하려 했음)

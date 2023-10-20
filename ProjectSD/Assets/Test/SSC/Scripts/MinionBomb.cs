@@ -22,8 +22,9 @@ public class MinionBomb : MinionBase, IHitObject
         base.Update();
 
         // TODO : 게임 재시작과 이어야함, 현재 임시 불값으로 테스트중
-        if(Golem.G_insance.minionRestart == true)
+        if(GameManager.Instance.playerState == PlayerState.DEAD)
         {
+            StopAllCoroutines();
             ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BOMB);
         }
 

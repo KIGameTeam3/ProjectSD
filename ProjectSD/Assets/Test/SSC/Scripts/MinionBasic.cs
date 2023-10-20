@@ -20,8 +20,9 @@ public class MinionBasic : MinionBase, IHitObject
     {
         base.Update();
 
-        if(Golem.G_insance.minionRestart == true)
+        if(GameManager.Instance.playerState == PlayerState.DEAD)
         {
+            StopAllCoroutines();
             ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BASIC);
         }
 
