@@ -1,13 +1,16 @@
-using JetBrains.Annotations;
-using Meta.Voice.Samples.BuiltInTimer;
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class KHJUIManager : MonoBehaviour
 {
+
+    public static UnityAction removeObject;
     float currentTime = 0f;
     float clearTime = 1.0f;
     //[SerializeField] private GameObject startCanvas;
@@ -70,7 +73,7 @@ public class KHJUIManager : MonoBehaviour
 
     //유닛 리스트
     public GameObject unit;
-    List<GameObject> unitList = new List<GameObject>();
+    List<GameObject> unitList;
 
 
     #region 싱글톤 변수
@@ -231,6 +234,7 @@ public class KHJUIManager : MonoBehaviour
         ShowResult();
         restartPanel.SetActive(true);
         endPanel.SetActive(true);
+        removeObject.Invoke();
     }
     //결과창 띄우는 함수입니다.
     private void ShowResult()
@@ -336,6 +340,12 @@ public class KHJUIManager : MonoBehaviour
     //{
     //    //unitList.Add(unit);
     //}
+
+    private void FindUnitDestroy()
+    {
+
+        //GameObject[] unitList = GameObject.FindGameObjectsWithTag("Unit");
+    }
 
     public void InitilizeUI()
     {
