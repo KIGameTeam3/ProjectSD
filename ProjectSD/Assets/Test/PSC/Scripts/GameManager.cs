@@ -149,11 +149,11 @@ public class GameManager : MonoBehaviour
         }
 
         InitManager();
-        FindObjectOfType<PlayerBase>().ChangeHand(false);
 
         //[SSC] 231019 괴수, 랜덤약점 초기화 추가
         Golem.G_insance.Initilize();
         LuckyPointController.instance.Initialize();
+        PlayerBase.instance.InitRestart();
     }
 
     //게임 시작시 불러온다
@@ -166,10 +166,10 @@ public class GameManager : MonoBehaviour
         }
 
         InitManager();
-        FindObjectOfType<PlayerBase>().ChangeHand(false);
 
         //[SSC] 231019 괴수행동시작 추가
         Golem.G_insance.GolemStart();
+        PlayerBase.instance.InitRestart();
     }
 
     //게임 종료시 불러온다
@@ -181,7 +181,6 @@ public class GameManager : MonoBehaviour
             return;
         }
         StopManager();
-        FindObjectOfType<PlayerBase>().ChangeHand(true);
     }
 
 

@@ -145,6 +145,6 @@ public class LaserPoint : MonoBehaviour
 }
 public enum HandPosition
 {
-    RIGHT,
-    LEFT
+    LEFT = 0,
+    RIGHT=1
 }
