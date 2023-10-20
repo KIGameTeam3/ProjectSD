@@ -17,5 +17,5 @@ MonoBehaviour:
   fireRate: 0.2
   bulletDamage: 50
   bulletSpeed: 50
-  criticalRate: 0
+  criticalRate: 1.5
   lifeTime: 5
