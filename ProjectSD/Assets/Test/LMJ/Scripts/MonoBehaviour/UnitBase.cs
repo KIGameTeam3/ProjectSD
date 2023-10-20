@@ -38,7 +38,7 @@ public class UnitBase : MonoBehaviour
 
     protected virtual void Update()
     {
-        unitHead.transform.LookAt(target.position+Vector3.up*50);    // Bullet의 정면방향이 target 향하도록 회전
+        unitHead.transform.LookAt(target.position+Vector3.up*30);    // Bullet의 정면방향이 target 향하도록 회전
     }
 
     IEnumerator BulletSpawn(float delayTime, int bulletIdx)
@@ -50,7 +50,7 @@ public class UnitBase : MonoBehaviour
         {
             GameObject bullet = Instantiate(bulletPrefab, bulletPoints[bulletIdx].transform.position, transform.rotation);
             bullet.transform.SetParent(bulletPoints[bulletIdx].transform); // spawner 하위에 생성
-            bullet.transform.LookAt(target);    // Bullet의 정면방향이 target 향하도록 회전
+            bullet.transform.LookAt(target.position + Vector3.up * 30);    // Bullet의 정면방향이 target 향하도록 회전
 
             yield return new WaitForSeconds(spawnRate);
         }

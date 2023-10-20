@@ -13285,7 +13285,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isLeftHand: 1
   lrMaxDistance: 200
-  isChooseTower: 0
+  isChooseHand: 0
+  btn: {fileID: 0}
 --- !u!1 &7170492118408765195
 GameObject:
   m_ObjectHideFlags: 0
@@ -15137,7 +15138,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isLeftHand: 0
   lrMaxDistance: 200
-  isChooseTower: 0
+  isChooseHand: 0
+  btn: {fileID: 0}
 --- !u!1 &7170492118448185249
 GameObject:
   m_ObjectHideFlags: 0
@@ -17130,8 +17132,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gun:
-  - {fileID: 7170492117764913995}
-  - {fileID: 7170492118102934728}
+  - {fileID: 0}
+  - {fileID: 0}
   hand:
   - {fileID: 924494118}
   - {fileID: 102338903}

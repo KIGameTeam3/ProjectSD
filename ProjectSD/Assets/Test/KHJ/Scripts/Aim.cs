@@ -19,6 +19,7 @@ public class Aim : MonoBehaviour
 
     //{커브 라인렌더러 변수 관련
     public static bool isChooseTower = false;
+    public bool isChooseHand = false;
     public BuyUnit btn;
     private PreviewBase preview;
 
@@ -61,7 +62,10 @@ public class Aim : MonoBehaviour
         //타워를 설치한 이후
         else
         {
-            ShowTowerCheck();
+            if (isChooseHand)
+            {                
+                ShowTowerCheck();
+            }
         }
     } //Update()
 
@@ -98,6 +102,7 @@ public class Aim : MonoBehaviour
                     // 컨트롤러의 진동 재생
                     //ARAVRInput.PlayVibration(ARAVRInput.Controller.RTouch);
                     hitObject?.HitUI();
+                    btn = hitInfo.collider.gameObject.GetComponent<BuyUnit>();
                 }
             }
         }
@@ -134,11 +139,7 @@ public class Aim : MonoBehaviour
                 }
             } 
         }
-       /* //손만 있는 상태에서 왼쪽 컨트롤러 Y 버튼 누르면 상점창 출력 / 죽었을때는  출력 못하게끔
-        else if (ARAVRInput.GetDown(ARAVRInput.Button.Two, ARAVRInput.Controller.LTouch))
-        {
-            ControlInPlay();
-        }*/
+        
         // Ray가 부딪힌 지점에 라인 그리기
         lineRenderer.SetPosition(0, startPos);
         lineRenderer.SetPosition(1, endPos);
