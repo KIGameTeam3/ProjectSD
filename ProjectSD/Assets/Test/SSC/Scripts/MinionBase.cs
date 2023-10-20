@@ -35,7 +35,7 @@ public class MinionBase : MonoBehaviour
     protected virtual void Update()
     {
         // TODO : 졸개들은 리미트 지점에 닿으면 모든 행동을 멈추고 오브젝트 풀에 반환
-        if (isLimit == true || Golem.G_insance.restart == true)
+        if (isLimit == true || GameManager.Instance.playerState == PlayerState.DEAD)
         {
             myAni.SetBool("isWalk", false);
             return;
