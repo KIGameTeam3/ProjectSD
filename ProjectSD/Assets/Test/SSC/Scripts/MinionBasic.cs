@@ -6,7 +6,7 @@ using UnityEngine.PlayerLoop;
 
 public class MinionBasic : MinionBase, IHitObject
 {
-    public float attackSpeed = 1f;              // 일반졸개 근접공격 시작 타이머
+    public float attackSpeed = 0.5f;              // 일반졸개 근접공격 시작 타이머
     private float timeReset = 0f;               // 근접공격 시작 체크값
     private bool atkReset = false;              // 근접공격 업데이트 반복호출 방지용 불값
     public float maxHp = 30f;                   // 일반졸개 체력 세팅값
