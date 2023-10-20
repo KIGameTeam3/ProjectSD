@@ -5,6 +5,9 @@ using UnityEngine;
 public class PreviewBase : MonoBehaviour
 {
     public GameObject[] previewObj = default;
+    // [LMJ] 231020 : zone Fx 배열 추가
+    public GameObject[] zoneObj = default;
+    public int zoneIdx = default;
 
     #region 설치 가능여부 체크
     private Coroutine placeCheckCoroutine;  // 설치 가능여부 체크 코루틴
@@ -13,7 +16,7 @@ public class PreviewBase : MonoBehaviour
 
     private void Start()
     {
-        transform.GetChild(2).GetComponent<MeshRenderer>().material.color = Color.clear;
+        zoneIdx = 0;
     }
 
     public void PlaceCheck()
@@ -22,7 +25,8 @@ public class PreviewBase : MonoBehaviour
     }
     public void StopPlaceCheck()
     {
-        transform.GetChild(2).GetComponent<MeshRenderer>().material.color = Color.clear;
+        // [LMJ] 231020 : zone Fx 코드 추가
+        zoneObj[zoneIdx].gameObject.SetActive(false);
         StopCoroutine(placeCheckCoroutine);
     }
 
@@ -46,7 +50,12 @@ public class PreviewBase : MonoBehaviour
             {
                 Debug.Log("설치 가능함");
                 installable = true;
-                transform.GetChild(2).GetComponent<MeshRenderer>().material.color = Color.green;
+
+                // [LMJ] 231020 : zone Fx 코드 추가
+                zoneObj[zoneIdx].gameObject.SetActive(false);
+                zoneIdx = 1;
+                zoneObj[zoneIdx].gameObject.SetActive(true);
+
             }
             else
             {
@@ -54,7 +63,11 @@ public class PreviewBase : MonoBehaviour
                 {
                     Debug.Log("설치 불가능" + collider.name);
                     installable = false;
-                    transform.GetChild(2).GetComponent<MeshRenderer>().material.color = Color.red;
+
+                    // [LMJ] 231020 : zone Fx 코드 추가
+                    zoneObj[zoneIdx].gameObject.SetActive(false);
+                    zoneIdx = 0;
+                    zoneObj[zoneIdx].gameObject.SetActive(true);
                 }
             }
 
