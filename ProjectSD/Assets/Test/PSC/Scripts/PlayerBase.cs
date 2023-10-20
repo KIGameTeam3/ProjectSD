@@ -52,24 +52,6 @@ public class PlayerBase : MonoBehaviour
             }
         }
 
-        if (GameManager.Instance.playerState != PlayerState.PLAY)
-        {
-            return;
-        }
-
-        if ((
-            ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.RTouch) || 
-            ARAVRInput.Get(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.RTouch)))
-        {
-            gun[(int)HandPosition.RIGHT].Shot();
-        }
-
-        if ((
-            ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch) ||
-            ARAVRInput.Get(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch)))
-        {
-            gun[(int)HandPosition.LEFT].Shot();
-        }
 
     }
 
@@ -109,8 +91,11 @@ public class PlayerBase : MonoBehaviour
 
         status = Instantiate(status);
         status.health = 100;
+        if (GameManager.Instance.playerState != PlayerState.READY)
+        {
 
-        ChangeHand(false);
+            ChangeHand(false);
+        }
 
         KHJUIManager.Instance.ChangeHpText(100);
         bloodEffect.transform.position = Vector3.down * -1000;
@@ -141,6 +126,9 @@ public class PlayerBase : MonoBehaviour
         ChangeHand(true);
         GameManager.Instance.EndGame();
         //게임오버 ui
+
+        //이 밑으로 
+        KHJUIManager.Instance.OnGameOver();
     }
 
     private void HitReaction()

@@ -27,6 +27,19 @@ public class GunBase : MonoBehaviour
         Init();
     }
 
+    private void Update()
+    {
+        if (GameManager.Instance.playerState != PlayerState.PLAY)
+        {
+            return;
+        }
+
+        if ((ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, controller) ||
+            ARAVRInput.Get(ARAVRInput.Button.IndexTrigger, controller)))
+        {
+            Shot();
+        }
+    }
 
     private void Init()
     {
