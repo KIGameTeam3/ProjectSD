@@ -357,7 +357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b536e08a49a2bd44ad3d51f038e7446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minionSpeed: 2
+  minionSpeed: 20
   isAttack: 0
   myAni: {fileID: 3266876403279583778}
   maxHp: 50

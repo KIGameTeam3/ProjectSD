@@ -158,6 +158,7 @@ public class Golem : MonoBehaviour, IHitObject
             if (isSpawnminion == false)
             {
                 isSpawnminion = true;
+                StartCoroutine(MinionCollTime());
                 golemAni.SetTrigger("SpawnMinion");
             }
 
@@ -211,6 +212,7 @@ public class Golem : MonoBehaviour, IHitObject
             {
                 isSpawnminion = true;
                 isAttack = true;
+                StartCoroutine(MinionCollTime());
                 golemAni.SetTrigger("SpawnMinion");
             }
             else if(isThrow == false && isAttack == false)
@@ -269,6 +271,7 @@ public class Golem : MonoBehaviour, IHitObject
             {
                 isSpawnminion = true;
                 isAttack = true;
+                StartCoroutine(MinionCollTime());
                 golemAni.SetTrigger("SpawnMinion");
             }
             else if (isThrow == false && isAttack == false)
@@ -330,6 +333,7 @@ public class Golem : MonoBehaviour, IHitObject
             {
                 isSpawnminion = true;
                 isAttack = true;
+                StartCoroutine(MinionCollTime());
                 golemAni.SetTrigger("SpawnMinion");
             }
             else if (isThrow == false && isAttack == false)
@@ -476,13 +480,16 @@ public class Golem : MonoBehaviour, IHitObject
         {
             // 0이 입력되면 왼팔
             case 0:
+                StartCoroutine(FireCooltime());                     // 원거리 공격 쿨타임
                 golemAni.SetTrigger("isLeftAttack");                // 왼팔 애니메이터 동작
                 LHandBomb.SetActive(true);
+
                 break;
 
             // 1이 입력되면 오른팔
             case 1:
-                golemAni.SetTrigger("isRightAttack");                   // 오른팔 애니메이터 동작=
+                StartCoroutine(FireCooltime());                     // 원거리 공격 쿨타임
+                golemAni.SetTrigger("isRightAttack");               // 오른팔 애니메이터 동작
                 RHandBomb.SetActive(true);
                 break;
             
@@ -591,6 +598,7 @@ public class Golem : MonoBehaviour, IHitObject
         golemRigid.velocity = Vector3.zero;
         golemCheck = Phase.GAMEOVER;
         golemAni.SetTrigger("isAttackStop");
+        golemAni.SetBool("isWalk", false);
     }
 
     // LEGACY : 개발일지에 쓰일 공격패턴 애니메이션 설정 오류부분 (애니메이션 이벤트가 아닌 코루틴으로 접근하려 했음)
