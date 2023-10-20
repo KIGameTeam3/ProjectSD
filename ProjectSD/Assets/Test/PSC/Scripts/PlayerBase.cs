@@ -159,4 +159,9 @@ public class PlayerBase : MonoBehaviour
         canEffect = true;
     }
 
+    public void EnhanceGun(bool enhance)
+    {
+        gun[0].ChangeWeaponMode(enhance);
+        gun[1].ChangeWeaponMode(enhance);
+    }
 }

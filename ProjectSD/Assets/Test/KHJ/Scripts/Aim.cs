@@ -19,9 +19,10 @@ public class Aim : MonoBehaviour
 
     //{커브 라인렌더러 변수 관련
     public static bool isChooseTower = false;
-    public bool isChooseHand = false;
+    public bool isChooseHand = true;
     public BuyUnit btn;
     private PreviewBase preview;
+    private ARAVRInput.Controller controller;
 
     //public int lineSmooth = 40;
     //public float lrCurveLength = 50f;
@@ -39,7 +40,10 @@ public class Aim : MonoBehaviour
         //width 수정
         lineRenderer.startWidth = 0.01f;
         lineRenderer.endWidth = 0.01f;
+        controller = ARAVRInput.Controller.RTouch;
 
+        if (isLeftHand)
+            controller = ARAVRInput.Controller.LTouch;
         preview = FindObjectOfType<PreviewBase>();
     }
 
@@ -63,8 +67,17 @@ public class Aim : MonoBehaviour
         else
         {
             if (isChooseHand)
-            {                
-                ShowTowerCheck();
+            {
+                if (isLeftHand)
+                {
+                    ShowTowerCheck(ARAVRInput.LHandPosition, ARAVRInput.LHandDirection);
+
+                }
+                else
+                {
+                     
+                    ShowTowerCheck(ARAVRInput.RHandPosition, ARAVRInput.RHandDirection);
+                }
             }
         }
     } //Update()
@@ -135,7 +148,7 @@ public class Aim : MonoBehaviour
                     Debug.Log("UnitBtn 핸드 트리거 찍히나요?");
                     hitObject?.HitUI();
                     btn = hitInfo.collider.gameObject.GetComponent<BuyUnit>();
-                    
+                    isChooseHand = true;
                 }
             } 
         }
@@ -173,50 +186,29 @@ public class Aim : MonoBehaviour
                     Debug.Log("UnitBtn 핸드 트리거 찍히나요?");
                     hitObject?.HitUI();
                     btn = hitInfo.collider.gameObject.GetComponent<BuyUnit>();
+                    isChooseHand = true;
 
                 }
             }
         }
 
-
-        // Ray가 부딪힌 지점에 라인 그리기
-        else if(ARAVRInput.GetDown(ARAVRInput.Button.HandTrigger, ARAVRInput.Controller.RTouch))
-        {
-            Ray ray = new Ray(startPos, ARAVRInput.RHandDirection);
-            RaycastHit hitInfo;
-
-            // 충돌이 있다면?
-            if (Physics.Raycast(ray, out hitInfo, lrMaxDistance, GlobalFunction.GetLayerMask("UI")))
-            {
-                Debug.Log(hitInfo.transform.tag);
-                endPos = hitInfo.point;
-                UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
-                if (hitInfo.collider.tag == "UnitBtn")
-                {
-                    Debug.Log("HandTrigger입니다");
-                    // 컨트롤러의 진동 재생
-                    ARAVRInput.PlayVibration(ARAVRInput.Controller.RTouch);
-                    hitObject?.HitUI();
-                }
-            }
-        }
         lineRenderer.SetPosition(0, startPos);
         lineRenderer.SetPosition(1, endPos);
     }       // else : 오른쪽 핸드 기준으로 레이저 포인터 만들기
-    public void ShowTowerCheck()
+    public void ShowTowerCheck(Vector3 position, Vector3 direction)
     {
         //left
-        Vector3 startPos = ARAVRInput.LHandPosition;
-        Vector3 pos = ARAVRInput.LHandDirection;
-        pos.y = 0;
-        Vector3 endPos = (startPos + (pos.normalized * lrMaxDistance));
+        Vector3 startPos = position;
+        Vector3 dir = direction;
+        dir.y = 0;
+        Vector3 endPos = (startPos + (dir.normalized * lrMaxDistance));
         endPos.y = 0;
         //{TEST
         storePos = endPos;
 
         //}TEST
         // 왼쪽 컨트롤러 기준으로 Ray를 만든다.
-        Ray ray = new Ray(startPos, ARAVRInput.LHandDirection);
+        Ray ray = new Ray(startPos, direction);
         RaycastHit hitInfo;
 
         preview.transform.position = endPos;
@@ -237,7 +229,7 @@ public class Aim : MonoBehaviour
             //2. Vector3.up이나 Vector3.down일때 위치
 
             //{TEST KHJ
-            Debug.LogFormat("{0} : 이건 LHNADDirection", ARAVRInput.LHandDirection);
+            Debug.LogFormat("{0} : 이건 LHNADDirection", direction);
 
             Ray checkRay = new Ray(preview.transform.position+Vector3.up, -Vector3.up);
 
@@ -265,7 +257,7 @@ public class Aim : MonoBehaviour
         lineRenderer.SetPosition(0, startPos);
         lineRenderer.SetPosition(1, endPos);
 
-        if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch) && btn != null && preview.installable && preview.gameObject.activeSelf)
+        if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, controller) && btn != null && preview.installable && preview.gameObject.activeSelf)
         {
             btn.SetInUnit(endPos);
      //   Ray checkRay = new Ray(preview.transform.position, -Vector3.up);

@@ -148,7 +148,7 @@ MonoBehaviour:
   _name: {fileID: 5374979377723730768}
   _info: {fileID: 5604725195071698840}
   preview: {fileID: 0}
-  previewIdx: 1
+  previewIdx: 0
 --- !u!65 &-8595572105648790877
 BoxCollider:
   m_ObjectHideFlags: 0

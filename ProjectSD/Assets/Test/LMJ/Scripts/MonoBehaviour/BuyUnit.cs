@@ -34,6 +34,8 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     public GameObject preview = default;
     public int previewIdx = default;
 
+    //KHJ 변수 선언 10.20
+    WaitForSeconds luckyTime = new WaitForSeconds(10f);
     public void Awake()
     {
         _name.text = unitPrefab.unitData.unitName;
@@ -138,13 +140,13 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         //Debug.Log(preview);
         //Debug.Log("설치 되는지 "+ preview.GetComponent<PreviewBase>());
         preview.GetComponent<PreviewBase>().StopPlaceCheck();   // 설치가능 체크 코루틴 끄기
-        preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(false); // 프리뷰 비활성화
+        preview.GetComponent<PreviewBase>().previewObj[previewIdx].SetActive(false); // 프리뷰 비활성화
 
        
         // 유닛을 생성
         if (preview.GetComponent<PreviewBase>().installable == true)
         {
-            if(preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.activeSelf == true)
+            if(preview.GetComponent<PreviewBase>().previewObj[previewIdx].activeSelf == true)
             {
                 OffPreview();
             }
@@ -170,13 +172,36 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
             //}
             //else { Debug.Log("설치 불가능 지역"); }
     }
+    public void OnLuckyPoint()
+    {
+        //TODO 예외처리 해줘야함   
+        
+        LuckyPointController.instance.LuuckyUint(luckyTime);
+        GameManager.Instance.playerState = PlayerState.PLAY;
+        PlayerBase.instance.ChangeHand(false);
+        KHJUIManager.Instance.CloseShop();
+    }
+    public void SpeedUpWeapon()
+    {
+        //TODO 여기 안에다가 무기 실행하는 함수 넣으면 됩니다.
+        PlayerBase.instance.EnhanceGun(true);
+
+        Invoke("StopEnhance", 10);
+
+    }
+
+    void StopEnhance()
+    {
+        PlayerBase.instance.EnhanceGun(false);
+    }
+
     public void OnPreview()
     {
-        preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(true);  // 프리뷰 활성화
+        preview.GetComponent<PreviewBase>().previewObj[previewIdx].SetActive(true);  // 프리뷰 활성화
     }
     public void OffPreview()
     {
-        preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(false); // 프리뷰 비활성화
+        preview.GetComponent<PreviewBase>().previewObj[previewIdx].SetActive(false); // 프리뷰 비활성화
     }
 }
     

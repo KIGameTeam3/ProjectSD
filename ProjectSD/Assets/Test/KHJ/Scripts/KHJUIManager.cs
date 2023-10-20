@@ -57,11 +57,11 @@ public class KHJUIManager : MonoBehaviour
     [SerializeField] private GameObject coinObj; 
     [SerializeField] private TMP_Text coinText; // 코인 수치 텍스트
 
-    [Header("ResultCanvas")]
-    [SerializeField] private GameObject resultPanel;
-    [SerializeField] private GameObject rTimeObj;
-    [SerializeField] private GameObject rCoinObj;
-    [SerializeField] private GameObject rKillObj;
+    //[Header("ResultCanvas")]
+    //[SerializeField] private GameObject resultPanel;
+    //[SerializeField] private GameObject rTimeObj;
+    //[SerializeField] private GameObject rCoinObj;
+    //[SerializeField] private GameObject rKillObj;
 
     [Header("Boss")]
     [SerializeField] private GameObject bossPanel;
@@ -132,14 +132,12 @@ public class KHJUIManager : MonoBehaviour
         coinText = coinObj.GetComponent<TMP_Text>();
         //}shopCanvas 관련 변수
 
-        //{resultCanvas 관련 변수
+        //{resultCanvas 관련 변수  나중에 쓰게 된다면 쓰면 됨
         GameObject resultCanvas = GameObject.Find("ResultCanvas");
-        resultPanel = resultCanvas.transform.GetChild(0).gameObject;
-       
-
-        rTimeObj = resultPanel.transform.GetChild(0).gameObject;
-        rCoinObj = resultPanel.transform.GetChild(1).gameObject;
-        rKillObj = resultPanel.transform.GetChild(2).gameObject;
+        //resultPanel = resultCanvas.transform.GetChild(0).gameObject;
+        //rTimeObj = resultPanel.transform.GetChild(0).gameObject;
+        //rCoinObj = resultPanel.transform.GetChild(1).gameObject;
+        //rKillObj = resultPanel.transform.GetChild(2).gameObject;
         //}resultCanvas 관련 변수
 
         //시간 변수
@@ -168,7 +166,7 @@ public class KHJUIManager : MonoBehaviour
         restartPanel.SetActive(false);
         pUiPivot.SetActive(false);
         shopPanel.SetActive(false);
-        resultPanel.SetActive(false);
+        //resultPanel.SetActive(false);
         timePanel.SetActive(false);
     }
 
@@ -229,28 +227,28 @@ public class KHJUIManager : MonoBehaviour
     public void OnGameOver()
     {
         //TODO 게임 오버 패널 켜주고 2초뒤 리스타트 버튼 활성화 혹은 
-        ShowResult();
+        //ShowResult();
         restartPanel.SetActive(true);
         endPanel.SetActive(true);
     }
     //결과창 띄우는 함수입니다.
-    private void ShowResult()
-    {
-        Debug.Log("게임 결과창 출력");
-        pUiPivot.SetActive(false);
-        shopPanel.SetActive(false);
-        resultPanel.SetActive(true);
+    //private void ShowResult()
+    //{
+    //    Debug.Log("게임 결과창 출력");
+    //    pUiPivot.SetActive(false);
+    //    shopPanel.SetActive(false);
+    //    resultPanel.SetActive(true);
 
-        rTimeObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = string.Format("{0}", GameManager.Instance.GetPlayTime());
-        rCoinObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = string.Format("{0}",coinText);
-        rKillObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "?";
-    }
+    //    rTimeObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = string.Format("{0}", GameManager.Instance.GetPlayTime());
+    //    rCoinObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = string.Format("{0}",coinText);
+    //    rKillObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "?";
+    //}
 
     public void ClickReStart() //재시작 버튼을 누르면 활성화될 것들 혹은 비활성화 될 것들 해줍니다.
     {
         Debug.Log("게임 재시작 되나?");
         restartPanel.SetActive(false); //재시작 캔버스 패널
-        resultPanel.SetActive(false); // 결과찬 캔버스 패널
+        //resultPanel.SetActive(false); // 결과찬 캔버스 패널
         endPanel.SetActive(false); //종료 버튼 
         pUiPivot.SetActive(true); // 플레이어 ui 관련 패널
         bossPanel.SetActive(true); //보스 체력 ui 패널 

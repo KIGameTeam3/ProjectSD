@@ -26,7 +26,7 @@ public class PreviewBase : MonoBehaviour
     public void StopPlaceCheck()
     {
         // [LMJ] 231020 : zone Fx 코드 추가
-        zoneObj[zoneIdx].gameObject.SetActive(false);
+        zoneObj[zoneIdx].SetActive(false);
         StopCoroutine(placeCheckCoroutine);
     }
 
@@ -48,7 +48,7 @@ public class PreviewBase : MonoBehaviour
 
             if (colliders.Length == 0)
             {
-                Debug.Log("설치 가능함");
+                //Debug.Log("설치 가능함");
                 installable = true;
 
                 // [LMJ] 231020 : zone Fx 코드 추가
@@ -59,10 +59,10 @@ public class PreviewBase : MonoBehaviour
             }
             else
             {
+                installable = false;
                 foreach (Collider collider in colliders)
                 {
                     Debug.Log("설치 불가능" + collider.name);
-                    installable = false;
 
                     // [LMJ] 231020 : zone Fx 코드 추가
                     zoneObj[zoneIdx].gameObject.SetActive(false);
