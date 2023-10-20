@@ -233,12 +233,13 @@ public class KHJUIManager : MonoBehaviour
         endPanel.SetActive(true);
     }
     //결과창 띄우는 함수입니다.
-    public void ShowResult()
+    private void ShowResult()
     {
         Debug.Log("게임 결과창 출력");
         pUiPivot.SetActive(false);
         shopPanel.SetActive(false);
         resultPanel.SetActive(true);
+
         rTimeObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = string.Format("{0}", GameManager.Instance.GetPlayTime());
         rCoinObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = string.Format("{0}",coinText);
         rKillObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = "?";
@@ -253,7 +254,7 @@ public class KHJUIManager : MonoBehaviour
         pUiPivot.SetActive(true); // 플레이어 ui 관련 패널
         bossPanel.SetActive(true); //보스 체력 ui 패널 
 
-        GameManager.Instance.StartGame();
+        GameManager.Instance.ReStartGame();
     }
 
     public void ChangeCoinText()
