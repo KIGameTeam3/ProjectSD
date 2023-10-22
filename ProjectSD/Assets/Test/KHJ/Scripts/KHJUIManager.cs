@@ -252,7 +252,8 @@ public class KHJUIManager : MonoBehaviour
         endPanel.SetActive(false); //종료 버튼 
         pUiPivot.SetActive(true); // 플레이어 ui 관련 패널
         bossPanel.SetActive(true); //보스 체력 ui 패널 
-
+        
+        FindUnitDestroy();
         GameManager.Instance.ReStartGame();
     }
 

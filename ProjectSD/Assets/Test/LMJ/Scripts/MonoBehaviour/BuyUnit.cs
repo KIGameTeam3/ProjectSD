@@ -134,7 +134,10 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
             //preview.transform.position = GameManager.Instance.hitPosition;
         }
     }
-
+    private void OnDestroy()
+    {
+        Debug.Log("이거 찍히나요?");
+    }
     public void SetInUnit(Vector3 pos) // 유닛 설치: 클릭 중인 버튼에서 손을 뗄 때
     {
         //Debug.Log(preview);
@@ -187,7 +190,9 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         PlayerBase.instance.EnhanceGun(true);
 
         Invoke("StopEnhance", 10);
-
+        GameManager.Instance.playerState = PlayerState.PLAY;
+        PlayerBase.instance.ChangeHand(false);
+        KHJUIManager.Instance.CloseShop();
     }
 
     void StopEnhance()
