@@ -8,6 +8,7 @@ public class UIHitCollider : MonoBehaviour
     //public UnityEvent HitUp;
     public void HitUI()
     {
+       
         OnHit?.Invoke();
         //gameObject.SetActive(false);
 

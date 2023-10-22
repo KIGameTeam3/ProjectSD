@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
 
     private bool isAttack = false;
 
-    private DamageText damageText;
+    public DamageText damageText;
 
     private void Start()
     {

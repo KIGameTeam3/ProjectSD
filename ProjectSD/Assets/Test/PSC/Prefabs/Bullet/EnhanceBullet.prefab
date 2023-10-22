@@ -554,7 +554,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   status: {fileID: 11400000, guid: d1ec1eece7481a846ba2917cbae7f45d, type: 2}
-  damageText: {fileID: 0}
+  damageText: {fileID: 5295490161214008754}
+  textSize: 0.1
 --- !u!82 &3369260266565889589
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5536,3 +5537,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6088926204725012931, guid: 5d558a2f7cdea0344a1b98b0f1384e3a, type: 3}
   m_PrefabInstance: {fileID: 2161000089840977010}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5295490161214008754 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6088926204725012928, guid: 5d558a2f7cdea0344a1b98b0f1384e3a, type: 3}
+  m_PrefabInstance: {fileID: 2161000089840977010}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0d5fb659055aa149a1f0794d5dd6b4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

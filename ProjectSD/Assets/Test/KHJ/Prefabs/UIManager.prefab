@@ -45,26 +45,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startPanel: {fileID: 0}
+  startHit: {fileID: 0}
   endPanel: {fileID: 0}
+  endHit: {fileID: 0}
   restartPanel: {fileID: 0}
+  restartHit: {fileID: 0}
   pUiPivot: {fileID: 0}
-  rightPanel: {fileID: 0}
-  buffImg: {fileID: 0}
+  topPanel: {fileID: 0}
+  leftPanel: {fileID: 0}
   chatText:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  leftPanel: {fileID: 0}
+  msgPanel: {fileID: 0}
   healthObj: {fileID: 0}
   currentHpImg: {fileID: 0}
   healthText: {fileID: 0}
-  coinObj: {fileID: 0}
-  coinText: {fileID: 0}
+  timePanel: {fileID: 0}
   timeObj: {fileID: 0}
   timeText: {fileID: 0}
   shopPanel: {fileID: 0}
-  resultPanel: {fileID: 0}
-  rTimeObj: {fileID: 0}
-  rCoinObj: {fileID: 0}
-  rKillObj: {fileID: 0}
+  isOpenShop: 0
+  coinObj: {fileID: 0}
+  coinText: {fileID: 0}
+  bossPanel: {fileID: 0}
+  bossHpObj: {fileID: 0}
+  currentBossImg: {fileID: 0}
+  bossHpText: {fileID: 0}
+  unit: {fileID: 0}
