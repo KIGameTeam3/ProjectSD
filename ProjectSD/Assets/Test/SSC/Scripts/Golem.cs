@@ -159,7 +159,8 @@ public class Golem : MonoBehaviour, IHitObject
             {
                 isSpawnminion = true;
                 StartCoroutine(MinionCollTime());
-                golemAni.SetTrigger("SpawnMinion");
+                StartCoroutine(SpawnStop());
+                golemAni.SetBool("SpawnMinion", true);
             }
 
             yield return null;
@@ -213,7 +214,8 @@ public class Golem : MonoBehaviour, IHitObject
                 isSpawnminion = true;
                 isAttack = true;
                 StartCoroutine(MinionCollTime());
-                golemAni.SetTrigger("SpawnMinion");
+                StartCoroutine(SpawnStop());
+                golemAni.SetBool("SpawnMinion", true);
             }
             else if(isThrow == false && isAttack == false)
             {
@@ -272,7 +274,8 @@ public class Golem : MonoBehaviour, IHitObject
                 isSpawnminion = true;
                 isAttack = true;
                 StartCoroutine(MinionCollTime());
-                golemAni.SetTrigger("SpawnMinion");
+                StartCoroutine(SpawnStop());
+                golemAni.SetBool("SpawnMinion", true);
             }
             else if (isThrow == false && isAttack == false)
             {
@@ -334,7 +337,8 @@ public class Golem : MonoBehaviour, IHitObject
                 isSpawnminion = true;
                 isAttack = true;
                 StartCoroutine(MinionCollTime());
-                golemAni.SetTrigger("SpawnMinion");
+                StartCoroutine(SpawnStop());
+                golemAni.SetBool("SpawnMinion", true);
             }
             else if (isThrow == false && isAttack == false)
             {
@@ -481,7 +485,8 @@ public class Golem : MonoBehaviour, IHitObject
             // 0이 입력되면 왼팔
             case 0:
                 StartCoroutine(FireCooltime());                     // 원거리 공격 쿨타임
-                golemAni.SetTrigger("isLeftAttack");                // 왼팔 애니메이터 동작
+                StartCoroutine(LeftStop());
+                golemAni.SetBool("isLeftAttack", true);                // 왼팔 애니메이터 동작
                 LHandBomb.SetActive(true);
 
                 break;
@@ -489,7 +494,8 @@ public class Golem : MonoBehaviour, IHitObject
             // 1이 입력되면 오른팔
             case 1:
                 StartCoroutine(FireCooltime());                     // 원거리 공격 쿨타임
-                golemAni.SetTrigger("isRightAttack");               // 오른팔 애니메이터 동작
+                StartCoroutine(SpawnStop());
+                golemAni.SetBool("isRightAttack", true);               // 오른팔 애니메이터 동작
                 RHandBomb.SetActive(true);
                 break;
             
@@ -581,15 +587,21 @@ public class Golem : MonoBehaviour, IHitObject
 
     public void Hit(float damage)
     {
-        currentHp -= damage;
-        KHJUIManager.Instance.ChangeBossHpText(currentHp, golemMaxHp);
-
-        if (currentHp <= 0)
+        if(golemCheck != Phase.GAMEOVER)
         {
-            StopAllCoroutines();
-            golemRigid.velocity = Vector3.zero;
-            golemCheck = Phase.GAMEOVER;
-            golemAni.SetTrigger("isDie");
+            if (currentHp <= 0)
+            {
+                StopAllCoroutines();
+                golemRigid.velocity = Vector3.zero;
+                golemCheck = Phase.GAMEOVER;
+                golemAni.SetTrigger("isDie");
+
+                //GameManager.Instance.EndGame();
+            }
+
+            currentHp -= damage;
+            KHJUIManager.Instance.ChangeBossHpText(currentHp, golemMaxHp);
+
         }
     }
 
@@ -600,6 +612,21 @@ public class Golem : MonoBehaviour, IHitObject
         golemCheck = Phase.GAMEOVER;
         golemAni.SetTrigger("isAttackStop");
         golemAni.SetBool("isWalk", false);
+    }
+
+    IEnumerator SpawnStop()
+    {
+        yield return new WaitForSeconds(2.3f);
+
+        golemAni.SetBool("SpawnMinion", false);
+        golemAni.SetBool("isRightAttack", false);
+    }
+
+    IEnumerator LeftStop()
+    {
+        yield return new WaitForSeconds(1.3f);
+
+        golemAni.SetBool("isLeftAttack", false);
     }
 
     // LEGACY : 개발일지에 쓰일 공격패턴 애니메이션 설정 오류부분 (애니메이션 이벤트가 아닌 코루틴으로 접근하려 했음)

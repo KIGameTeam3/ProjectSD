@@ -3164,7 +3164,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8588035327547512545, guid: 118cdc496b9ca934d9550a0710167235, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 100
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 8588035327547512545, guid: 118cdc496b9ca934d9550a0710167235, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4778,6 +4778,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitPrefab: {fileID: 6035314711198153692, guid: fa2a87585ab228c439e10fc25e94a4b1, type: 3}
+  price: 0
   _price: {fileID: 118774568}
   _name: {fileID: 904078034}
   _info: {fileID: 75050915}
@@ -6717,6 +6718,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitPrefab: {fileID: 6035314711198153692, guid: fa2a87585ab228c439e10fc25e94a4b1, type: 3}
+  price: 0
   _price: {fileID: 640903491118289969}
   _name: {fileID: 1131752395195234202}
   _info: {fileID: 640903490371382098}
