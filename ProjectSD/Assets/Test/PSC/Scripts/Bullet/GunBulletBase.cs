@@ -56,7 +56,7 @@ public class GunBulletBase : MonoBehaviour
         obj.transform.position = damageText.transform.position;
         damageText.transform.SetParent(obj.transform);
         damageText.SetDamage(damage);
-        float distance = Vector3.Distance(transform.position, PlayerBase.instance.transform.position);
+        float distance = Vector3.Distance(transform.position, PlayerBase.instance.transform.position) ;
         //damageText.transform.localScale = damageText.transform.localScale * textSize * (Mathf.Abs(distance)+1);
         damageText.SetTextSize(distance);
 
