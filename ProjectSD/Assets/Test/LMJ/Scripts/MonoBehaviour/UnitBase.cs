@@ -10,7 +10,7 @@ public class UnitBase : MonoBehaviour
 
     #region Bullet 관련 변수
     public GameObject[] bulletPoints = default;  // 총구 배열
-    public GameObject bulletPrefab;     // 생성할 bullet 프리팹
+    public Bullet bulletPrefab;     // 생성할 bullet 프리팹
     public float spawnRate = 2.0f;      // bullet 생성 주기
     protected Transform target = default;
     public ParticleSystem[] flashParticleObj = default;    // 총구 화염 파티클
@@ -28,8 +28,7 @@ public class UnitBase : MonoBehaviour
 
     protected virtual void Update()
     {
-        
-        unitHead.transform.LookAt(target.position + Vector3.up * 30);    // Bullet의 정면방향이 target 향하도록 회전
+        unitHead.transform.LookAt(target.GetChild(0).GetChild(0).position);    // Bullet의 정면방향이 target 향하도록 회전
     }
 
     IEnumerator BulletSpawn(float delayTime, int bulletIdx)
@@ -40,9 +39,9 @@ public class UnitBase : MonoBehaviour
 
         while (true)
         {
-            GameObject bullet = Instantiate(bulletPrefab, bulletPoints[bulletIdx].transform.position, transform.rotation);
-            //bullet.transform.SetParent(bulletPoints[bulletIdx].transform); // spawner 하위에 생성
-            bullet.transform.LookAt(target.position + Vector3.up * 30);    // Bullet의 정면방향이 target 향하도록 회전
+            Bullet bullet = Instantiate(bulletPrefab, bulletPoints[bulletIdx].transform.position, transform.rotation);
+            bullet.transform.SetParent(bulletPoints[bulletIdx].transform); // spawner 하위에 생성
+            bullet.Move(unitHead.transform.forward);    // Bullet의 정면방향이 target 향하도록 회전
 
             //if (flashParticleObj[bulletIdx].isPlaying)
             //{

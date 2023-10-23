@@ -52,6 +52,7 @@ public class PreviewBase : MonoBehaviour
                 installable = true;
 
                 // [LMJ] 231020 : zone Fx 코드 추가
+                zoneIdx = 0;
                 zoneObj[zoneIdx].gameObject.SetActive(false);
                 zoneIdx = 1;
                 zoneObj[zoneIdx].gameObject.SetActive(true);
@@ -65,7 +66,8 @@ public class PreviewBase : MonoBehaviour
                     Debug.Log("설치 불가능" + collider.name);
 
                     // [LMJ] 231020 : zone Fx 코드 추가
-                    zoneObj[zoneIdx].gameObject.SetActive(false);
+                    zoneIdx = 1;
+                    zoneObj[zoneIdx ].gameObject.SetActive(false);
                     zoneIdx = 0;
                     zoneObj[zoneIdx].gameObject.SetActive(true);
                 }

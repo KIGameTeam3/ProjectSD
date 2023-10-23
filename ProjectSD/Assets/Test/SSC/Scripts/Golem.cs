@@ -127,7 +127,7 @@ public class Golem : MonoBehaviour, IHitObject
         //  괴수는 라스트페이즈에 진입하면 PC를 향해 멈추지않고 다가오게 된다.
         if (golemCheck == Phase.PHASE_LAST)
         {
-            if(Vector3.Distance(distance.position, player.transform.position) <= 1f)
+            if(Vector3.Distance(distance.position, player.transform.position) <= 2f)
             {
                 // { 게임종료에 따른 괴수의 기능동작 정지 행동들
 
@@ -500,7 +500,7 @@ public class Golem : MonoBehaviour, IHitObject
     // 왼손 애니메이션이 선택 되었을 때 (애니메이션 이벤트 함수)
     private void FireLeft()
     {
-        GameObject obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.BOMB);
+        GameObject obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.ROCK);
         obj.transform.position = LHandBomb.transform.position;
         obj.SetActive(true);
         LHandBomb.SetActive(false);
@@ -509,7 +509,7 @@ public class Golem : MonoBehaviour, IHitObject
     // 오른손 애니메이션이 선택 되었을 때 (애니메이션 이벤트 함수)
     private void FireRight()
     {
-        GameObject obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.BOMB);
+        GameObject obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.ROCK);
         obj.transform.position = RHandBomb.transform.position;
         obj.SetActive(true);
         RHandBomb.SetActive(false);
@@ -535,15 +535,15 @@ public class Golem : MonoBehaviour, IHitObject
             {
                 case 0:
                     minion = ObjectPoolManager.instance.GetPoolObj(PoolObjType.MINION_BASIC);
-                    minion.transform.position = spawners[i].position;
                     break;
                 case 1:
                     minion = ObjectPoolManager.instance.GetPoolObj(PoolObjType.MINION_BOMB);
-                    minion.transform.position = spawners[i].position;
+                    //minion.transform.position = spawners[i].position;
                     bombCount++;
                     break;
             }
 
+            minion.transform.position = spawners[i].position;
             minion.SetActive(true);
 
         }
@@ -583,6 +583,7 @@ public class Golem : MonoBehaviour, IHitObject
     {
         currentHp -= damage;
         KHJUIManager.Instance.ChangeBossHpText(currentHp, golemMaxHp);
+
         if (currentHp <= 0)
         {
             StopAllCoroutines();

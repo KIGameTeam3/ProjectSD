@@ -4,20 +4,21 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float bulletSpeed = 8f;  // Bullet 속력
+    public float bulletSpeed = 50f;  // Bullet 속력
     private Rigidbody bulletRigidbody = default;    // Bullet Rigidbody 컴포넌트
 
     private bool isAttack = false;
 
     public DamageText damageText;
+    float lifeTime = 5f;
 
-    private void Start()
+    private void Awake()
     {
         bulletRigidbody = GetComponent<Rigidbody>();    // Rigidbody 컴포넌트 할당
         bulletRigidbody.velocity = transform.forward * bulletSpeed; // 앞쪽 방향으로 날아가도록 속도 설정
-        damageText = GetComponentInChildren<DamageText>();
+        //damageText = GetComponentInChildren<DamageText>();
 
-        Destroy(gameObject, 3f);    // 5초 뒤 Bullet 오브젝트 파괴
+        Destroy(gameObject, lifeTime);    // 5초 뒤 Bullet 오브젝트 파괴
     }
 
     // Bullet의 트리거 충돌시
@@ -49,6 +50,16 @@ public class Bullet : MonoBehaviour
             AttackReaction(damage);
         }
     }
+
+
+    public void Move(Vector3 direction)
+    {
+
+        ;
+
+        bulletRigidbody.velocity = direction * bulletSpeed;
+    }
+
     protected void AttackReaction(int damage)
     {
 

@@ -21,7 +21,6 @@ public class MinionBomb : MinionBase, IHitObject
     {
         base.Update();
 
-        // TODO : 게임 재시작과 이어야함, 현재 임시 불값으로 테스트중
         if(GameManager.Instance.playerState == PlayerState.DEAD)
         {
             StopAllCoroutines();
@@ -59,6 +58,10 @@ public class MinionBomb : MinionBase, IHitObject
     // 자폭실행
     private void Explosive()
     {
+        GameObject obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.BOOM_DIE);
+        obj.transform.position = transform.position;
+        obj.SetActive(true);
+
         // 자신을 기준으로 일정범위 구체크기만큼 충돌 감지하여 
         Collider[] hitObj = Physics.OverlapSphere(transform.position, explosionArea);
 

@@ -12,7 +12,7 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     public UnitBase unitPrefab;   // 생성할 유닛 프리팹
     private GameObject unitObj;  // 드래그 중인 유닛을 저장할 변수
     private float unitDestroy = default; // 유닛 파괴 시간
-    private int price = default;    // 유닛 가격
+    public int price = default;    // 유닛 가격
 
     private float installMaxDis = 10f;    // 유닛 최대 설치 거리
     //private Vector3 mousePosition = default;
@@ -117,6 +117,7 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     //{KHJ 메서드 변환 테스트
     public void ClickUnit()   // 버튼을 눌렀을 때
     {
+        if (GameManager.Instance.gold < price) return;
         if (gameObject.CompareTag("UnitBtn") && unitPrefab != null) // 프리뷰 생성 조건
         {
             preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(true);  // 프리뷰 활성화
@@ -178,7 +179,9 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     public void OnLuckyPoint()
     {
         //TODO 예외처리 해줘야함   
-        
+
+        if (GameManager.Instance.gold < price) return;
+
         LuckyPointController.instance.LuuckyUint(luckyTime);
         GameManager.Instance.playerState = PlayerState.PLAY;
         PlayerBase.instance.ChangeHand(false);
@@ -186,6 +189,7 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     }
     public void SpeedUpWeapon()
     {
+        if (GameManager.Instance.gold < price) return;
         //TODO 여기 안에다가 무기 실행하는 함수 넣으면 됩니다.
         PlayerBase.instance.EnhanceGun(true);
 

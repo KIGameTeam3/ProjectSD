@@ -87,7 +87,7 @@ MonoBehaviour:
   unitHead: {fileID: 2062716677150233242}
   bulletPoints:
   - {fileID: 2274022376317924893}
-  bulletPrefab: {fileID: 4344226775905457457, guid: e51fe7cf5e436a6429f8d561aee97ccf, type: 3}
+  bulletPrefab: {fileID: 2016135332455564035, guid: e51fe7cf5e436a6429f8d561aee97ccf, type: 3}
   spawnRate: 2
   flashParticleObj:
   - {fileID: 2288573827533672707}
