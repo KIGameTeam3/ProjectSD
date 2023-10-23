@@ -759,6 +759,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitPrefab: {fileID: 6035314711198153692, guid: fa2a87585ab228c439e10fc25e94a4b1, type: 3}
+  price: 0
   _price: {fileID: 3374066848848544947}
   _name: {fileID: 3374066848562511177}
   _info: {fileID: 3374066848837890104}
@@ -795,6 +796,18 @@ MonoBehaviour:
       - m_Target: {fileID: 3374066849798447542}
         m_TargetAssemblyTypeName: BuyUnit, Assembly-CSharp
         m_MethodName: OnLuckyPoint
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3374066849798447542}
+        m_TargetAssemblyTypeName: BuyUnit, Assembly-CSharp
+        m_MethodName: OnSizeBuff
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
