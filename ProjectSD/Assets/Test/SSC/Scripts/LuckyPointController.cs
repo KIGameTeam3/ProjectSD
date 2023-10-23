@@ -6,6 +6,7 @@ using UnityEngine;
 public class LuckyPointController : MonoBehaviour
 {
     public static LuckyPointController instance;
+    private AudioSource myAudio = null;
 
     public BuyUnit btn;
 
@@ -203,6 +204,9 @@ public class LuckyPointController : MonoBehaviour
 
     public IEnumerator Test(GameObject obj)
     {
+        myAudio = obj.GetComponent<AudioSource>();
+        myAudio.Play();
+
         if (obj != unitPoint)
         {
             //obj.GetComponent<Collider>().enabled = false;

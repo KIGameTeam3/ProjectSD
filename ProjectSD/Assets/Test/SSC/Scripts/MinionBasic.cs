@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using static MinionBomb;
 
 public class MinionBasic : MinionBase, IHitObject
 {
@@ -11,6 +12,10 @@ public class MinionBasic : MinionBase, IHitObject
     private bool atkReset = false;              // 근접공격 업데이트 반복호출 방지용 불값
     public float maxHp = 30f;                   // 일반졸개 체력 세팅값
     public float currentHp = default;           // 일반졸개 현재 체력 체크
+    //public Collider myCollider;
+
+    public enum State { ALIVE, DIE }            // 자폭졸개의 스테이트 상태
+    public State state { get; private set; }    // 스테이트 프로퍼티
 
 
     private WaitForSeconds atkcoolTime = new WaitForSeconds(1f);    // 공격 실행시 쿨타임
@@ -18,41 +23,46 @@ public class MinionBasic : MinionBase, IHitObject
 
     protected override void Update()
     {
-        base.Update();
-
-        if(GameManager.Instance.playerState == PlayerState.DEAD)
+        if (state == State.ALIVE)
         {
-            StopAllCoroutines();
-            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BASIC);
-        }
+            base.Update();
 
-        // 부모클래스상에서 추적을 멈추고 공격범위에 들어섰다면
-        if (isAttack == true && Golem.G_insance.restart == false)
-        {
-            // 공격 시간 누적
-            timeReset += Time.deltaTime;
-
-            // 시간 누적치가 도달했다면 
-            if (attackSpeed <= timeReset && atkReset == false)
+            if(GameManager.Instance.playerState == PlayerState.DEAD)
             {
-                // 업데이트상 공격 반복 호출 방지용
-                atkReset = true;
-
-                // 애니메이션 선택
-                int randAttack = Random.Range(0, 2);
-
-                switch (randAttack)
-                {
-                    case 0:
-                        myAni.SetTrigger("AttackLeft");
-                        break;
-                    case 1:
-                        myAni.SetTrigger("AttackRight");
-                        break;
-                }
-
+                StopAllCoroutines();
+                ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BASIC);
             }
+
+            // 부모클래스상에서 추적을 멈추고 공격범위에 들어섰다면
+            if (isAttack == true && Golem.G_insance.restart == false)
+            {
+                // 공격 시간 누적
+                timeReset += Time.deltaTime;
+
+                // 시간 누적치가 도달했다면 
+                if (attackSpeed <= timeReset && atkReset == false)
+                {
+                    // 업데이트상 공격 반복 호출 방지용
+                    atkReset = true;
+
+                    // 애니메이션 선택
+                    int randAttack = Random.Range(0, 2);
+
+                    switch (randAttack)
+                    {
+                        case 0:
+                            myAni.SetTrigger("AttackLeft");
+                            break;
+                        case 1:
+                            myAni.SetTrigger("AttackRight");
+                            break;
+                    }
+
+                }
+            }
+
         }
+
 
     }
 
@@ -60,11 +70,12 @@ public class MinionBasic : MinionBase, IHitObject
     {
         base.OnTriggerEnter(other);
 
-        // DeadZone(절벽 뒤) 트리거시 오브젝트 풀 반환
-        if (other.CompareTag("DeadZone"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("PlayerBullet") && state == State.ALIVE)
         {
-            StartCoroutine(CoolObj(this.gameObject, PoolObjType.MINION_BASIC));
+            myAudio.clip = hitClip;
+            myAudio.Play();
         }
+
     }
 
     // 풀링오브젝트 반환에 의한 활성화시 초기 체력 세팅
@@ -99,15 +110,31 @@ public class MinionBasic : MinionBase, IHitObject
     {
         currentHp = maxHp;
         atkReset = false;
+        state = State.ALIVE;
     }
 
     public void Hit(float damage)
     {
         currentHp -= damage;
 
-        if (currentHp <= 0)
+        if (currentHp <= 0 && state == State.ALIVE)
         {
-            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BASIC);
+            myAudio.clip = deathClip;
+            myAudio.Play();
+            state = State.DIE;
+            isDetected = false;
+            myRigid.velocity = Vector3.zero;
+            myAni.SetTrigger("isDie");
+            
         }
+    }
+
+    IEnumerator Die_Minion()
+    {
+        transform.position = new Vector3(-200f, -200f, -200f);
+
+        yield return new WaitForSeconds(2f);
+
+        ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BASIC);
     }
 }

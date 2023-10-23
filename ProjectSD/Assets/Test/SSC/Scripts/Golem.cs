@@ -2,10 +2,6 @@
 using Oculus.Platform.Models;
 using System.Collections;
 using System.Collections.Generic;
-
-
-
-
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -83,6 +79,10 @@ public class Golem : MonoBehaviour, IHitObject
 
     private Rigidbody golemRigid = default;     // 괴수의 속력을 입력할 컴포넌트
     private Animator golemAni = default;        // 괴수의 애니메이션을 관리할 컴포넌트
+    private AudioSource myAudio = null;
+    public AudioClip golemWalk;
+    public AudioClip golemFear;
+
 
     private WaitForSeconds ballThrowcooltime = new WaitForSeconds(5f);
     private WaitForSeconds minionSpawncooltime = new WaitForSeconds(25f);
@@ -97,6 +97,7 @@ public class Golem : MonoBehaviour, IHitObject
         firstPos = transform.position;
         target = (player.transform.position - transform.position).normalized;       // 괴수의 진행할 방향을 체크하기 위한 노말라이즈
         firstDistnance = Vector3.Distance(distance.position, player.transform.position); // 괴수의 초기 위치와 PC의 거리 체크
+        myAudio = GetComponent<AudioSource>();
 
         // }게임 입장시 골렘이 가져올 정보들
 
@@ -627,6 +628,18 @@ public class Golem : MonoBehaviour, IHitObject
         yield return new WaitForSeconds(1.3f);
 
         golemAni.SetBool("isLeftAttack", false);
+    }
+
+    private void GolemWalk()
+    {
+        myAudio.clip = golemWalk;
+        myAudio.Play();
+    }
+
+    private void GolemFear()
+    {
+        myAudio.clip = golemFear;
+        myAudio.Play();
     }
 
     // LEGACY : 개발일지에 쓰일 공격패턴 애니메이션 설정 오류부분 (애니메이션 이벤트가 아닌 코루틴으로 접근하려 했음)
