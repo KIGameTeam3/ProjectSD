@@ -281,6 +281,7 @@ public class KHJUIManager : MonoBehaviour
 
     public void OnGameOver()
     {
+        DefeatGameSound();
         //TODO 게임 오버 패널 켜주고 2초뒤 리스타트 버튼 활성화 혹은 
         //ShowResult();
         restartPanel.SetActive(true);

@@ -184,6 +184,9 @@ public class GameManager : MonoBehaviour
 
         // [SSC] 231020 플레이어 사망시 골렘 동작멈춤 추가
         Golem.G_insance.GolemStop();
+        
+        //KHJ 231023 골렘 동작 멈춤 이후 승리 사운드 출력위해 임시 추가
+        KHJUIManager.Instance.VictoryGameSound();
     }
 
 
