@@ -11,7 +11,7 @@ public class TestBullet : MonoBehaviour
     void Start()
     {
         myRigid = GetComponent<Rigidbody>();
-        myRigid.velocity = Camera.main.transform.forward * 50f;
+        myRigid.velocity = Camera.main.transform.forward * 80f;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -20,7 +20,7 @@ public class TestBullet : MonoBehaviour
         if(other.CompareTag("HitPoint"))
         {
             GameObject obj = other.attachedRigidbody.gameObject;
-            obj.GetComponent<IHitObject>().Hit(10f);
+            obj.GetComponent<IHitObject>().Hit(50f);
 
 
             // ============ TODO : 개발일지 혹은 기술문서에 개선사항으로 기술하기 ================
@@ -52,6 +52,7 @@ public class TestBullet : MonoBehaviour
 
             // 약점위치 변경하는 메소드 실행 (이때 접촉한 약점 게임오브젝트를 매개변수로 보내줘야함)
             obj.GetComponent<LuckyPointController>().ChangePoint(other.gameObject.transform.parent.gameObject);
+            obj.GetComponent<IHitObject>().Hit(50f * 1.5f);
             Debug.Log(other.gameObject.transform.parent.gameObject);
 
             Destroy(this.gameObject);

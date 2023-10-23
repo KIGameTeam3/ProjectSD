@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 // 호출하는 오브젝트의 타입을 구별하기위해 선언하는 enum
-public enum PoolObjType { BOMB, MINION_BASIC, MINION_BOMB, DESTROY_FX }
+public enum PoolObjType { ROCK, MINION_BASIC, MINION_BOMB, ROCK_DESTROY, BOOM_DIE }
 
 // 외부 인스펙터창에서 클래스 정보에 접근할수 있게 해주는 [Serializable]
 [Serializable]
@@ -94,7 +94,7 @@ public class ObjectPoolManager : MonoBehaviour
             objInstance = Instantiate(select.prefab, select.container.transform);
         }
 
-        objInstance.transform.parent = null;
+        //objInstance.transform.parent = null;
         // 담긴 오브젝트 반환
         return objInstance;
     }
@@ -105,7 +105,7 @@ public class ObjectPoolManager : MonoBehaviour
         PoolInfo select = GetPoolByType(type);
 
         obj.transform.position = select.container.transform.position;
-        obj.transform.parent = select.container.transform;
+        //obj.transform.parent = select.container.transform;
         obj.SetActive(false);
         Stack<GameObject> pool = select.poolObj;
 
