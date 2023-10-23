@@ -345,7 +345,7 @@ public class KHJUIManager : MonoBehaviour
     }
 
     //시간 텍스트 00:00 형식으로 보여주는 함수 
-    public void DisplayTime(float timeToDisplay)
+    private void DisplayTime(float timeToDisplay)
     {
         timeToDisplay += 1;
         float minutes = Mathf.FloorToInt(timeToDisplay / 60);

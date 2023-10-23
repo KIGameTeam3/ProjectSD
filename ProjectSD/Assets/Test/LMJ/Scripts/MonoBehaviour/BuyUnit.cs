@@ -179,6 +179,9 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         //TODO 예외처리 해줘야함   
 
         if (GameManager.Instance.currentGold < price) return;
+        
+        gameObject.GetComponent<Button>().interactable = false;
+        gameObject.GetComponent<BoxCollider>().enabled = false;
 
         LuckyPointController.instance.LuuckyUint(luckyTime);
         GameManager.Instance.playerState = PlayerState.PLAY;
@@ -190,7 +193,9 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         if (GameManager.Instance.currentGold < price) return;
         //TODO 여기 안에다가 무기 실행하는 함수 넣으면 됩니다.
         PlayerBase.instance.EnhanceGun(true);
-        
+        gameObject.GetComponent<Button>().interactable = false;
+        gameObject.GetComponent<BoxCollider>().enabled = false;
+
         Invoke("StopEnhance", 10);
         GameManager.Instance.playerState = PlayerState.PLAY;
         PlayerBase.instance.ChangeHand(false);
@@ -209,6 +214,15 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     public void OffPreview()
     {
         preview.GetComponent<PreviewBase>().previewObj[previewIdx].SetActive(false); // 프리뷰 비활성화
+    }
+
+    public void OnSizeBuff()
+    {
+        KHJUIManager.Instance.ChangeSizeUpBuff(10f);
+    }
+    public void OnSpeedBuff()
+    {
+        KHJUIManager.Instance.ChangeSpeedUpBuff(10f);
     }
 }
     
