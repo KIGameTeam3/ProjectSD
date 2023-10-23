@@ -90,6 +90,9 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
                 GameManager.Instance.hitPosition.z = installMaxDis;
             }
             unitObj = Instantiate(unitPrefab.gameObject, GameManager.Instance.hitPosition, Quaternion.identity);
+
+            unitObj.GetComponent<UnitBase>().audioManager(1);       // 설치 사운드 재생
+
             Destroy(unitObj, unitDestroy);  // 설치 후 일정 시간이 지나면 파괴
             GameManager.Instance.SubtractGold(price);    // 재화 소모 메서드 호출
             // } [PSH] 231018 수정
@@ -97,14 +100,6 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         else { Debug.Log("설치 불가능 지역"); }
 
     }
-
-    // LEGACY:
-    //private void ScreentoWorld()    // 마우스 좌표 설정 메서드
-    //{
-    //    mousePosition = Input.mousePosition;
-    //    unitPosition = Camera.main.ScreenToWorldPoint(mousePosition + new Vector3(0, 0, 10.0f));
-    //    unitPosition.y = 0;
-    //}
 
     private void OnDrawGizmos()
     {
@@ -159,20 +154,6 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
             PlayerBase.instance.ChangeHand(false);
             Destroy(unitObj, unitDestroy);
         }
-
-
-            //    // [PSH] 231018 수정 {
-            //    if (GameManager.Instance.hitPosition.z >= installMaxDis)    // 유닛 배치 최대 거리 제한
-            //    {
-            //        GameManager.Instance.hitPosition.z = installMaxDis;
-            //    }
-            //    unitObj = Instantiate(unitPrefab.gameObject, GameManager.Instance.hitPosition, Quaternion.identity);
-            //    Destroy(unitObj, unitDestroy);  // 설치 후 일정 시간이 지나면 파괴
-            //    //KHJ 감소하는 함수 주석처리
-            //    //GameManager.Instance.SubtractGold(price);    // 재화 소모 메서드 호출
-            //    // } [PSH] 231018 수정
-            //}
-            //else { Debug.Log("설치 불가능 지역"); }
     }
     public void OnLuckyPoint()
     {
