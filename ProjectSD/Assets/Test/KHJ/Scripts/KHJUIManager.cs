@@ -262,24 +262,24 @@ public class KHJUIManager : MonoBehaviour
         coinText.text = "" + GameManager.Instance.currentGold;
     }
 
-    public void ChangeHpText(int maxHp)
-    {
-        //TODO hp 추가를 해줘야 합니다.
-        currentHpImg.fillAmount = PlayerBase.instance.status.health / maxHp;
-        healthText.text = string.Format("{0}", PlayerBase.instance.status.health);
-    }
+    //public void ChangeHpText(int maxHp)
+    //{
+    //    //TODO hp 추가를 해줘야 합니다.
+    //    currentHpImg.fillAmount = PlayerBase.instance.status.health / maxHp;
+    //    healthText.text = string.Format("{0}", PlayerBase.instance.status.health);
+    //}
     public void ChangeHpText(float pHp, float pMaxHp )
     {
         //TODO hp 추가를 해줘야 합니다.
         currentHpImg.fillAmount = pHp / pMaxHp;
-        healthText.text = string.Format("{0}", pHp); 
+        healthText.text = string.Format("{0}/{1}", pHp, pMaxHp); 
     }
 
     public void ChangeBossHpText(float bHp, float bMaxHp) //Boss hp
     {
         //TODO hp 추가를 해줘야 합니다.
         currentBossImg.fillAmount = bHp / bMaxHp;
-        bossHpText.text = string.Format("{0}", bHp); 
+        bossHpText.text = string.Format("{0} / {1}", bHp, bMaxHp); 
     }
 
 
