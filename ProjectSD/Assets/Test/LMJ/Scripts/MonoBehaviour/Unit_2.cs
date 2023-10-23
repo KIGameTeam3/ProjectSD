@@ -7,7 +7,7 @@ public class Unit_2 : UnitBase
 {
     private void OnDestroy()
     {
-        KHJUIManager.Instance.PopUpMsg("unit2 Destroy");
+        KHJUIManager.Instance.PopUpMsg("유닛2 파괴됨");
     }
 
 }
