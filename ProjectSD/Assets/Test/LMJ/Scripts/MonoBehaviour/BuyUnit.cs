@@ -117,6 +117,7 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     //{KHJ 메서드 변환 테스트
     public void ClickUnit()   // 버튼을 눌렀을 때
     {
+        if (GameManager.Instance.gold < price) return;
         if (gameObject.CompareTag("UnitBtn") && unitPrefab != null) // 프리뷰 생성 조건
         {
             preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(true);  // 프리뷰 활성화

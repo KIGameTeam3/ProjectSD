@@ -597,5 +597,5 @@ MonoBehaviour:
   bulletPoints:
   - {fileID: 1203774801076989810}
   - {fileID: 1230482318157915976}
-  bulletPrefab: {fileID: 4344226775905457457, guid: e51fe7cf5e436a6429f8d561aee97ccf, type: 3}
+  bulletPrefab: {fileID: 2016135332455564035, guid: e51fe7cf5e436a6429f8d561aee97ccf, type: 3}
   spawnRate: 2

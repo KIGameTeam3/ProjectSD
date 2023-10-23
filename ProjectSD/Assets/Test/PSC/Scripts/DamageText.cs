@@ -11,7 +11,8 @@ public class DamageText : MonoBehaviour
     Camera m_Camera;
 
     float lifeTime = 3f;
-    float speed = 10;
+    float speed = 6;
+    float textSize = 0.3f;
 
     private void Awake()
     {
@@ -37,7 +38,7 @@ public class DamageText : MonoBehaviour
 
     public void SetTextSize(float size)
     {
-        mText.fontSize = size;
+        mText.fontSize = size* textSize;
     }
 
     IEnumerator MoveUpRoutine()
