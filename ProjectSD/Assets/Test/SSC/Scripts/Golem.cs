@@ -591,6 +591,7 @@ public class Golem : MonoBehaviour, IHitObject
         {
             if (currentHp <= 0)
             {
+                KHJUIManager.Instance.VictoryGameSound();
                 StopAllCoroutines();
                 golemRigid.velocity = Vector3.zero;
                 golemCheck = Phase.GAMEOVER;
