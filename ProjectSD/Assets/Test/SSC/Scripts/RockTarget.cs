@@ -22,7 +22,7 @@ public class RockTarget : MonoBehaviour, IHitObject
         if(other.CompareTag("Player"))
         {
             other.gameObject.GetComponent<IHitObject>().Hit(10f);
-            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.BOMB);
+            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.ROCK);
         }
     }
 
@@ -45,7 +45,7 @@ public class RockTarget : MonoBehaviour, IHitObject
 
         if (currentHp <= 0)
         {
-            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.BOMB);
+            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.ROCK);
         }
     }
 
