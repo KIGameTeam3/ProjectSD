@@ -215,8 +215,6 @@ public class KHJUIManager : MonoBehaviour
         bossPanel.SetActive(true);
         timePanel.SetActive(true);
         GameManager.Instance.StartGame();
-
-
     }//시작 함수는 완료
     public void ClickExitGame()
     {
