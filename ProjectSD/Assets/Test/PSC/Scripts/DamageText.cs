@@ -12,7 +12,7 @@ public class DamageText : MonoBehaviour
 
     float lifeTime = 3f;
     float speed = 6;
-    float textSize = 0.3f;
+    float textSize = 0.1f;
 
     private void Awake()
     {

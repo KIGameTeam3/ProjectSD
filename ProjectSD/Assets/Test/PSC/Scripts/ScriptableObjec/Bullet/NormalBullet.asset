@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 10
   context: "\uAE30\uBCF8 \uCD1D\uC54C"
-  fireRate: 0.2
+  fireRate: 0.3
   bulletDamage: 50
-  bulletSpeed: 50
+  bulletSpeed: 100
   criticalRate: 1.5
-  lifeTime: 30
+  lifeTime: 15

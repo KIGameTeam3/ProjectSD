@@ -13,7 +13,7 @@ public class GunBulletBase : MonoBehaviour
     private ParticleSystem bulletParticle;
 
     private bool isAttack = false;
-
+    public float bulletSpeed = 1f;
 
     [SerializeField]
     private DamageText damageText;
@@ -39,7 +39,7 @@ public class GunBulletBase : MonoBehaviour
 
     public void Move(Vector3 direction)
     {
-        bulletRigidbody.velocity = direction * status.bulletSpeed*0.6f;
+        bulletRigidbody.velocity = direction * status.bulletSpeed;
     }
 
     protected void Remove()

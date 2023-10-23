@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 1000
   context: "\uAE30\uBCF8\uBB34\uAE30"
-  fireRate: 0.2
+  fireRate: 0.3
   bulletID: 10

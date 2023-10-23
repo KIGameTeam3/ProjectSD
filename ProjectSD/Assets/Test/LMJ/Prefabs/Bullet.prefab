@@ -225,6 +225,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: DamageUnit
       objectReference: {fileID: 0}
+    - target: {fileID: 6088926204725012940, guid: cd743bb97668a8e4b85c4db41e39acd7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6088926204725012941, guid: cd743bb97668a8e4b85c4db41e39acd7, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 3690936832
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd743bb97668a8e4b85c4db41e39acd7, type: 3}
 --- !u!224 &3493583462854159361 stripped
