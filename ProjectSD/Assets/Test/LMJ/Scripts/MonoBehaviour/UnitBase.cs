@@ -13,6 +13,7 @@ public class UnitBase : MonoBehaviour
     public Bullet bulletPrefab;     // 생성할 bullet 프리팹
     public float spawnRate = 2.0f;      // bullet 생성 주기
     protected Transform target = default;
+    public ParticleSystem[] flashParticleObj = default;    // 총구 화염 파티클
     #endregion
 
     private void Start()
@@ -21,17 +22,8 @@ public class UnitBase : MonoBehaviour
 
         for (int i = 0; i < bulletPoints.Length; i++)
         {
-            StartCoroutine(BulletSpawn(((float)i / bulletPoints.Length)*spawnRate, i));
+            StartCoroutine(BulletSpawn(((float)i / bulletPoints.Length) * spawnRate, i));
         }
-    }
-
-    void Remove()
-    {
-        Destroy(gameObject);
-    }
-
-    private void OnDestroy()
-    {
     }
 
     protected virtual void Update()
@@ -41,6 +33,7 @@ public class UnitBase : MonoBehaviour
 
     IEnumerator BulletSpawn(float delayTime, int bulletIdx)
     {
+
         // 딜레이 시간
         yield return new WaitForSeconds(delayTime);
 
@@ -49,6 +42,12 @@ public class UnitBase : MonoBehaviour
             Bullet bullet = Instantiate(bulletPrefab, bulletPoints[bulletIdx].transform.position, transform.rotation);
             bullet.transform.SetParent(bulletPoints[bulletIdx].transform); // spawner 하위에 생성
             bullet.Move(unitHead.transform.forward);    // Bullet의 정면방향이 target 향하도록 회전
+
+            //if (flashParticleObj[bulletIdx].isPlaying)
+            //{
+            //    flashParticleObj[bulletIdx].Stop();    // 총구 화염 파티클 멈춤
+            //}
+            flashParticleObj[bulletIdx].Play();    // 총구 화염 파티클 재생
 
             yield return new WaitForSeconds(spawnRate);
         }
