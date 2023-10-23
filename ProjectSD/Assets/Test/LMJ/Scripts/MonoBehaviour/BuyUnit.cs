@@ -136,10 +136,7 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
             //preview.transform.position = GameManager.Instance.hitPosition;
         }
     }
-    private void OnDestroy()
-    {
-        Debug.Log("이거 찍히나요?");
-    }
+   
     public void SetInUnit(Vector3 pos) // 유닛 설치: 클릭 중인 버튼에서 손을 뗄 때
     {
         //Debug.Log(preview);
@@ -193,7 +190,7 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         if (GameManager.Instance.currentGold < price) return;
         //TODO 여기 안에다가 무기 실행하는 함수 넣으면 됩니다.
         PlayerBase.instance.EnhanceGun(true);
-
+        
         Invoke("StopEnhance", 10);
         GameManager.Instance.playerState = PlayerState.PLAY;
         PlayerBase.instance.ChangeHand(false);
