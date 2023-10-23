@@ -632,14 +632,19 @@ public class Golem : MonoBehaviour, IHitObject
 
     private void GolemWalk()
     {
-        myAudio.clip = golemWalk;
-        myAudio.Play();
+        //myAudio.clip = golemWalk;
+        //myAudio.Play();
+
+        myAudio.PlayOneShot(golemWalk);
     }
 
     private void GolemFear()
     {
-        myAudio.clip = golemFear;
-        myAudio.Play();
+        //myAudio.clip = golemFear;
+        //myAudio.Play();
+
+        myAudio.PlayOneShot(golemFear);
+
     }
 
     // LEGACY : 개발일지에 쓰일 공격패턴 애니메이션 설정 오류부분 (애니메이션 이벤트가 아닌 코루틴으로 접근하려 했음)

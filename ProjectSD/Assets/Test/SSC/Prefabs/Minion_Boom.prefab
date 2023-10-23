@@ -360,6 +360,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minionSpeed: 3.5
   isAttack: 0
+  myRigid: {fileID: 7772760553277847305}
+  myCollider: {fileID: 1513051938885138516}
   myAni: {fileID: 3266876403279583778}
   myAudio: {fileID: -2311408053517111243}
   spawnClip: {fileID: 8300000, guid: 9fd6aca4d0a9db445a4b68c8991d9376, type: 3}
@@ -370,7 +372,6 @@ MonoBehaviour:
   explosiveDamage: 10
   explosionArea: 10
   explosionClip: {fileID: 8300000, guid: 3225f46e9c8f7c047b0c196d2e73e158, type: 3}
-  myCollider: {fileID: 1513051938885138516}
 --- !u!54 &7772760553277847305
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -412,7 +413,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 0
   Mute: 0

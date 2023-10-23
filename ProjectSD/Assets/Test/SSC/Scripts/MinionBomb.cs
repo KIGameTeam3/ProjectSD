@@ -140,6 +140,8 @@ public class MinionBomb : MinionBase, IHitObject
             myAudio.Play();
             isDetected = false;
             myRigid.velocity = Vector3.zero;
+            myRigid.useGravity = false;
+            myCollider.enabled = false;
             myAni.SetTrigger("isDie");
             state = StateBoom.DIE;
 

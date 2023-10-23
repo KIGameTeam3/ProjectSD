@@ -12,7 +12,6 @@ public class MinionBasic : MinionBase, IHitObject
     private bool atkReset = false;              // 근접공격 업데이트 반복호출 방지용 불값
     public float maxHp = 30f;                   // 일반졸개 체력 세팅값
     public float currentHp = default;           // 일반졸개 현재 체력 체크
-    //public Collider myCollider;
 
     public enum State { ALIVE, DIE }            // 자폭졸개의 스테이트 상태
     public State state { get; private set; }    // 스테이트 프로퍼티
@@ -124,6 +123,8 @@ public class MinionBasic : MinionBase, IHitObject
             state = State.DIE;
             isDetected = false;
             myRigid.velocity = Vector3.zero;
+            myRigid.useGravity = false;
+            myCollider.enabled = false; 
             myAni.SetTrigger("isDie");
             
         }

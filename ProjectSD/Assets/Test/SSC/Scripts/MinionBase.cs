@@ -14,7 +14,12 @@ public class MinionBase : MonoBehaviour
     public bool isAttack = false;                                   // 하위 클래스에서 참조할 공격 실행 불값
     private bool isLimit = false;                                   // DeadZone 트리거시 Update상 동작 방지용 불값
 
-    protected Rigidbody myRigid = default;                            // 자신의 Rigidbody 캐싱
+
+    // ************* 자식에서도 해당 컴포넌트에 접근하려면 protected가 아닌 퍼블릭으로 열어야함
+    // 나중에 원리 확인해보기
+
+    public Rigidbody myRigid = default;                            // 자신의 Rigidbody 캐싱
+    public Collider myCollider = default;    
     public Animator myAni = default;                                // 자신의 애니메이터 캐싱 (자식 클래스에서 각자의 애니메이터 인스펙어창에서 할당)
     public AudioSource myAudio;
     public AudioClip spawnClip;
@@ -28,6 +33,7 @@ public class MinionBase : MonoBehaviour
 
         // 자신의 Rigidbody 캐싱
         myRigid = GetComponent<Rigidbody>();
+        myCollider = GetComponent<Collider>();
 
         myAudio.clip = spawnClip;
         myAudio.Play();
@@ -89,6 +95,8 @@ public class MinionBase : MonoBehaviour
     // 풀링오브젝트로 인한 오브젝트 활성화시 초기상태 초기화
     protected virtual void OnEnable()
     {
+        myRigid.useGravity = true;
+        myCollider.enabled = true;
         myAudio.clip = spawnClip;
         myAudio.Play();
         isLimit = false;                    // 풀에 반환되기 전 절벽을 넘었을시 세팅값 초기화
