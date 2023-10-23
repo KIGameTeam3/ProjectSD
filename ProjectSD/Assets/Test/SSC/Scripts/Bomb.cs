@@ -11,9 +11,13 @@ public class Bomb : MonoBehaviour, IHitObject
 
     public float maxHp = 50f;
     private float currentHp = default;
+    private TrailRenderer trail = default;
+
+    Vector3 subVelo = new Vector3 (-1f, 13f, -21f);
 
     private void Awake()
     {
+        trail = GetComponent<TrailRenderer>();
         rb = GetComponent<Rigidbody>();
         target = GameObject.FindWithTag("Player").GetComponent<Transform>();
     }
@@ -49,17 +53,28 @@ public class Bomb : MonoBehaviour, IHitObject
     {
         // 풀링 오브젝트를 돌리기에 오브젝트가 활성화 될때마다 새로 세팅값을 해준다.
         Initilize();
+        trail.enabled = true;
 
         Vector3 randTarget = target.transform.position + Random.insideUnitSphere * 10f;
 
         Vector3 shoot = GetVelocity(transform.position, randTarget, initialAngle);
         rb.velocity = shoot;
         rb.angularVelocity = shoot;
+
+        // [SSC] 23.10.23 현재 포물선 운동식이 계산 안된 채 벨로시티값이 0,0,0일 때가 종종 발생중
+        // 임시 조치로 해당 조건시 특정값을 벨로시티에 넣어줌.
+        if(rb.velocity == Vector3.zero)
+        {
+            rb.velocity = subVelo;
+            rb.angularVelocity = subVelo;
+        }    
+
     }
+
     public void Initilize()
     {
         // 생성 되었을 시 체력 세팅
-        currentHp = maxHp;
+        currentHp = maxHp; 
     }
 
     public void Hit(float damage)
@@ -74,6 +89,9 @@ public class Bomb : MonoBehaviour, IHitObject
             obj.transform.rotation = obj.transform.rotation;
             obj.SetActive(true);
 
+
+            trail.enabled = false;
+            rb.velocity = Vector3.zero;
             ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.ROCK);
         }
     }
