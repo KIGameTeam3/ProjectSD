@@ -10,6 +10,9 @@ public class GunBase : MonoBehaviour
     public LaserPoint point;
     public GunStatus status;
 
+    public Material originMaterial;
+    public Material hologramMaterial;
+
     private AudioSource gunAudioSource;
     private ParticleSystem gunParticle;
     private ARAVRInput.Controller controller;
@@ -42,7 +45,7 @@ public class GunBase : MonoBehaviour
     }
 
     private void Init()
-    {
+    {   
         gunAudioSource = GetComponent<AudioSource>();
         gunParticle = GetComponentInChildren<ParticleSystem>();
 

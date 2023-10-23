@@ -11,6 +11,7 @@ public class Bullet : MonoBehaviour
 
     public DamageText damageText;
     float lifeTime = 5f;
+    int damage = 10;
 
     private void Awake()
     {
@@ -32,10 +33,8 @@ public class Bullet : MonoBehaviour
 
         IHitObject enemy = other.attachedRigidbody.GetComponent<IHitObject>();
 
-        if (enemy != null && !isAttack && (other.CompareTag("HitPoint") || other.CompareTag("LuckyPoint")))
+        if (enemy != null && !isAttack && (other.gameObject.layer == LayerMask.NameToLayer("Boss")))
         {
-            int damage = 10;
-            enemy.Hit(damage);
 
             if (other.CompareTag("LuckyPoint"))
             {
@@ -44,7 +43,13 @@ public class Bullet : MonoBehaviour
                 // 약점위치 변경하는 메소드 실행 (이때 접촉한 약점 게임오브젝트를 매개변수로 보내줘야함)
                 // [SSC] 2023.10.19 매개변수 other.gameobject에서 부모 오브젝트로 변경
                 obj.GetComponent<LuckyPointController>().ChangePoint(other.transform.parent.gameObject);
+                enemy.Hit(damage);
 
+            }
+            
+            else
+            {
+                enemy.Hit(damage);
             }
 
             AttackReaction(damage);
@@ -54,8 +59,6 @@ public class Bullet : MonoBehaviour
 
     public void Move(Vector3 direction)
     {
-
-        ;
 
         bulletRigidbody.velocity = direction * bulletSpeed;
     }
