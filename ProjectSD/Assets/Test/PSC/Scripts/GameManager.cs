@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviour
 
     #region public 변수
     public PlayerState playerState = PlayerState.READY;     //현재 게임 상태
-    public int gold = 0;//플레이어 골드
 
     public Vector3 hitPosition;
     #endregion

@@ -117,7 +117,8 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     //{KHJ 메서드 변환 테스트
     public void ClickUnit()   // 버튼을 눌렀을 때
     {
-        if (GameManager.Instance.gold < price) return;
+        if (GameManager.Instance.currentGold < price) return;
+
         if (gameObject.CompareTag("UnitBtn") && unitPrefab != null) // 프리뷰 생성 조건
         {
             preview.GetComponent<PreviewBase>().previewObj[previewIdx].gameObject.SetActive(true);  // 프리뷰 활성화
@@ -180,7 +181,7 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     {
         //TODO 예외처리 해줘야함   
 
-        if (GameManager.Instance.gold < price) return;
+        if (GameManager.Instance.currentGold < price) return;
 
         LuckyPointController.instance.LuuckyUint(luckyTime);
         GameManager.Instance.playerState = PlayerState.PLAY;
@@ -189,7 +190,7 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     }
     public void SpeedUpWeapon()
     {
-        if (GameManager.Instance.gold < price) return;
+        if (GameManager.Instance.currentGold < price) return;
         //TODO 여기 안에다가 무기 실행하는 함수 넣으면 됩니다.
         PlayerBase.instance.EnhanceGun(true);
 

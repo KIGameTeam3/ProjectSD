@@ -174,18 +174,6 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6088926204725012931, guid: cd743bb97668a8e4b85c4db41e39acd7, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 2.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6088926204725012931, guid: cd743bb97668a8e4b85c4db41e39acd7, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 2.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6088926204725012931, guid: cd743bb97668a8e4b85c4db41e39acd7, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 2.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6088926204725012931, guid: cd743bb97668a8e4b85c4db41e39acd7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -236,18 +224,6 @@ PrefabInstance:
     - target: {fileID: 6088926204725012940, guid: cd743bb97668a8e4b85c4db41e39acd7, type: 3}
       propertyPath: m_Name
       value: DamageUnit
-      objectReference: {fileID: 0}
-    - target: {fileID: 6088926204725012940, guid: cd743bb97668a8e4b85c4db41e39acd7, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6088926204725012941, guid: cd743bb97668a8e4b85c4db41e39acd7, type: 3}
-      propertyPath: m_fontColor.a
-      value: 0.6862745
-      objectReference: {fileID: 0}
-    - target: {fileID: 6088926204725012941, guid: cd743bb97668a8e4b85c4db41e39acd7, type: 3}
-      propertyPath: m_fontColor32.rgba
-      value: 2080324096
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd743bb97668a8e4b85c4db41e39acd7, type: 3}

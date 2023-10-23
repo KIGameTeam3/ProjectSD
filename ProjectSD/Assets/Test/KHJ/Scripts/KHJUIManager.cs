@@ -228,6 +228,7 @@ public class KHJUIManager : MonoBehaviour
         //ShowResult();
         restartPanel.SetActive(true);
         endPanel.SetActive(true);
+        CloseShop();
     }
     //결과창 띄우는 함수입니다.
     //private void ShowResult()
