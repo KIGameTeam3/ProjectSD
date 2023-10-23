@@ -14454,7 +14454,7 @@ GameObject:
   - component: {fileID: 4000011428506136}
   - component: {fileID: 198000012942003240}
   - component: {fileID: 199000010939959374}
-  - component: {fileID: -3385347922132890862}
+  - component: {fileID: -6519130318638795113}
   m_Layer: 0
   m_Name: SmallExplosionEffect
   m_TagString: Untagged
@@ -19167,7 +19167,7 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &-3385347922132890862
+--- !u!114 &-6519130318638795113
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -19176,6 +19176,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000013462590818}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b6ad0fb45c277842b3fc01e28c2f7b7, type: 3}
+  m_Script: {fileID: 11500000, guid: e9b08f719a5454245ba236615c12c1a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

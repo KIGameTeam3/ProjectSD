@@ -22,7 +22,16 @@ public class Bomb : MonoBehaviour, IHitObject
     {
         if(other.CompareTag("Player") || other.CompareTag("Ground"))
         {
-            other.gameObject.GetComponent<IHitObject>().Hit(10f);
+            Collider[] hitObj = Physics.OverlapSphere(transform.position, 20f);
+
+            foreach (Collider info in hitObj)
+            {
+                if (info.CompareTag("Player"))
+                {
+                    info.GetComponent<IHitObject>().Hit(10f);
+                }
+            }
+
             Hit(50f);
         }
     }
