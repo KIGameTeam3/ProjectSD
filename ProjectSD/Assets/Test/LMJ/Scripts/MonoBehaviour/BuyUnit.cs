@@ -182,11 +182,22 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         
         gameObject.GetComponent<Button>().interactable = false;
         gameObject.GetComponent<BoxCollider>().enabled = false;
-
+        KHJUIManager.Instance.OnSizeBuff();
         LuckyPointController.instance.LuuckyUint(luckyTime);
+        LuckyPointController.instance.btn = GetComponent<BuyUnit>();
         GameManager.Instance.playerState = PlayerState.PLAY;
         PlayerBase.instance.ChangeHand(false);
         KHJUIManager.Instance.CloseShop();
+    }
+    public void InitLuckyPoint()
+    {
+        gameObject.GetComponent<Button>().interactable = true;
+        gameObject.GetComponent<BoxCollider>().enabled = true;
+    }
+    public void InitSpeedUpWeapon()
+    {
+        gameObject.GetComponent<Button>().interactable = true;
+        gameObject.GetComponent<BoxCollider>().enabled = true;
     }
     public void SpeedUpWeapon()
     {
@@ -195,7 +206,7 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         PlayerBase.instance.EnhanceGun(true);
         gameObject.GetComponent<Button>().interactable = false;
         gameObject.GetComponent<BoxCollider>().enabled = false;
-
+        KHJUIManager.Instance.OnSpeedBuff();
         Invoke("StopEnhance", 10);
         GameManager.Instance.playerState = PlayerState.PLAY;
         PlayerBase.instance.ChangeHand(false);
@@ -205,6 +216,9 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     void StopEnhance()
     {
         PlayerBase.instance.EnhanceGun(false);
+        gameObject.GetComponent<Button>().interactable = true;
+        gameObject.GetComponent<BoxCollider>().enabled = true;
+
     }
 
     public void OnPreview()
@@ -214,15 +228,6 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     public void OffPreview()
     {
         preview.GetComponent<PreviewBase>().previewObj[previewIdx].SetActive(false); // 프리뷰 비활성화
-    }
-
-    public void OnSizeBuff()
-    {
-        KHJUIManager.Instance.ChangeSizeUpBuff(10f);
-    }
-    public void OnSpeedBuff()
-    {
-        KHJUIManager.Instance.ChangeSpeedUpBuff(10f);
     }
 }
     

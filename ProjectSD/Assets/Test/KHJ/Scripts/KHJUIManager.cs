@@ -186,7 +186,7 @@ public class KHJUIManager : MonoBehaviour
         restartPanel.SetActive(false);
         sizeUpBuff.SetActive(false);
         speedUpBuff.SetActive(false);
-        buffPanel.SetActive(false);
+        //buffPanel.SetActive(false);
         pUiPivot.SetActive(false);
         shopPanel.SetActive(false);
         //resultPanel.SetActive(false);
@@ -323,9 +323,17 @@ public class KHJUIManager : MonoBehaviour
             ChangeSpeedUpBuff(speedBuffCheck);
         }
     }
-    public void ChangeSizeUpBuff(float buffTime)
+    public void OnSizeBuff()
     {
         sizeUpBuff.SetActive(true);
+    }
+    public void OnSpeedBuff()
+    {
+        speedUpBuff.SetActive(true);
+    }
+    public void ChangeSizeUpBuff(float buffTime)
+    {
+        //sizeUpBuff.SetActive(true);
         sizeUpImage.fillAmount = buffTime / 10f;
         sizeUpText.text = string.Format("{0:0}", buffTime);
         if(buffTime <= 0)
@@ -335,7 +343,7 @@ public class KHJUIManager : MonoBehaviour
     }
     public void ChangeSpeedUpBuff(float buffTime)
     {
-        speedUpBuff.SetActive(true);
+        //speedUpBuff.SetActive(true);
         speedUpImg.fillAmount = buffTime / 10f;
         speedUpText.text= string.Format("{0:0}", buffTime);
         if(buffTime <= 0) 

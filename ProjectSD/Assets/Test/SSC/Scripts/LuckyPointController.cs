@@ -7,6 +7,8 @@ public class LuckyPointController : MonoBehaviour
 {
     public static LuckyPointController instance;
 
+    public BuyUnit btn;
+
     private void Awake()
     {
         instance = this;
@@ -97,7 +99,20 @@ public class LuckyPointController : MonoBehaviour
 
         unitPoint = luckyPoint[rand];
 
-        yield return time;
+        float waitTime = 0;
+        while (waitTime <= 5)
+        {
+            if(GameManager.Instance.playerState == PlayerState.DEAD)
+            {
+                btn.InitLuckyPoint();
+                yield break;
+            }
+            waitTime += Time.deltaTime;
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+
+        //1023.KHJ 변경
+        btn.InitLuckyPoint();
 
         // 기존 약점 교체로직
         //luckyPoint[rand].GetComponent<Collider>().enabled = false;
