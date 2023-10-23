@@ -168,12 +168,14 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         LuckyPointController.instance.btn = GetComponent<BuyUnit>();
         GameManager.Instance.playerState = PlayerState.PLAY;
         PlayerBase.instance.ChangeHand(false);
+        GameManager.Instance.SubtractGold(price);
         KHJUIManager.Instance.CloseShop();
     }
     public void InitLuckyPoint()
     {
         gameObject.GetComponent<Button>().interactable = true;
         gameObject.GetComponent<BoxCollider>().enabled = true;
+        KHJUIManager.Instance.ResetSizeBuff();
     }
     public void InitSpeedUpWeapon()
     {
@@ -188,6 +190,7 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         gameObject.GetComponent<Button>().interactable = false;
         gameObject.GetComponent<BoxCollider>().enabled = false;
         KHJUIManager.Instance.OnSpeedBuff();
+        GameManager.Instance.SubtractGold(price);
         Invoke("StopEnhance", 10);
         GameManager.Instance.playerState = PlayerState.PLAY;
         PlayerBase.instance.ChangeHand(false);
@@ -199,6 +202,7 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
         PlayerBase.instance.EnhanceGun(false);
         gameObject.GetComponent<Button>().interactable = true;
         gameObject.GetComponent<BoxCollider>().enabled = true;
+        KHJUIManager.Instance.ResetSpeedBuff();
 
     }
 

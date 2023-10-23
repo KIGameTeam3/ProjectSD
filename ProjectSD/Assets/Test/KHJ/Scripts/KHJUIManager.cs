@@ -140,16 +140,21 @@ public class KHJUIManager : MonoBehaviour
         healthObj = topPanel.transform.GetChild(1).gameObject;
         currentHpImg = healthObj.GetComponent<Image>();
         healthText = healthObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
-        
+
+        //코인
+        GameObject coinPanel = topPanel.transform.GetChild(2).gameObject;
+        coinObj = coinPanel.transform.GetChild(0).gameObject;
+        coinText = coinObj.GetComponent<TMP_Text>();
+
         //}PlayerUICanvas 
 
         //{shopCanvas 관련 변수
         GameObject shopCanvas = GameObject.Find("ShopCanvas");
         shopPanel = shopCanvas.transform.GetChild(0).gameObject;
         //코인 변수
-        GameObject coinPanel = shopPanel.transform.GetChild(1).gameObject;  
-        coinObj = coinPanel.transform.GetChild(0).gameObject;
-        coinText = coinObj.GetComponent<TMP_Text>();
+        //GameObject coinPanel = shopPanel.transform.GetChild(1).gameObject;  
+        //coinObj = coinPanel.transform.GetChild(0).gameObject;
+        //coinText = coinObj.GetComponent<TMP_Text>();
         //}shopCanvas 관련 변수
 
         //{resultCanvas 관련 변수  나중에 쓰게 된다면 쓰면 됨
@@ -434,6 +439,16 @@ public class KHJUIManager : MonoBehaviour
         sizeBuffCheck = 10f;
         speedBuffCheck = 10f;
         sizeUpImage.fillAmount = sizeBuffCheck;
+        speedUpImg.fillAmount = speedBuffCheck;
+    }
+    public void ResetSizeBuff()
+    {
+        sizeBuffCheck = 10f;
+        sizeUpImage.fillAmount = sizeBuffCheck;
+    }
+    public void ResetSpeedBuff()
+    {
+        speedBuffCheck = 10f;
         speedUpImg.fillAmount = speedBuffCheck;
     }
 }
