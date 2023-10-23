@@ -44,7 +44,7 @@ public class GunBase : MonoBehaviour
     private void Init()
     {
         gunAudioSource = GetComponent<AudioSource>();
-        gunParticle = GetComponent<ParticleSystem>();
+        gunParticle = GetComponentInChildren<ParticleSystem>();
 
         if (handPosition == HandPosition.RIGHT)
         {

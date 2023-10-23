@@ -39,7 +39,7 @@ public class GunBulletBase : MonoBehaviour
 
     public void Move(Vector3 direction)
     {
-        bulletRigidbody.velocity = direction * status.bulletSpeed*0.3f;
+        bulletRigidbody.velocity = direction * status.bulletSpeed*0.6f;
     }
 
     protected void Remove()
