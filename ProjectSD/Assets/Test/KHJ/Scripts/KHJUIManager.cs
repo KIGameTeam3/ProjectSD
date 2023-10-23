@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class KHJUIManager : MonoBehaviour
 {
     float currentTime = 0f;
-    float clearTime = 1.0f;
+    float clearTime = 2.0f;
     //[SerializeField] private GameObject startCanvas;
     [SerializeField] private GameObject startPanel;
     [SerializeField] private UIHitCollider startHit;
