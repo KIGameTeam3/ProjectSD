@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.PlayerSettings;
 
 public class GetUnitBtn : MonoBehaviour
 {
     public GameObject[] unitBtnList = default;
 
     private float originWidth, originHeight;
-    private RectTransform parent;
-    private GridLayoutGroup grid;
+    private RectTransform upperRectTP; // rectTransform 
+    private GridLayoutGroup unitGridLayout;  
 
     //[SerializeField] private GameObject btnPrefab;
 
@@ -17,11 +18,16 @@ public class GetUnitBtn : MonoBehaviour
 
     void Awake()
     {
+        upperRectTP = gameObject.GetComponent<RectTransform>();
+        unitGridLayout = gameObject.GetComponent<GridLayoutGroup>();
+
+        originWidth = upperRectTP.rect.width;
+        originHeight = upperRectTP.rect.height;
+
         unitBtnList = Resources.LoadAll<GameObject>("UnitBtnPrefabs/");
     }
     private void OnEnable()
     {
-        Debug.Log("버튼 생성기 켜지나요?");
         //CreateUnitBtn();
     }
     private void OnDisable()
@@ -30,9 +36,10 @@ public class GetUnitBtn : MonoBehaviour
     }
     void Start()
     {
-        Debug.Log($"{unitBtnList.Length}");
+        //Debug.Log($"{unitBtnList.Length}");
         
         CreateUnitBtn();
+       
     }
 
     // Update is called once per frame
@@ -49,6 +56,23 @@ public class GetUnitBtn : MonoBehaviour
         {
             Instantiate(unitBtnList[i],this.transform);
         }
+    }
+
+    public void ChangeDynamicGrid(int count, int minCol, int maxCol)
+    {
+        int rows = Mathf.Clamp(Mathf.CeilToInt((float)count / minCol),1, maxCol + 1);
+        int cols = Mathf.CeilToInt((float)count / rows);
+
+        float spaceW = (unitGridLayout.padding.left + unitGridLayout.padding.right) + (unitGridLayout.spacing.x * (rows - 1));
+        float spaceH = (unitGridLayout.padding.top + unitGridLayout.padding.bottom) + (unitGridLayout.spacing.y * (rows - 1));
+
+        float maxWidth = originWidth - spaceW;
+        float maxHeight = originHeight - spaceH;
+
+        float width = Mathf.Min(upperRectTP.rect.width - (unitGridLayout.padding.left + unitGridLayout.padding.right) - (unitGridLayout.spacing.x * (cols - 1)), maxWidth);
+        float height = Mathf.Min(upperRectTP.rect.height - (unitGridLayout.padding.top + unitGridLayout.padding.bottom) - (unitGridLayout.spacing.y * (rows - 1)), maxHeight);
+
+        unitGridLayout.cellSize = new Vector2(width / cols, height / rows);
     }
 
 }

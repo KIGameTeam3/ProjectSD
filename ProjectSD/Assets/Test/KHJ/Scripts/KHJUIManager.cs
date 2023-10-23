@@ -32,9 +32,16 @@ public class KHJUIManager : MonoBehaviour
     //[SerializeField] private GameObject rightPanel; // 채팅과 버프 이미지 있는 패널
 
     [Header("LeftPanel")]
-    [SerializeField] private GameObject leftPanel; // 코인과 시간 체력 있는 패널
-    //public GameObject buffImg; //버프 이미지 오브젝트
-    
+    [SerializeField] private GameObject leftPanel; //버프 이미지 있는 패널
+    public GameObject buffPanel; //버프 패널 오브젝트
+    [SerializeField] private GameObject SizeUpBuff;
+    [SerializeField] private Image SizeUpImage;
+    [SerializeField] private TMP_Text SizeUpText;
+
+    [SerializeField] private GameObject SpeedUpBuff;
+    [SerializeField] private Image SpeedUpImg;
+    [SerializeField] private TMP_Text SpeedUpText;
+
     [Header("UnitDestroyMsg")]
     public TMP_Text[] chatText;  // 팝업 알림 텍스트 리스트 
     public GameObject msgPanel;
@@ -112,7 +119,15 @@ public class KHJUIManager : MonoBehaviour
 
         //leftPanel
         leftPanel = pUiPivot.transform.GetChild(0).gameObject;
-        //buffImg = leftPanel.transform.GetChild(0).gameObject;
+        buffPanel = leftPanel.transform.GetChild(0).gameObject;
+
+        SizeUpBuff = buffPanel.transform.GetChild(0).gameObject;
+        SizeUpImage = SizeUpBuff.transform.GetChild(0).gameObject.GetComponent<Image>();
+        SizeUpText = SizeUpBuff.transform.GetChild(1).gameObject.GetComponent<TMP_Text>();
+
+        SpeedUpBuff = buffPanel.transform.GetChild(1).gameObject;
+        SpeedUpImg = SpeedUpBuff.transform.GetChild(0).gameObject.GetComponent<Image>();
+        SpeedUpText = SpeedUpBuff.transform.GetChild(1).gameObject.GetComponent<TMP_Text>();
 
         //topPanel
         topPanel = pUiPivot.transform.GetChild(1).gameObject;  
@@ -164,6 +179,7 @@ public class KHJUIManager : MonoBehaviour
 
         bossPanel.SetActive(false);
         restartPanel.SetActive(false);
+        buffPanel.SetActive(false);
         pUiPivot.SetActive(false);
         shopPanel.SetActive(false);
         //resultPanel.SetActive(false);
@@ -281,6 +297,29 @@ public class KHJUIManager : MonoBehaviour
         currentBossImg.fillAmount = bHp / bMaxHp;
         bossHpText.text = string.Format("{0} / {1}", bHp,bMaxHp); 
     }
+
+    public void ChangeSizeUpBuff(float buffTime)
+    {
+        SizeUpBuff.SetActive(true);
+        SizeUpImage.fillAmount = buffTime;
+        SizeUpText.text = string.Format("{0}", buffTime);
+        if(buffTime <= 0)
+        {
+            SizeUpBuff.SetActive(false);
+        }
+    }
+
+    public void ChangeSpeedUpBuff(float buffTime)
+    {
+        SizeUpBuff.SetActive(true) ;
+        SpeedUpImg.fillAmount = buffTime;
+        SpeedUpText.text= string.Format("{0}", buffTime);
+        if(buffTime <= 0) 
+        {
+            SpeedUpBuff.SetActive(false);
+        }
+    }
+    
 
 
     //시간 텍스트 00:00 형식으로 보여주는 함수 
