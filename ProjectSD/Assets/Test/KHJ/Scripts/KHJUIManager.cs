@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -11,6 +12,10 @@ public class KHJUIManager : MonoBehaviour
 {
     float currentTime = 0f;
     float clearTime = 2.0f;
+
+    float sizeBuffCheck = 10f;
+    float speedBuffCheck = 10f;
+
     //[SerializeField] private GameObject startCanvas;
     [SerializeField] private GameObject startPanel;
     [SerializeField] private UIHitCollider startHit;
@@ -34,13 +39,13 @@ public class KHJUIManager : MonoBehaviour
     [Header("LeftPanel")]
     [SerializeField] private GameObject leftPanel; //버프 이미지 있는 패널
     public GameObject buffPanel; //버프 패널 오브젝트
-    [SerializeField] private GameObject SizeUpBuff;
-    [SerializeField] private Image SizeUpImage;
-    [SerializeField] private TMP_Text SizeUpText;
+    [SerializeField] private GameObject sizeUpBuff;
+    [SerializeField] private Image sizeUpImage;
+    [SerializeField] private TMP_Text sizeUpText;
 
-    [SerializeField] private GameObject SpeedUpBuff;
-    [SerializeField] private Image SpeedUpImg;
-    [SerializeField] private TMP_Text SpeedUpText;
+    [SerializeField] private GameObject speedUpBuff;
+    [SerializeField] private Image speedUpImg;
+    [SerializeField] private TMP_Text speedUpText;
 
     [Header("UnitDestroyMsg")]
     public TMP_Text[] chatText;  // 팝업 알림 텍스트 리스트 
@@ -121,13 +126,13 @@ public class KHJUIManager : MonoBehaviour
         leftPanel = pUiPivot.transform.GetChild(0).gameObject;
         buffPanel = leftPanel.transform.GetChild(0).gameObject;
 
-        SizeUpBuff = buffPanel.transform.GetChild(0).gameObject;
-        SizeUpImage = SizeUpBuff.transform.GetChild(0).gameObject.GetComponent<Image>();
-        SizeUpText = SizeUpBuff.transform.GetChild(1).gameObject.GetComponent<TMP_Text>();
+        sizeUpBuff = buffPanel.transform.GetChild(0).gameObject;
+        sizeUpImage = sizeUpBuff.transform.GetChild(0).gameObject.GetComponent<Image>();
+        sizeUpText = sizeUpBuff.transform.GetChild(1).gameObject.GetComponent<TMP_Text>();
 
-        SpeedUpBuff = buffPanel.transform.GetChild(1).gameObject;
-        SpeedUpImg = SpeedUpBuff.transform.GetChild(0).gameObject.GetComponent<Image>();
-        SpeedUpText = SpeedUpBuff.transform.GetChild(1).gameObject.GetComponent<TMP_Text>();
+        speedUpBuff = buffPanel.transform.GetChild(1).gameObject;
+        speedUpImg = speedUpBuff.transform.GetChild(0).gameObject.GetComponent<Image>();
+        speedUpText = speedUpBuff.transform.GetChild(1).gameObject.GetComponent<TMP_Text>();
 
         //topPanel
         topPanel = pUiPivot.transform.GetChild(1).gameObject;  
@@ -179,6 +184,8 @@ public class KHJUIManager : MonoBehaviour
 
         bossPanel.SetActive(false);
         restartPanel.SetActive(false);
+        sizeUpBuff.SetActive(false);
+        speedUpBuff.SetActive(false);
         buffPanel.SetActive(false);
         pUiPivot.SetActive(false);
         shopPanel.SetActive(false);
@@ -196,6 +203,8 @@ public class KHJUIManager : MonoBehaviour
         {
             DisplayTime(GameManager.Instance.GetPlayTime());
         }
+        CheckOneBuff();
+        CheckTwoBuff();
 
     }
   
@@ -267,7 +276,7 @@ public class KHJUIManager : MonoBehaviour
         endPanel.SetActive(false); //종료 버튼 
         pUiPivot.SetActive(true); // 플레이어 ui 관련 패널
         bossPanel.SetActive(true); //보스 체력 ui 패널 
-        
+        InitilizeBuff();
         FindUnitDestroy();
         GameManager.Instance.ReStartGame();
     }
@@ -297,29 +306,43 @@ public class KHJUIManager : MonoBehaviour
         bossHpText.text = string.Format("{0} / {1}", bHp,bMaxHp); 
     }
 
+    private void CheckOneBuff()
+    {
+        if (sizeUpBuff.activeSelf == true)
+        {
+            sizeBuffCheck -= Time.deltaTime;
+            ChangeSizeUpBuff(sizeBuffCheck);
+        }
+    }
+
+    private void CheckTwoBuff()
+    {
+        if (speedUpBuff.activeSelf == true) 
+        {
+            speedBuffCheck -= Time.deltaTime;
+            ChangeSpeedUpBuff(speedBuffCheck);
+        }
+    }
     public void ChangeSizeUpBuff(float buffTime)
     {
-        SizeUpBuff.SetActive(true);
-        SizeUpImage.fillAmount = buffTime;
-        SizeUpText.text = string.Format("{0}", buffTime);
+        sizeUpBuff.SetActive(true);
+        sizeUpImage.fillAmount = buffTime / 10f;
+        sizeUpText.text = string.Format("{0:0}", buffTime);
         if(buffTime <= 0)
         {
-            SizeUpBuff.SetActive(false);
+            sizeUpBuff.SetActive(false);
         }
     }
-
     public void ChangeSpeedUpBuff(float buffTime)
     {
-        SizeUpBuff.SetActive(true) ;
-        SpeedUpImg.fillAmount = buffTime;
-        SpeedUpText.text= string.Format("{0}", buffTime);
+        speedUpBuff.SetActive(true);
+        speedUpImg.fillAmount = buffTime / 10f;
+        speedUpText.text= string.Format("{0:0}", buffTime);
         if(buffTime <= 0) 
         {
-            SpeedUpBuff.SetActive(false);
+            speedUpBuff.SetActive(false);
         }
     }
-    
-
 
     //시간 텍스트 00:00 형식으로 보여주는 함수 
     public void DisplayTime(float timeToDisplay)
@@ -396,5 +419,13 @@ public class KHJUIManager : MonoBehaviour
         bossPanel.SetActive(false);
         timePanel.SetActive(false);
         msgPanel.SetActive(false);
+    }
+
+    public void InitilizeBuff()
+    {
+        sizeBuffCheck = 10f;
+        speedBuffCheck = 10f;
+        sizeUpImage.fillAmount = sizeBuffCheck;
+        speedUpImg.fillAmount = speedBuffCheck;
     }
 }
