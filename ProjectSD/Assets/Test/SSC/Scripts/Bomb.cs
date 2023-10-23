@@ -20,7 +20,7 @@ public class Bomb : MonoBehaviour, IHitObject
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if(other.CompareTag("Player") || other.CompareTag("Ground"))
         {
             other.gameObject.GetComponent<IHitObject>().Hit(10f);
             Hit(50f);
@@ -29,10 +29,10 @@ public class Bomb : MonoBehaviour, IHitObject
 
     private void Update()
     {
-        if(GameManager.Instance.playerState == PlayerState.DEAD ||
+        if (GameManager.Instance.playerState == PlayerState.DEAD ||
             GameManager.Instance.playerState == PlayerState.READY)
         {
-            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.BOMB);
+            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.ROCK);
         }
     }
 
@@ -40,7 +40,10 @@ public class Bomb : MonoBehaviour, IHitObject
     {
         // 풀링 오브젝트를 돌리기에 오브젝트가 활성화 될때마다 새로 세팅값을 해준다.
         Initilize();
-        Vector3 shoot = GetVelocity(transform.position, target.transform.position, initialAngle);
+
+        Vector3 randTarget = target.transform.position + Random.insideUnitSphere * 10f;
+
+        Vector3 shoot = GetVelocity(transform.position, randTarget, initialAngle);
         rb.velocity = shoot;
         rb.angularVelocity = shoot;
     }
@@ -50,12 +53,6 @@ public class Bomb : MonoBehaviour, IHitObject
         currentHp = maxHp;
     }
 
-    private void OnDisable()
-    {
-
-
-    }
-
     public void Hit(float damage)
     {
         // 데미지받는 처리
@@ -63,12 +60,12 @@ public class Bomb : MonoBehaviour, IHitObject
 
         if (currentHp <= 0)
         {
-            GameObject obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.DESTROY_FX);
+            GameObject obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.ROCK_DESTROY);
             obj.transform.position = transform.position;
             obj.transform.rotation = obj.transform.rotation;
             obj.SetActive(true);
 
-            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.BOMB);
+            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.ROCK);
         }
     }
 
