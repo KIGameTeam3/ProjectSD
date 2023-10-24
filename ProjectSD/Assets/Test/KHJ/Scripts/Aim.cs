@@ -1,8 +1,7 @@
-using Oculus.Interaction;
-using OVR.OpenVR;
+
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.IMGUI.Controls;
+
 //using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
@@ -83,6 +82,18 @@ public class Aim : MonoBehaviour
                      
                     ShowTowerCheck(ARAVRInput.RHandPosition, ARAVRInput.RHandDirection);
                 }
+            }else
+            {
+
+                //MouseDetect();
+                if (isLeftHand)
+                {
+                    DetectL();
+                }       // if : 왼쪽 핸드 기준으로 레이저 포인터 만들기
+                else
+                {
+                    DetectR();
+                }
             }
         }
     } //Update()
@@ -129,8 +140,6 @@ public class Aim : MonoBehaviour
     
     public void DetectL()
     {
-        //shop 클릭 
-        ClickShopSound();
 
         Vector3 startPos = ARAVRInput.LHandPosition;
         Vector3 endPos = startPos + ARAVRInput.LHandDirection * lrMaxDistance;
@@ -154,9 +163,18 @@ public class Aim : MonoBehaviour
                 else if(hitInfo.collider.tag == "UnitBtn")
                 {
                     Debug.Log("UnitBtn 핸드 트리거 찍히나요?");
-                    hitObject?.HitUI();
-                    btn = hitInfo.collider.gameObject.GetComponent<BuyUnit>();
-                    isChooseHand = true;
+                    //hitObject?.HitUI();
+                    BuyUnit tmp = hitInfo.collider.gameObject.GetComponent<BuyUnit>();
+                    if (tmp.ClickUnit())
+                    {
+                        isChooseHand = true;
+                        btn = tmp;
+                    }
+                }
+                else
+                {
+                    //shop 클릭 
+                   // ClickShopSound();
                 }
             } 
         }
@@ -168,13 +186,11 @@ public class Aim : MonoBehaviour
     }
     public void DetectR()
     {
-        //shop 클릭 
-        ClickShopSound();
-        
         Vector3 startPos = ARAVRInput.RHandPosition;
         Vector3 endPos = startPos + ARAVRInput.RHandDirection * lrMaxDistance;
         if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.RTouch))
         {
+           
             // 왼쪽 컨트롤러 기준으로 Ray를 만든다.
             Ray ray = new Ray(startPos, ARAVRInput.RHandDirection);
             RaycastHit hitInfo;
@@ -194,10 +210,19 @@ public class Aim : MonoBehaviour
                 else if (hitInfo.collider.tag == "UnitBtn")
                 {
                     Debug.Log("UnitBtn 핸드 트리거 찍히나요?");
-                    hitObject?.HitUI();
-                    btn = hitInfo.collider.gameObject.GetComponent<BuyUnit>();
-                    isChooseHand = true;
+                    //hitObject?.HitUI();
+                    BuyUnit tmp = hitInfo.collider.gameObject.GetComponent<BuyUnit>();
+                    if (tmp.ClickUnit())
+                    {
+                        isChooseHand = true;
+                        btn = tmp;
+                    }
 
+                }
+                else 
+                {
+                    //shop 클릭 
+                    //ClickShopSound();
                 }
             }
         }
@@ -269,7 +294,11 @@ public class Aim : MonoBehaviour
 
         if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, controller) && btn != null && preview.installable && preview.gameObject.activeSelf)
         {
-            btn.SetInUnit(endPos);
+            if (btn.SetInUnit(endPos))
+            {
+
+                isChooseHand = false;
+            }
      //   Ray checkRay = new Ray(preview.transform.position, -Vector3.up);
        // Debug.DrawRay(checkRay.origin, checkRay.direction * 200f,Color.red);
       //  RaycastHit hitCheck;

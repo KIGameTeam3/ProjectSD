@@ -5433,6 +5433,8 @@ MonoBehaviour:
   handPosition: 1
   point: {fileID: 7170492117764913995}
   status: {fileID: 0}
+  originMaterial: {fileID: 0}
+  hologramMaterial: {fileID: 0}
 --- !u!1 &7170492117418725452
 GameObject:
   m_ObjectHideFlags: 0
@@ -12137,6 +12139,8 @@ MonoBehaviour:
   handPosition: 0
   point: {fileID: 7170492118102934728}
   status: {fileID: 0}
+  originMaterial: {fileID: 0}
+  hologramMaterial: {fileID: 0}
 --- !u!1 &7170492118141377752
 GameObject:
   m_ObjectHideFlags: 0
@@ -13287,6 +13291,8 @@ MonoBehaviour:
   lrMaxDistance: 200
   isChooseHand: 0
   btn: {fileID: 0}
+  aimAudioSource: {fileID: 0}
+  shopClickClip: {fileID: 0}
 --- !u!1 &7170492118408765195
 GameObject:
   m_ObjectHideFlags: 0
@@ -15140,6 +15146,8 @@ MonoBehaviour:
   lrMaxDistance: 200
   isChooseHand: 0
   btn: {fileID: 0}
+  aimAudioSource: {fileID: 0}
+  shopClickClip: {fileID: 0}
 --- !u!1 &7170492118448185249
 GameObject:
   m_ObjectHideFlags: 0
@@ -17132,15 +17140,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gun:
-  - {fileID: 0}
+  - {fileID: 1969583325}
   - {fileID: 0}
   hand:
   - {fileID: 924494118}
   - {fileID: 102338903}
-  status: {fileID: 11400000, guid: 823c2f068712d694187697c1a419998b, type: 2}
   bloodEffect: {fileID: 1090804507}
   centerCamera: {fileID: 7170492118788614016}
-  canEffect: 1
+  status: {fileID: 11400000, guid: 823c2f068712d694187697c1a419998b, type: 2}
+  bulletPool: {fileID: 0}
 --- !u!82 &1078163765
 AudioSource:
   m_ObjectHideFlags: 0

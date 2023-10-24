@@ -36,6 +36,10 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
 
     //KHJ 변수 선언 10.20
     WaitForSeconds luckyTime = new WaitForSeconds(10f);
+    //KHJ 오디오 변수 선언
+    [SerializeField] private AudioSource unitBtnAudioSource = default;
+    public AudioClip buyClip = default;
+    public AudioClip buyFailClip = default;
     public void Awake()
     {
         _name.text = unitPrefab.unitData.unitName;
@@ -45,6 +49,7 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
 
         preview = FindObjectOfType<PreviewBase>().gameObject;
         Debug.Log(gameObject.name+ " "+preview+"!!!!!");
+        unitBtnAudioSource = KHJUIManager.Instance.uiAudioSource;
     }
 
     public void OnPointerDown(PointerEventData eventData)   // 버튼을 눌렀을 때
@@ -110,9 +115,19 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
 
     //KHJ 테스트를 위해 복사해서 사용해봅니다.
     //{KHJ 메서드 변환 테스트
-    public void ClickUnit()   // 버튼을 눌렀을 때
+    public bool ClickUnit()   // 버튼을 눌렀을 때
     {
-        if (GameManager.Instance.currentGold < price) return;
+        //if (GameManager.Instance.currentGold < price) return;
+        if (GameManager.Instance.currentGold < price)
+        {
+            BuyFail();
+            return false;
+        }
+        else
+        {
+            BuyComplete();
+        }
+
 
         if (gameObject.CompareTag("UnitBtn") && unitPrefab != null) // 프리뷰 생성 조건
         {
@@ -130,9 +145,10 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
             // [PSH] 231018 수정: GetComponent말고 Istance로
             //preview.transform.position = GameManager.Instance.hitPosition;
         }
+        return true;
     }
    
-    public void SetInUnit(Vector3 pos) // 유닛 설치: 클릭 중인 버튼에서 손을 뗄 때
+    public bool SetInUnit(Vector3 pos) // 유닛 설치: 클릭 중인 버튼에서 손을 뗄 때
     {
         //Debug.Log(preview);
         //Debug.Log("설치 되는지 "+ preview.GetComponent<PreviewBase>());
@@ -153,14 +169,26 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
             GameManager.Instance.playerState = PlayerState.PLAY;
             PlayerBase.instance.ChangeHand(false);
             Destroy(unitObj, unitDestroy);
+            return true;
         }
+        return false;
     }
     public void OnLuckyPoint()
     {
         //TODO 예외처리 해줘야함   
 
-        if (GameManager.Instance.currentGold < price) return;
-        
+        //if (GameManager.Instance.currentGold < price) return;
+        //CheckBuyPossible();
+        if (GameManager.Instance.currentGold < price)
+        {
+            BuyFail();
+            return;
+        }
+        else
+        {
+            BuyComplete();
+        }
+
         gameObject.GetComponent<Button>().interactable = false;
         gameObject.GetComponent<BoxCollider>().enabled = false;
         KHJUIManager.Instance.OnSizeBuff();
@@ -184,7 +212,17 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     }
     public void SpeedUpWeapon()
     {
-        if (GameManager.Instance.currentGold < price) return;
+        //if (GameManager.Instance.currentGold < price) return;
+        //CheckBuyPossible();
+        if (GameManager.Instance.currentGold < price)
+        {
+            BuyFail();
+            return;
+        }
+        else
+        {
+            BuyComplete();
+        }// 함수로 뺄려고 했으나 실패..TODO 함수로 뺄 예정
         //TODO 여기 안에다가 무기 실행하는 함수 넣으면 됩니다.
         PlayerBase.instance.EnhanceGun(true);
         gameObject.GetComponent<Button>().interactable = false;
@@ -213,6 +251,14 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     public void OffPreview()
     {
         preview.GetComponent<PreviewBase>().previewObj[previewIdx].SetActive(false); // 프리뷰 비활성화
+    }
+    private void BuyComplete()
+    {
+        unitBtnAudioSource.PlayOneShot(buyClip);
+    }
+    private void BuyFail()
+    {
+        unitBtnAudioSource.PlayOneShot(buyFailClip);
     }
 }
     

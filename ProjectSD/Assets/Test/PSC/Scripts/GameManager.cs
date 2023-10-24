@@ -150,7 +150,7 @@ public class GameManager : MonoBehaviour
         InitManager();
 
         //[SSC] 231019 괴수, 랜덤약점 초기화 추가
-        Golem.G_insance.Initilize();
+        //Golem.G_insance.Initilize();
         LuckyPointController.instance.Initialize();
         Golem.G_insance.GolemStart();
         PlayerBase.instance.InitRestart();
@@ -181,7 +181,7 @@ public class GameManager : MonoBehaviour
             return;
         }
         StopManager();
-
+        PlayerBase.instance.ChangeHand(true); 
         // [SSC] 231020 플레이어 사망시 골렘 동작멈춤 추가
         Golem.G_insance.GolemStop();
         

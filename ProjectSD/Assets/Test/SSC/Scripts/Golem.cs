@@ -113,7 +113,6 @@ public class Golem : MonoBehaviour, IHitObject
         Initilize();
         golemCheck = Phase.PHASE_1;
         StartCoroutine(Phase1());
-
     }
     // } 게임 시작
 
@@ -150,8 +149,10 @@ public class Golem : MonoBehaviour, IHitObject
     #region 1페이즈
     IEnumerator Phase1()
     {
+        //Initilize();
+        golemAni.SetTrigger("isAttackStop");
         // { 제한시간이 다 되거나 일정체력이 깎이면 1페이즈 탈출
-        while(currentTime >= 0f && currentHp >= golemMaxHp * phase2Hp)
+        while (currentTime >= 0f && currentHp >= golemMaxHp * phase2Hp)
         {
             currentTime -= Time.deltaTime;
 
@@ -574,6 +575,7 @@ public class Golem : MonoBehaviour, IHitObject
     public void Initilize()
     {
         StopAllCoroutines();                        // 괴수가 가진 모든 코루틴 정지
+        //golemAni.SetTrigger("isAttackStop");
         golemAni.SetBool("isWalk", false);
         isAttack = false;                           // 공격 코루틴 진입조건 초기화
         isThrow = false;                            // ""
@@ -590,8 +592,11 @@ public class Golem : MonoBehaviour, IHitObject
     {
         if(golemCheck != Phase.GAMEOVER)
         {
+            currentHp -= damage;
+            KHJUIManager.Instance.ChangeBossHpText(currentHp, golemMaxHp);
             if (currentHp <= 0)
             {
+                GameManager.Instance.EndGame();
                 KHJUIManager.Instance.VictoryGame();
                 StopAllCoroutines();
                 golemRigid.velocity = Vector3.zero;
@@ -601,8 +606,6 @@ public class Golem : MonoBehaviour, IHitObject
                 //GameManager.Instance.EndGame();
             }
 
-            currentHp -= damage;
-            KHJUIManager.Instance.ChangeBossHpText(currentHp, golemMaxHp);
 
         }
     }
@@ -612,7 +615,8 @@ public class Golem : MonoBehaviour, IHitObject
         StopAllCoroutines();
         golemRigid.velocity = Vector3.zero;
         golemCheck = Phase.GAMEOVER;
-        golemAni.SetTrigger("isAttackStop");
+
+        //golemAni.SetTrigger("isAttackStop");
         golemAni.SetBool("isWalk", false);
     }
 

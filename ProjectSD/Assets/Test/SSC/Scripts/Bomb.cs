@@ -46,11 +46,12 @@ public class Bomb : MonoBehaviour, IHitObject
 
     private void Update()
     {
-        //if (GameManager.Instance.playerState == PlayerState.DEAD ||
-        //    GameManager.Instance.playerState == PlayerState.READY)
-        //{
-        //    ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.ROCK);
-        //}
+        if (GameManager.Instance.playerState == PlayerState.DEAD ||
+            GameManager.Instance.playerState == PlayerState.READY ||
+            Golem.G_insance.golemCheck == Golem.Phase.GAMEOVER)
+        {
+            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.ROCK);
+        }
     }
 
     private void OnEnable()

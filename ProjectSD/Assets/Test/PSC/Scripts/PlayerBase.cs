@@ -143,7 +143,6 @@ public class PlayerBase : MonoBehaviour, IHitObject
         {
             Destroy(bulletPool.gameObject);
         }
-        ChangeHand(true);
 
         //이 밑으로 
         //KHJUIManager.Instance.DefeatGameSound(); //OnGameOver에 합쳤습니다.
