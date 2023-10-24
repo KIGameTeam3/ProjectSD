@@ -1062,6 +1062,7 @@ MonoBehaviour:
   unitBtnAudioSource: {fileID: 0}
   buyClip: {fileID: 8300000, guid: cf78c3df07fdd6f499079a44f0a200e6, type: 3}
   buyFailClip: {fileID: 8300000, guid: cd266a93ed069d741898871a75ca8999, type: 3}
+  isBuildUnit: 1
 --- !u!65 &6012278505425790869
 BoxCollider:
   m_ObjectHideFlags: 0

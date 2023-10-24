@@ -75,11 +75,9 @@ public class Aim : MonoBehaviour
                 if (isLeftHand)
                 {
                     ShowTowerCheck(ARAVRInput.LHandPosition, ARAVRInput.LHandDirection);
-
                 }
                 else
                 {
-                     
                     ShowTowerCheck(ARAVRInput.RHandPosition, ARAVRInput.RHandDirection);
                 }
             }else
@@ -163,18 +161,24 @@ public class Aim : MonoBehaviour
                 else if(hitInfo.collider.tag == "UnitBtn")
                 {
                     Debug.Log("UnitBtn 핸드 트리거 찍히나요?");
-                    //hitObject?.HitUI();
                     BuyUnit tmp = hitInfo.collider.gameObject.GetComponent<BuyUnit>();
-                    if (tmp.ClickUnit())
+                    if (tmp.isBuildUnit)
                     {
-                        isChooseHand = true;
-                        btn = tmp;
+                        if (tmp.ClickUnit())
+                        {
+                            isChooseHand = true;
+                            btn = tmp;
+                        }
+                    }
+                    else
+                    {
+                        hitObject?.HitUI();
                     }
                 }
                 else
                 {
                     //shop 클릭 
-                   // ClickShopSound();
+                    ClickShopSound();
                 }
             } 
         }
@@ -210,19 +214,25 @@ public class Aim : MonoBehaviour
                 else if (hitInfo.collider.tag == "UnitBtn")
                 {
                     Debug.Log("UnitBtn 핸드 트리거 찍히나요?");
-                    //hitObject?.HitUI();
                     BuyUnit tmp = hitInfo.collider.gameObject.GetComponent<BuyUnit>();
-                    if (tmp.ClickUnit())
+                    if (tmp.isBuildUnit)
                     {
-                        isChooseHand = true;
-                        btn = tmp;
+                        if (tmp.ClickUnit())
+                        {
+                            isChooseHand = true;
+                            btn = tmp;
+                        }
+                    }
+                    else
+                    {
+                        hitObject?.HitUI();
                     }
 
                 }
                 else 
                 {
                     //shop 클릭 
-                    //ClickShopSound();
+                    ClickShopSound();
                 }
             }
         }

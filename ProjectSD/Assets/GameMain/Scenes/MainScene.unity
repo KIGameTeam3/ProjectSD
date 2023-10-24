@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.31290278, g: 0.6295204, b: 0.8586217, a: 1}
+  m_IndirectSpecularColor: {r: 0.312913, g: 0.6289218, b: 0.85830283, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -894,6 +894,14 @@ PrefabInstance:
       propertyPath: handPosition
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1094537685, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
+      propertyPath: originMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 8e3f8a8347b3b28438c89f57b6f528e9, type: 2}
+    - target: {fileID: 1094537685, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
+      propertyPath: hologramMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: c4594597c2177f24b84189eb5bb35099, type: 2}
     - target: {fileID: 1094537688, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
       propertyPath: m_audioClip
       value: 
@@ -922,6 +930,14 @@ PrefabInstance:
       propertyPath: handPosition
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1969583325, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
+      propertyPath: originMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 8e3f8a8347b3b28438c89f57b6f528e9, type: 2}
+    - target: {fileID: 1969583325, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
+      propertyPath: hologramMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: c4594597c2177f24b84189eb5bb35099, type: 2}
     - target: {fileID: 1969583328, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
       propertyPath: m_audioClip
       value: 
@@ -2371,7 +2387,7 @@ TerrainCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 938088592}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: ee7a89cd6110a03479b2c770765fdcd8, type: 2}
   m_Enabled: 1
   m_TerrainData: {fileID: 15600000, guid: 053158c74390f9e4eb2fbfb90564a82e, type: 2}
   m_EnableTreeColliders: 1
@@ -3199,7 +3215,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 826041479, guid: 118cdc496b9ca934d9550a0710167235, type: 3}
       propertyPath: golemMaxHp
-      value: 100
+      value: 100000
       objectReference: {fileID: 0}
     - target: {fileID: 826041479, guid: 118cdc496b9ca934d9550a0710167235, type: 3}
       propertyPath: phase1Time
@@ -5242,6 +5258,10 @@ PrefabInstance:
     - target: {fileID: 5753206386449955287, guid: 592f0a47f11151a48b74d618e10dd4ff, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8390308245167449763, guid: 592f0a47f11151a48b74d618e10dd4ff, type: 3}
+      propertyPath: isBuildUnit
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 592f0a47f11151a48b74d618e10dd4ff, type: 3}
@@ -7295,6 +7315,10 @@ PrefabInstance:
     - target: {fileID: 378511268078260247, guid: 3712c717b7933354396caf78ecb363eb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4532767063939125088, guid: 3712c717b7933354396caf78ecb363eb, type: 3}
+      propertyPath: isBuildUnit
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5754729808299127846, guid: 3712c717b7933354396caf78ecb363eb, type: 3}
       propertyPath: OnHit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName

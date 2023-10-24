@@ -16,6 +16,7 @@ public class GunBase : MonoBehaviour
     private AudioSource gunAudioSource;
     private ParticleSystem gunParticle;
     private ARAVRInput.Controller controller;
+    private Renderer gunRenderer;
     private bool isEnhance = false;
     private bool canShot = true;
 
@@ -49,6 +50,7 @@ public class GunBase : MonoBehaviour
     {   
         gunAudioSource = GetComponent<AudioSource>();
         gunParticle = GetComponentInChildren<ParticleSystem>();
+        gunRenderer = GetComponentInChildren<Renderer>();
 
         if (handPosition == HandPosition.RIGHT)
         {
@@ -121,6 +123,14 @@ public class GunBase : MonoBehaviour
     public void ChangeWeaponMode(bool enable)
     {
         isEnhance = enable;
+        if (enable)
+        {
+            gunRenderer.material = hologramMaterial;
+        }
+        else
+        {
+            gunRenderer.material = originMaterial;
+        }
     }
 
 }
