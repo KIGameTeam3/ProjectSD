@@ -11,35 +11,41 @@ public class MinionBomb : MinionBase, IHitObject
     private float timeReset = 0f;           // 자폭실행 시간 체크
     public float explosiveDamage = 10f;     // 자폭 데미지
     public float explosionArea = 10f;       // 자폭 범위
-
-    public enum State { ALIVE, DIE }            // 자폭졸개의 스테이트 상태
-    public State state {  get; private set; }   // 스테이트 프로퍼티
+    public AudioClip explosionClip;
 
     private bool atkReset = false;              // 공격 제한조건
 
+    public enum StateBoom { ALIVE, DIE }            // 자폭졸개의 스테이트 상태
+    public StateBoom state { get; private set; }    // 스테이트 프로퍼티
+
     protected override void Update()
     {
-        base.Update();
-
-        if(GameManager.Instance.playerState == PlayerState.DEAD)
+        if(state == StateBoom.ALIVE)
         {
-            StopAllCoroutines();
-            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BOMB);
-        }
+            base.Update();
 
-        // 부모클래스에서 공격진입에 들어갔다면
-        if(isAttack == true)
-        {
-            // 자폭실행시간까지 시간 누적      
-            timeReset += Time.deltaTime;
-
-            // 자폭실행 시간에 도달하면
-            if (attackSpeed <= timeReset && atkReset == false)
+            if(GameManager.Instance.playerState == PlayerState.DEAD)
             {
-                timeReset = 0f;     // 자폭 시간 초기화 (풀링오브젝트라 값이 남아있음)
-                atkReset = true;    // 자폭진입 제한
-                Explosive();        // 자폭실행 메소드
+                StopAllCoroutines();
+                ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BOMB);
             }
+
+            // 부모클래스에서 공격진입에 들어갔다면
+            if(isAttack == true)
+            {
+                // 자폭실행시간까지 시간 누적      
+                timeReset += Time.deltaTime;
+
+                // 자폭실행 시간에 도달하면
+                if (attackSpeed <= timeReset && atkReset == false)
+                {
+                    timeReset = 0f;     // 자폭 시간 초기화 (풀링오브젝트라 값이 남아있음)
+                    atkReset = true;    // 자폭진입 제한
+                    Explosive();        // 자폭실행 메소드
+                }
+
+            }
+
         }
 
     }
@@ -48,10 +54,10 @@ public class MinionBomb : MinionBase, IHitObject
     {
         base.OnTriggerEnter(other);
 
-        // DeadZone 트리거시 오브젝트 풀 반환
-        if (other.CompareTag("DeadZone"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("PlayerBullet") && state == StateBoom.ALIVE)
         {
-            StartCoroutine(CoolObj(this.gameObject, PoolObjType.MINION_BOMB));
+            myAudio.clip = hitClip;
+            myAudio.Play();
         }
     }
 
@@ -61,6 +67,8 @@ public class MinionBomb : MinionBase, IHitObject
         GameObject obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.BOOM_DIE);
         obj.transform.position = transform.position;
         obj.SetActive(true);
+        myAudio.clip = explosionClip;
+        myAudio.Play();
 
         // 자신을 기준으로 일정범위 구체크기만큼 충돌 감지하여 
         Collider[] hitObj = Physics.OverlapSphere(transform.position, explosionArea);
@@ -73,7 +81,35 @@ public class MinionBomb : MinionBase, IHitObject
             }
         }
 
-        ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BOMB);
+        transform.position = new Vector3(-200f, -200f, -200f);
+
+        StartCoroutine(Die_Minion());
+    }
+
+    IEnumerator Die_Explosive()
+    {
+        yield return new WaitForSeconds(1f);
+
+        GameObject obj = ObjectPoolManager.instance.GetPoolObj(PoolObjType.BOOM_DIE);
+        obj.transform.position = transform.position;
+        obj.SetActive(true);
+        myAudio.clip = explosionClip;
+        myAudio.Play();
+
+        // 자신을 기준으로 일정범위 구체크기만큼 충돌 감지하여 
+        Collider[] hitObj = Physics.OverlapSphere(transform.position, explosionArea);
+
+        foreach (Collider info in hitObj)
+        {
+            if (info.GetComponent<IHitObject>() != null)
+            {
+                info.GetComponent<IHitObject>().Hit(explosiveDamage);
+            }
+        }
+
+        transform.position = new Vector3(-200f, -200f, -200f);
+
+        StartCoroutine(Die_Minion());
     }
 
 
@@ -82,11 +118,12 @@ public class MinionBomb : MinionBase, IHitObject
     {
         base.OnEnable();
         Initilize();
+        state = StateBoom.ALIVE;
     }
 
     public void Initilize()
     {
-        state = State.ALIVE;
+        state = StateBoom.ALIVE;
         atkReset = false;
         currentHp = maxHp;
     }
@@ -96,11 +133,25 @@ public class MinionBomb : MinionBase, IHitObject
         currentHp -= damage;
 
         // 제한조건을 안달아두면 스택 오버플로우가 발생했었음 => 스테이트 패턴으로 조건문 진입제한을 두겠음.
-        if (currentHp <= 0 && state == State.ALIVE)
+        if (currentHp <= 0 && state == StateBoom.ALIVE)
         {
-            state = State.DIE;
-            Explosive();
-            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BOMB);
+            myAudio.clip = deathClip;
+            myAudio.Play();
+            isDetected = false;
+            myRigid.velocity = Vector3.zero;
+            myRigid.useGravity = false;
+            myCollider.enabled = false;
+            myAni.SetTrigger("isDie");
+            state = StateBoom.DIE;
+
         }
     }
+
+    IEnumerator Die_Minion()
+    {
+        yield return new WaitForSeconds(2f);
+
+        ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.MINION_BOMB);
+    }
+
 }
