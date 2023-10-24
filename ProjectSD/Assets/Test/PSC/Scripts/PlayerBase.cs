@@ -146,7 +146,7 @@ public class PlayerBase : MonoBehaviour, IHitObject
         ChangeHand(true);
 
         //이 밑으로 
-        KHJUIManager.Instance.DefeatGameSound();
+        //KHJUIManager.Instance.DefeatGameSound(); //OnGameOver에 합쳤습니다.
         KHJUIManager.Instance.OnGameOver();
     }
 

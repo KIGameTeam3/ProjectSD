@@ -69,8 +69,10 @@ public class KHJUIManager : MonoBehaviour
     [SerializeField] private GameObject coinObj; 
     [SerializeField] private TMP_Text coinText; // 코인 수치 텍스트
 
-    //[Header("ResultCanvas")]
-    //[SerializeField] private GameObject resultPanel;
+    [Header("ResultCanvas")]
+    [SerializeField] private GameObject resultPanel;
+    [SerializeField] private GameObject victoryPanel;
+    [SerializeField] private GameObject defeatPanel;
     //[SerializeField] private GameObject rTimeObj;
     //[SerializeField] private GameObject rCoinObj;
     //[SerializeField] private GameObject rKillObj;
@@ -175,10 +177,12 @@ public class KHJUIManager : MonoBehaviour
 
         //{resultCanvas 관련 변수  나중에 쓰게 된다면 쓰면 됨
         GameObject resultCanvas = GameObject.Find("ResultCanvas");
-        //resultPanel = resultCanvas.transform.GetChild(0).gameObject;
-        //rTimeObj = resultPanel.transform.GetChild(0).gameObject;
-        //rCoinObj = resultPanel.transform.GetChild(1).gameObject;
-        //rKillObj = resultPanel.transform.GetChild(2).gameObject;
+        resultPanel = resultCanvas.transform.GetChild(0).gameObject;
+        victoryPanel = resultPanel.transform.GetChild(0).gameObject;
+        defeatPanel = resultPanel.transform.GetChild(1).gameObject;
+        //rTimeObj = resultPanel.transform.GetChild(2).gameObject;
+        //rCoinObj = resultPanel.transform.GetChild(3).gameObject;
+        //rKillObj = resultPanel.transform.GetChild(4).gameObject;
         //}resultCanvas 관련 변수
 
         //시간 변수
@@ -213,6 +217,8 @@ public class KHJUIManager : MonoBehaviour
         restartHit.OnHit.AddListener(() => ClickReStart());
         restartHit.OnHit.AddListener(() => ClickSound());
 
+        defeatPanel.SetActive(false);
+        victoryPanel.SetActive(false);
         bossPanel.SetActive(false);
         restartPanel.SetActive(false);
         sizeUpBuff.SetActive(false);
@@ -281,7 +287,7 @@ public class KHJUIManager : MonoBehaviour
 
     public void OnGameOver()
     {
-        DefeatGameSound();
+        DefeatGame();
         //TODO 게임 오버 패널 켜주고 2초뒤 리스타트 버튼 활성화 혹은 
         //ShowResult();
         restartPanel.SetActive(true);
@@ -476,13 +482,34 @@ public class KHJUIManager : MonoBehaviour
         uiAudioSource.PlayOneShot(enterGameSound);
     }
 
-    public void VictoryGameSound()
+
+    public void VictoryGame()
+    {
+        VictoryGameSound();
+        OnVictroyPanel();
+    }
+    public void DefeatGame()
+    {
+        DefeatGameSound();
+        OnDefeatPanel();
+    }
+
+    private void VictoryGameSound()
     {
         uiAudioSource.PlayOneShot(uiVictorySound);
     }
 
-    public void DefeatGameSound()
+    private void DefeatGameSound()
     {
         uiAudioSource.PlayOneShot(uiDefeatSound);
+    }
+
+    private void OnVictroyPanel()
+    {
+        victoryPanel.SetActive(true);
+    }
+    private void OnDefeatPanel()
+    {
+        defeatPanel.SetActive(true);
     }
 }
