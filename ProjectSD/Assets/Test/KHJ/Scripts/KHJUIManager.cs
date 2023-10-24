@@ -69,8 +69,10 @@ public class KHJUIManager : MonoBehaviour
     [SerializeField] private GameObject coinObj; 
     [SerializeField] private TMP_Text coinText; // 코인 수치 텍스트
 
-    //[Header("ResultCanvas")]
-    //[SerializeField] private GameObject resultPanel;
+    [Header("ResultCanvas")]
+    [SerializeField] private GameObject resultPanel;
+    [SerializeField] private GameObject victoryPanel;
+    [SerializeField] private GameObject defeatPanel;
     //[SerializeField] private GameObject rTimeObj;
     //[SerializeField] private GameObject rCoinObj;
     //[SerializeField] private GameObject rKillObj;
@@ -87,14 +89,10 @@ public class KHJUIManager : MonoBehaviour
 
     [Header("Sound")]
     //임시 사운드 
-    [SerializeField] private AudioSource uiAudioSource;
+    public AudioSource uiAudioSource;
     
-    
-
     public AudioClip enterGameSound;
-
     public AudioClip uiClickSound;
-
     public AudioClip uiVictorySound;
     public AudioClip uiDefeatSound;
     
@@ -175,10 +173,12 @@ public class KHJUIManager : MonoBehaviour
 
         //{resultCanvas 관련 변수  나중에 쓰게 된다면 쓰면 됨
         GameObject resultCanvas = GameObject.Find("ResultCanvas");
-        //resultPanel = resultCanvas.transform.GetChild(0).gameObject;
-        //rTimeObj = resultPanel.transform.GetChild(0).gameObject;
-        //rCoinObj = resultPanel.transform.GetChild(1).gameObject;
-        //rKillObj = resultPanel.transform.GetChild(2).gameObject;
+        resultPanel = resultCanvas.transform.GetChild(0).gameObject;
+        victoryPanel = resultPanel.transform.GetChild(0).gameObject;
+        defeatPanel = resultPanel.transform.GetChild(1).gameObject;
+        //rTimeObj = resultPanel.transform.GetChild(2).gameObject;
+        //rCoinObj = resultPanel.transform.GetChild(3).gameObject;
+        //rKillObj = resultPanel.transform.GetChild(4).gameObject;
         //}resultCanvas 관련 변수
 
         //시간 변수
@@ -197,7 +197,6 @@ public class KHJUIManager : MonoBehaviour
         GameObject msgCanvas = GameObject.Find("MsgCanvas");
         msgPanel = msgCanvas.transform.GetChild(0).gameObject;
 
-
         //사운드 관련 
         uiAudioSource = gameObject.GetComponent<AudioSource>();
         
@@ -213,6 +212,8 @@ public class KHJUIManager : MonoBehaviour
         restartHit.OnHit.AddListener(() => ClickReStart());
         restartHit.OnHit.AddListener(() => ClickSound());
 
+        defeatPanel.SetActive(false);
+        victoryPanel.SetActive(false);
         bossPanel.SetActive(false);
         restartPanel.SetActive(false);
         sizeUpBuff.SetActive(false);
@@ -281,12 +282,16 @@ public class KHJUIManager : MonoBehaviour
 
     public void OnGameOver()
     {
-        DefeatGameSound();
+        if(victoryPanel.activeSelf == false)
+        {
+            DefeatGame();
+        }
         //TODO 게임 오버 패널 켜주고 2초뒤 리스타트 버튼 활성화 혹은 
         //ShowResult();
         restartPanel.SetActive(true);
         endPanel.SetActive(true);
         CloseShop();
+        
     }
     //결과창 띄우는 함수입니다.
     //private void ShowResult()
@@ -307,11 +312,17 @@ public class KHJUIManager : MonoBehaviour
         restartPanel.SetActive(false); //재시작 캔버스 패널
         //resultPanel.SetActive(false); // 결과찬 캔버스 패널
         endPanel.SetActive(false); //종료 버튼 
+        victoryPanel.SetActive(false);
+        defeatPanel.SetActive(false);
         pUiPivot.SetActive(true); // 플레이어 ui 관련 패널
         bossPanel.SetActive(true); //보스 체력 ui 패널 
+        timePanel.SetActive (true);//시간 패널 
+        msgPanel.SetActive(true);
+
         InitilizeBuff();
         FindUnitDestroy();
         EnterGameSound();
+        
         GameManager.Instance.ReStartGame();
     }
 
@@ -476,13 +487,43 @@ public class KHJUIManager : MonoBehaviour
         uiAudioSource.PlayOneShot(enterGameSound);
     }
 
-    public void VictoryGameSound()
+
+    public void VictoryGame()
+    {
+        VictoryGameSound();
+        OnVictroyPanel();
+        OnGameOver();
+        bossPanel.SetActive(false);
+        pUiPivot.SetActive(false);
+        timePanel.SetActive(false);
+        msgPanel.SetActive(false);
+    }
+    public void DefeatGame()
+    {
+        DefeatGameSound();
+        OnDefeatPanel();
+        bossPanel.SetActive(false);
+        pUiPivot.SetActive(false);
+        timePanel.SetActive(false);
+        msgPanel.SetActive(false);
+    }
+
+    private void VictoryGameSound()
     {
         uiAudioSource.PlayOneShot(uiVictorySound);
     }
 
-    public void DefeatGameSound()
+    private void DefeatGameSound()
     {
         uiAudioSource.PlayOneShot(uiDefeatSound);
+    }
+
+    private void OnVictroyPanel()
+    {
+        victoryPanel.SetActive(true);
+    }
+    private void OnDefeatPanel()
+    {
+        defeatPanel.SetActive(true);
     }
 }
