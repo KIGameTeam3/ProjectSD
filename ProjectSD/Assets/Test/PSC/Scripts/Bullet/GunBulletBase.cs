@@ -64,7 +64,7 @@ public class GunBulletBase : MonoBehaviour
         bulletRigidbody.velocity = Vector3.zero;
         transform.localScale = Vector3.zero;
 
-        ARAVRInput.PlayVibration(ARAVRInput.Controller.LTouch);
+        ARAVRInput.PlayVibration(damage/500, damage/100, damage/100, ARAVRInput.Controller.LTouch);
         ARAVRInput.PlayVibration(ARAVRInput.Controller.RTouch);
 
         bulletAudioSource.Play();
