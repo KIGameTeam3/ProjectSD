@@ -40,6 +40,8 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     [SerializeField] private AudioSource unitBtnAudioSource = default;
     public AudioClip buyClip = default;
     public AudioClip buyFailClip = default;
+
+    public bool isBuildUnit = false;
     public void Awake()
     {
         _name.text = unitPrefab.unitData.unitName;
@@ -165,10 +167,10 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
             }
             Debug.Log("유닛 설치");
             unitObj = Instantiate(unitPrefab.gameObject, pos, Quaternion.identity);
+            unitObj.GetComponent<UnitBase>().StartDestroy();
             Aim.isChooseTower = false;
             GameManager.Instance.playerState = PlayerState.PLAY;
             PlayerBase.instance.ChangeHand(false);
-            Destroy(unitObj, unitDestroy);
             return true;
         }
         return false;
@@ -250,7 +252,8 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     }
     public void OffPreview()
     {
-        preview.GetComponent<PreviewBase>().previewObj[previewIdx].SetActive(false); // 프리뷰 비활성화
+        //preview.GetComponent<PreviewBase>().previewObj[previewIdx].SetActive(false); // 프리뷰 비활성화
+        preview.GetComponent<PreviewBase>()?.HideAll();
     }
     private void BuyComplete()
     {

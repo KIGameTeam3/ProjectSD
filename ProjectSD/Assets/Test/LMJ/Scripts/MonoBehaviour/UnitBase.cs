@@ -56,6 +56,11 @@ public class UnitBase : MonoBehaviour
         }
     }
 
+    public void StartDestroy()
+    {
+        Destroy(gameObject, unitData.unitLifeTime);
+    }
+
     // 0: 발사, 1: 설치
     public void audioManager(int clipIdx)
     {

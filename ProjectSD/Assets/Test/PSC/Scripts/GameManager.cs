@@ -154,6 +154,7 @@ public class GameManager : MonoBehaviour
         LuckyPointController.instance.Initialize();
         Golem.G_insance.GolemStart();
         PlayerBase.instance.InitRestart();
+        FindObjectOfType<PreviewBase>()?.HideAll();
     }
 
     //게임 시작시 불러온다
@@ -170,6 +171,7 @@ public class GameManager : MonoBehaviour
         //[SSC] 231019 괴수행동시작 추가
         Golem.G_insance.GolemStart();
         PlayerBase.instance.InitRestart();
+        FindObjectOfType<PreviewBase>()?.HideAll();
     }
 
     //게임 종료시 불러온다
@@ -181,7 +183,9 @@ public class GameManager : MonoBehaviour
             return;
         }
         StopManager();
-        PlayerBase.instance.ChangeHand(true); 
+        Aim.isChooseTower = false;
+        PlayerBase.instance.ChangeHand(true);
+        FindObjectOfType<PreviewBase>()?.HideAll();
         // [SSC] 231020 플레이어 사망시 골렘 동작멈춤 추가
         Golem.G_insance.GolemStop();
         

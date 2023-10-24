@@ -19,6 +19,16 @@ public class PreviewBase : MonoBehaviour
         zoneIdx = 0;
     }
 
+
+    public void HideAll()
+    {
+        StopAllCoroutines();
+        for(int i = 0; i < previewObj.Length; i++)
+        {
+            previewObj[i].gameObject.SetActive(false);
+            zoneObj[i].gameObject.SetActive(false);
+        }
+    }
     public void PlaceCheck()
     {
         placeCheckCoroutine = StartCoroutine(PlaceChecking());
