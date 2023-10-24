@@ -12,11 +12,15 @@ public class Bomb : MonoBehaviour, IHitObject
     public float maxHp = 50f;
     private float currentHp = default;
     private TrailRenderer trail = default;
+    private AudioSource myAudio = null;
+    public AudioClip fireClip = null;
+    public AudioClip destroyClip = null;
 
     Vector3 subVelo = new Vector3 (-1f, 13f, -21f);
 
     private void Awake()
     {
+        myAudio = GetComponent<AudioSource>();
         trail = GetComponent<TrailRenderer>();
         rb = GetComponent<Rigidbody>();
         target = GameObject.FindWithTag("Player").GetComponent<Transform>();
@@ -42,11 +46,11 @@ public class Bomb : MonoBehaviour, IHitObject
 
     private void Update()
     {
-        if (GameManager.Instance.playerState == PlayerState.DEAD ||
-            GameManager.Instance.playerState == PlayerState.READY)
-        {
-            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.ROCK);
-        }
+        //if (GameManager.Instance.playerState == PlayerState.DEAD ||
+        //    GameManager.Instance.playerState == PlayerState.READY)
+        //{
+        //    ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.ROCK);
+        //}
     }
 
     private void OnEnable()
@@ -54,6 +58,7 @@ public class Bomb : MonoBehaviour, IHitObject
         // 풀링 오브젝트를 돌리기에 오브젝트가 활성화 될때마다 새로 세팅값을 해준다.
         Initilize();
         trail.enabled = true;
+        myAudio.Play();
 
         Vector3 randTarget = target.transform.position + Random.insideUnitSphere * 10f;
 
@@ -74,7 +79,8 @@ public class Bomb : MonoBehaviour, IHitObject
     public void Initilize()
     {
         // 생성 되었을 시 체력 세팅
-        currentHp = maxHp; 
+        currentHp = maxHp;
+        myAudio.clip = fireClip;
     }
 
     public void Hit(float damage)
@@ -88,11 +94,15 @@ public class Bomb : MonoBehaviour, IHitObject
             obj.transform.position = transform.position;
             obj.transform.rotation = obj.transform.rotation;
             obj.SetActive(true);
+            myAudio.clip = destroyClip;
+            myAudio.Play();
 
 
             trail.enabled = false;
+            transform.position = new Vector3(-200f, -200f, -200f);
             rb.velocity = Vector3.zero;
-            ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.ROCK);
+
+            StartCoroutine(MyDestroy());
         }
     }
 
@@ -164,6 +174,13 @@ public class Bomb : MonoBehaviour, IHitObject
             = Quaternion.AngleAxis(angleBetweenObjects, Vector3.up) * velocity;
 
         return finalVelocity;
+    }
+
+    IEnumerator MyDestroy()
+    {
+        yield return new WaitForSeconds(3.0f);
+
+        ObjectPoolManager.instance.CoolObj(this.gameObject, PoolObjType.ROCK);
     }
 
 }
