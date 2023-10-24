@@ -81,9 +81,25 @@ public class KHJUIManager : MonoBehaviour
     [SerializeField] private Image currentBossImg; // 변동하는 이미지
     [SerializeField] private TMP_Text bossHpText; //체력 수치 텍스트
 
-    //유닛 리스트
-    public GameObject unit;
-    List<GameObject> unitList;
+    ////유닛 리스트
+    //public GameObject unit;
+    //List<GameObject> unitList;
+
+    [Header("Sound")]
+    //임시 사운드 
+    [SerializeField] private AudioSource uiAudioSource;
+    
+    
+
+    public AudioClip enterGameSound;
+
+    public AudioClip uiClickSound;
+
+    public AudioClip uiVictorySound;
+    public AudioClip uiDefeatSound;
+    
+    //[SerializeField] private AudioClip uiInGameBGSound;
+
 
 
     #region 싱글톤 변수
@@ -140,16 +156,21 @@ public class KHJUIManager : MonoBehaviour
         healthObj = topPanel.transform.GetChild(1).gameObject;
         currentHpImg = healthObj.GetComponent<Image>();
         healthText = healthObj.transform.GetChild(0).gameObject.GetComponent<TMP_Text>();
-        
+
+        //코인
+        GameObject coinPanel = topPanel.transform.GetChild(2).gameObject;
+        coinObj = coinPanel.transform.GetChild(0).gameObject;
+        coinText = coinObj.GetComponent<TMP_Text>();
+
         //}PlayerUICanvas 
 
         //{shopCanvas 관련 변수
         GameObject shopCanvas = GameObject.Find("ShopCanvas");
         shopPanel = shopCanvas.transform.GetChild(0).gameObject;
         //코인 변수
-        GameObject coinPanel = shopPanel.transform.GetChild(1).gameObject;  
-        coinObj = coinPanel.transform.GetChild(0).gameObject;
-        coinText = coinObj.GetComponent<TMP_Text>();
+        //GameObject coinPanel = shopPanel.transform.GetChild(1).gameObject;  
+        //coinObj = coinPanel.transform.GetChild(0).gameObject;
+        //coinText = coinObj.GetComponent<TMP_Text>();
         //}shopCanvas 관련 변수
 
         //{resultCanvas 관련 변수  나중에 쓰게 된다면 쓰면 됨
@@ -175,12 +196,22 @@ public class KHJUIManager : MonoBehaviour
         //버프 종료 알림 텍스트 관련
         GameObject msgCanvas = GameObject.Find("MsgCanvas");
         msgPanel = msgCanvas.transform.GetChild(0).gameObject;
+
+
+        //사운드 관련 
+        uiAudioSource = gameObject.GetComponent<AudioSource>();
+        
     }
     private void Start()
     {
         startHit.OnHit.AddListener(() => ClickStartGame()); //함수 연결
+        startHit.OnHit.AddListener(() => ClickSound());//클릭 사운드
+
         endHit.OnHit.AddListener(() => ClickExitGame());
+        endHit.OnHit.AddListener(() => ClickSound());
+
         restartHit.OnHit.AddListener(() => ClickReStart());
+        restartHit.OnHit.AddListener(() => ClickSound());
 
         bossPanel.SetActive(false);
         restartPanel.SetActive(false);
@@ -196,7 +227,7 @@ public class KHJUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //코루틴으로 뺼 예정
+        //코루틴으로 뺼 예정 어떻게?
         ClearMsg();
 
         if(GameManager.Instance.CheckPlayingGame())
@@ -239,6 +270,7 @@ public class KHJUIManager : MonoBehaviour
         pUiPivot.SetActive(true);
         bossPanel.SetActive(true);
         timePanel.SetActive(true);
+        EnterGameSound();
         GameManager.Instance.StartGame();
     }//시작 함수는 완료
     public void ClickExitGame()
@@ -249,6 +281,7 @@ public class KHJUIManager : MonoBehaviour
 
     public void OnGameOver()
     {
+        DefeatGameSound();
         //TODO 게임 오버 패널 켜주고 2초뒤 리스타트 버튼 활성화 혹은 
         //ShowResult();
         restartPanel.SetActive(true);
@@ -278,6 +311,7 @@ public class KHJUIManager : MonoBehaviour
         bossPanel.SetActive(true); //보스 체력 ui 패널 
         InitilizeBuff();
         FindUnitDestroy();
+        EnterGameSound();
         GameManager.Instance.ReStartGame();
     }
 
@@ -285,13 +319,7 @@ public class KHJUIManager : MonoBehaviour
     {
         coinText.text = "" + GameManager.Instance.currentGold;
     }
-
-    //public void ChangeHpText(int maxHp)
-    //{
-    //    //TODO hp 추가를 해줘야 합니다.
-    //    currentHpImg.fillAmount = PlayerBase.instance.status.health / maxHp;
-    //    healthText.text = string.Format("{0}", PlayerBase.instance.status.health);
-    //}
+   
     public void ChangeHpText(float pHp, float pMaxHp )
     {
         //TODO hp 추가를 해줘야 합니다.
@@ -386,11 +414,6 @@ public class KHJUIManager : MonoBehaviour
     }
     //}메시지 창에 띄울 함수입니다.
 
-    //public void ShowBuff()
-    //{
-    //    buffImg.SetActive(true);
-    //}
-
     public void OpenShop() //상점을 켜줍니다.
     {
         shopPanel.SetActive(true);
@@ -401,10 +424,6 @@ public class KHJUIManager : MonoBehaviour
         shopPanel.SetActive(false);
         isOpenShop = false;
     } //상점을 꺼줍니다.
-    //public void GetUnit()
-    //{
-    //    //unitList.Add(unit);
-    //}
 
     private void FindUnitDestroy()
     {
@@ -435,5 +454,35 @@ public class KHJUIManager : MonoBehaviour
         speedBuffCheck = 10f;
         sizeUpImage.fillAmount = sizeBuffCheck;
         speedUpImg.fillAmount = speedBuffCheck;
+    }
+    public void ResetSizeBuff()
+    {
+        sizeBuffCheck = 10f;
+        sizeUpImage.fillAmount = sizeBuffCheck;
+    }
+    public void ResetSpeedBuff()
+    {
+        speedBuffCheck = 10f;
+        speedUpImg.fillAmount = speedBuffCheck;
+    }
+
+    public void ClickSound() //TODO 나중에 사운드 매니저 생기면 옮길 예정
+    {
+        uiAudioSource.PlayOneShot(uiClickSound);
+    }
+
+    public void EnterGameSound()
+    {
+        uiAudioSource.PlayOneShot(enterGameSound);
+    }
+
+    public void VictoryGameSound()
+    {
+        uiAudioSource.PlayOneShot(uiVictorySound);
+    }
+
+    public void DefeatGameSound()
+    {
+        uiAudioSource.PlayOneShot(uiDefeatSound);
     }
 }

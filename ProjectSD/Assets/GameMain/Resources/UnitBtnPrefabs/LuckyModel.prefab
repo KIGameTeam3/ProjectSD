@@ -807,7 +807,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 3374066849798447542}
         m_TargetAssemblyTypeName: BuyUnit, Assembly-CSharp
-        m_MethodName: OnSizeBuff
+        m_MethodName: OnLuckyPoint
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

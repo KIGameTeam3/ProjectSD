@@ -101,7 +101,7 @@ public class LuckyPointController : MonoBehaviour
         unitPoint = luckyPoint[rand];
 
         float waitTime = 0;
-        while (waitTime <= 5)
+        while (waitTime <= 10)
         {
             if(GameManager.Instance.playerState == PlayerState.DEAD)
             {
