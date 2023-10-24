@@ -756,6 +756,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260822031}
   m_CullTransparentMesh: 1
+--- !u!114 &265388166 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 102338903, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
+  m_PrefabInstance: {fileID: 273734530}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9505a981ed4989489965b07af5d8e41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &273285924
 GameObject:
   m_ObjectHideFlags: 0
@@ -854,7 +865,7 @@ PrefabInstance:
     - target: {fileID: 1872122253826079966, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
       propertyPath: gameSong
       value: 
-      objectReference: {fileID: 8300000, guid: 7293617c57c54a442932d42f6ec09faf, type: 3}
+      objectReference: {fileID: 8300000, guid: 35fc3a8a06a71014a80ac79d77c9f106, type: 3}
     - target: {fileID: 1872122253826079966, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
       propertyPath: lobbySong
       value: 
@@ -867,10 +878,30 @@ PrefabInstance:
       propertyPath: m_PlayOnAwake
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6742522789636589961, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
+      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7170492117764913995, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
+      propertyPath: handPosition
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7170492118102934728, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
+      propertyPath: handPosition
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7170492118950660472, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7170492118950660473, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
+      propertyPath: hand.Array.data[0]
+      value: 
+      objectReference: {fileID: 982932392}
+    - target: {fileID: 7170492118950660473, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
+      propertyPath: hand.Array.data[1]
+      value: 
+      objectReference: {fileID: 265388166}
     - target: {fileID: 7170492118950660474, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1621,7 +1652,7 @@ TerrainCollider:
   m_Material: {fileID: 13400000, guid: ee7a89cd6110a03479b2c770765fdcd8, type: 2}
   m_Enabled: 1
   m_TerrainData: {fileID: 15600000, guid: 053158c74390f9e4eb2fbfb90564a82e, type: 2}
-  m_EnableTreeColliders: 1
+  m_EnableTreeColliders: 0
 --- !u!218 &938088594
 Terrain:
   m_ObjectHideFlags: 0
@@ -1671,6 +1702,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &982932392 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 924494118, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
+  m_PrefabInstance: {fileID: 273734530}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9505a981ed4989489965b07af5d8e41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &990746892
 GameObject:
   m_ObjectHideFlags: 0
