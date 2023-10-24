@@ -21,6 +21,7 @@ public class GunBase : MonoBehaviour
 
 
 
+
     private const float VIBRATION_TIME = 0.1f;
     private const float VIBRATION_FREQUENCY = 5F;
     private const float VIBRATION_AMPLITUDE = 5F;
@@ -64,6 +65,7 @@ public class GunBase : MonoBehaviour
     public void ResetSetting()
     {
         canShot = true;
+        
     }
 
     public void Shot()
@@ -88,11 +90,11 @@ public class GunBase : MonoBehaviour
 
         if (!isEnhance)
         {
-            currBullet = Instantiate(defaultBullet, point.startPos.position, Quaternion.identity);
+            currBullet = Instantiate(defaultBullet, point.startPos.position, Quaternion.identity, PlayerBase.instance.bulletPool);
         }
         else
         {
-            currBullet = Instantiate(enhanceBullet, point.startPos.position, Quaternion.identity);
+            currBullet = Instantiate(enhanceBullet, point.startPos.position, Quaternion.identity, PlayerBase.instance.bulletPool);
         }
 
         currBullet.transform.up = direction;

@@ -7,14 +7,21 @@ public class PlayerBase : MonoBehaviour
     public static PlayerBase instance;
 
     //0 : left 1: right
-    public GunBase[] gun;
-    public Aim[] hand;
-    public PlayerStatus status;
-    public OVRScreenFade bloodEffect;
-    public GameObject centerCamera;
-    AudioSource audioSource;
-    public bool canEffect = true;
+    private AudioSource audioSource;
+    [SerializeField]
+    private GunBase[] gun;
+    [SerializeField]
+    private Aim[] hand;
+    [SerializeField]
+    private OVRScreenFade bloodEffect;
+    [SerializeField]
+    private GameObject centerCamera;
 
+
+    public PlayerStatus status;
+    public Transform bulletPool;
+
+    private bool canEffect = true;
     private float maxHP = 100;
     private const float VIBRATION_TIME = 0.2f;
     private const float VIBRATION_FREQUENCY = 10F;
@@ -103,6 +110,8 @@ public class PlayerBase : MonoBehaviour
         //}KHJ 추가
         bloodEffect.transform.position = Vector3.down * -1000;
         Invoke("SetBloodEffect", 0.5f);
+
+        bulletPool = new GameObject("BulletManager").transform;
     }
 
 
@@ -120,17 +129,20 @@ public class PlayerBase : MonoBehaviour
         HitReaction();
         if (status.health <= 0)
         {
+            GameManager.Instance.EndGame();
             Invoke("Die", 2);
         }
     }
 
     private void Die()
     {
+        if (bulletPool != null)
+        {
+            Destroy(bulletPool.gameObject);
+        }
         ChangeHand(true);
-        GameManager.Instance.EndGame();
-        //게임오버 ui
 
-        //이 밑으로 
+        //게임오버 ui
         KHJUIManager.Instance.OnGameOver();
     }
 
