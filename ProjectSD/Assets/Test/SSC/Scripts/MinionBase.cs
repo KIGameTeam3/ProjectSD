@@ -10,12 +10,21 @@ public class MinionBase : MonoBehaviour
     private WaitForSeconds coolingTime = new WaitForSeconds(3f);    // DeadZone 트리거시 오브젝트 풀 반환 시간
     public float minionSpeed = 5f;                                  // 졸개의 이동속도
     private float firstDistance = default;                          // PC와의 거리 (생성 되었을시 캐싱)
-    private bool isDetected = false;                                // 추적활성화 불값
+    protected bool isDetected = false;                                // 추적활성화 불값
     public bool isAttack = false;                                   // 하위 클래스에서 참조할 공격 실행 불값
     private bool isLimit = false;                                   // DeadZone 트리거시 Update상 동작 방지용 불값
 
-    private Rigidbody myRigid = default;                            // 자신의 Rigidbody 캐싱
+
+    // ************* 자식에서도 해당 컴포넌트에 접근하려면 protected가 아닌 퍼블릭으로 열어야함
+    // 나중에 원리 확인해보기
+
+    public Rigidbody myRigid = default;                            // 자신의 Rigidbody 캐싱
+    public Collider myCollider = default;    
     public Animator myAni = default;                                // 자신의 애니메이터 캐싱 (자식 클래스에서 각자의 애니메이터 인스펙어창에서 할당)
+    public AudioSource myAudio;
+    public AudioClip spawnClip;
+    public AudioClip deathClip;
+    public AudioClip hitClip;
 
     void Start()
     {
@@ -24,6 +33,10 @@ public class MinionBase : MonoBehaviour
 
         // 자신의 Rigidbody 캐싱
         myRigid = GetComponent<Rigidbody>();
+        myCollider = GetComponent<Collider>();
+
+        myAudio.clip = spawnClip;
+        myAudio.Play();
 
         // 처음 생성되었을시 PC 와의 거리 캐싱 ( PC가 고정되어 있어서 Start시에만 캐싱하면 된다. )
         firstDistance = Vector3.Distance(transform.position, player.transform.position);
@@ -54,7 +67,6 @@ public class MinionBase : MonoBehaviour
         if (Vector3.Distance(transform.position, player.transform.position) <= 3.0f)
         {
             myRigid.velocity = Vector3.zero;        // PC에게 도달하면 속도값 0
-            //myRigid.isKinematic = true;
             isDetected = false;                     // 추적 금지 (걷는 애니메이션, PC향해 velocity 가지기)
             myAni.SetBool("isWalk", false);         // 애니메이션 Idle 전환
             isAttack = true;                        // 자식 클래스에서 쓰일 isAttack (공격을 진행하라)
@@ -80,17 +92,13 @@ public class MinionBase : MonoBehaviour
         }
     }
 
-    // 하위클래스에서 사용할 오브젝트풀 반환 코루틴
-    protected virtual IEnumerator CoolObj(GameObject obj, PoolObjType type)
-    {
-        yield return coolingTime;
-
-        ObjectPoolManager.instance.CoolObj(obj, type);
-    }
-
     // 풀링오브젝트로 인한 오브젝트 활성화시 초기상태 초기화
     protected virtual void OnEnable()
     {
+        myRigid.useGravity = true;
+        myCollider.enabled = true;
+        myAudio.clip = spawnClip;
+        myAudio.Play();
         isLimit = false;                    // 풀에 반환되기 전 절벽을 넘었을시 세팅값 초기화
         isDetected = false;                 // 풀에 반환되기 전 PC에게 도달했을시 추적상태 초기화
         isAttack = false;                   // 풀에 반환되기 전 PC에게 도달하여 공격진입 상태 초기화
