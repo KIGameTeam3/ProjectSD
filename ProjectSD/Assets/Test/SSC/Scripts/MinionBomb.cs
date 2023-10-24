@@ -12,7 +12,6 @@ public class MinionBomb : MinionBase, IHitObject
     public float explosiveDamage = 10f;     // 자폭 데미지
     public float explosionArea = 10f;       // 자폭 범위
     public AudioClip explosionClip;
-    //public Collider myCollider;
 
     private bool atkReset = false;              // 공격 제한조건
 

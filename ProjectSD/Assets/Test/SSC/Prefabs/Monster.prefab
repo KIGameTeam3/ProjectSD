@@ -581,7 +581,7 @@ MonoBehaviour:
   restart: 0
   minionRestart: 0
   golemMaxHp: 100000
-  phase1Time: 5
+  phase1Time: 120
   phase2Hp: 0.8
   phase2Distance: 0.8
   phase2Time: 120
