@@ -46,6 +46,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: DamageText
+    uniqueID: 3438281271
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
