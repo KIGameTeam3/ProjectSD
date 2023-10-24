@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerBase : MonoBehaviour
+public class PlayerBase : MonoBehaviour, IHitObject
 {
     public static PlayerBase instance;
 
@@ -116,6 +116,9 @@ public class PlayerBase : MonoBehaviour
 
     public void Hit(float damage)
     {
+        if (!GameManager.Instance.CheckPlayingGame())
+            return;
+
         status.health -= (int)Mathf.Round(damage);
         HitReaction();
         if (status.health <= 0)
@@ -131,6 +134,7 @@ public class PlayerBase : MonoBehaviour
         //게임오버 ui
 
         //이 밑으로 
+        KHJUIManager.Instance.DefeatGameSound();
         KHJUIManager.Instance.OnGameOver();
     }
 

@@ -34,8 +34,13 @@ public class Aim : MonoBehaviour
     //}커브 라인렌더러 변수 관련
     Vector3 storePos = default;
 
+    public AudioSource aimAudioSource = default;
+    public AudioClip shopClickClip = default;
+
+
     private void Awake()
     {
+        aimAudioSource = GetComponent<AudioSource>();
         lineRenderer = GetComponent<LineRenderer>();
         //width 수정
         lineRenderer.startWidth = 0.01f;
@@ -124,6 +129,9 @@ public class Aim : MonoBehaviour
     
     public void DetectL()
     {
+        //shop 클릭 
+        ClickShopSound();
+
         Vector3 startPos = ARAVRInput.LHandPosition;
         Vector3 endPos = startPos + ARAVRInput.LHandDirection * lrMaxDistance;
         if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch))
@@ -160,7 +168,9 @@ public class Aim : MonoBehaviour
     }
     public void DetectR()
     {
-
+        //shop 클릭 
+        ClickShopSound();
+        
         Vector3 startPos = ARAVRInput.RHandPosition;
         Vector3 endPos = startPos + ARAVRInput.RHandDirection * lrMaxDistance;
         if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.RTouch))
@@ -294,4 +304,15 @@ public class Aim : MonoBehaviour
             KHJUIManager.Instance.CloseShop();
         }
     }
+
+    public void ClickShopSound()
+    {
+        if(GameManager.Instance.playerState == PlayerState.SHOP)
+        {
+            aimAudioSource.PlayOneShot(shopClickClip);
+        }
+    }
+
+    //public void 
+
 }
