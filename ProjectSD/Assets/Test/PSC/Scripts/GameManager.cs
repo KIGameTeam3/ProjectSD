@@ -31,32 +31,31 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region private 변수
+    private int firstGold = 1000;    // 초기 재화
     private float StartTime = 0;    //시작시간
     private float EndTime = 0;      //종료시간
+    private float updateInterval = 1.0f; // 1초 간격으로 업데이트하도록 설정
+    private float timeSinceLastUpdate = 0.0f;
+    private BackGroundPlayer backGroundPlayer;
     #endregion
 
     #region public 변수
-    public PlayerState playerState = PlayerState.READY;     //현재 게임 상태
-
+    public PlayerState playerState = PlayerState.READY;     //현재 게임 상태=
     public Vector3 hitPosition;
+    public int currentGold = 0;     // 보유중인 재화
+
     #endregion
 
-    #region 재화 변수
-    public Text goldText = default;
-    public int firstGold = 1000;    // 초기 재화
-    public int currentGold = 0;     // 보유중인 재화
-    private float updateInterval = 1.0f; // 1초 간격으로 업데이트하도록 설정
-    private float timeSinceLastUpdate = 0.0f;
-    #endregion
+
+    private void Awake()
+    {
+        backGroundPlayer = FindObjectOfType<BackGroundPlayer>();
+    }
 
     // [이미정] 231013 재화 초기값 설정
     private void Start()
     {
-        currentGold += firstGold;
-        if (goldText != null)
-        {
-            goldText.text = currentGold.ToString(); // 텍스트에 현재 재화 할당
-        }
+        backGroundPlayer.ChangeSong(false);
     }
 
     // [이미정] 231016 raycast hitPosition 추가
@@ -75,6 +74,11 @@ public class GameManager : MonoBehaviour
                     hitPosition = hitPoint.point;
                 }
             }
+        }
+
+        if (!CheckPlayingGame())
+        {
+            return;
         }
 
         // 매 프레임마다 deltaTime 값을 누적
@@ -155,6 +159,7 @@ public class GameManager : MonoBehaviour
         Golem.G_insance.GolemStart();
         PlayerBase.instance.InitRestart();
         FindObjectOfType<PreviewBase>()?.HideAll();
+        backGroundPlayer.ChangeSong(true);
     }
 
     //게임 시작시 불러온다
@@ -172,6 +177,7 @@ public class GameManager : MonoBehaviour
         Golem.G_insance.GolemStart();
         PlayerBase.instance.InitRestart();
         FindObjectOfType<PreviewBase>()?.HideAll();
+        backGroundPlayer.ChangeSong(true);
     }
 
     //게임 종료시 불러온다
@@ -188,7 +194,8 @@ public class GameManager : MonoBehaviour
         FindObjectOfType<PreviewBase>()?.HideAll();
         // [SSC] 231020 플레이어 사망시 골렘 동작멈춤 추가
         Golem.G_insance.GolemStop();
-        
+        backGroundPlayer.ChangeSong(false);
+
         ////KHJ 231023 골렘 동작 멈춤 이후 승리 사운드 출력위해 임시 추가
         //KHJUIManager.Instance.VictoryGameSound();
     }
