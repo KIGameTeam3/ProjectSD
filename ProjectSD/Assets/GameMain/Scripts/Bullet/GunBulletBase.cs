@@ -40,9 +40,16 @@ public class GunBulletBase : MonoBehaviour
     {
         bulletRigidbody.velocity = direction * status.bulletSpeed;
     }
-    public void Move(Vector3 direction, float distance)
+    public void Trans(Vector3 point, float time)
     {
-        transform.position = direction * distance;
+        StartCoroutine(moveRoutine(point, time));
+    }
+
+    IEnumerator moveRoutine(Vector3 point, float time)
+    {
+        yield return new WaitForSeconds(time/ status.bulletSpeed);
+        transform.position = point;
+
     }
 
     protected void Remove()

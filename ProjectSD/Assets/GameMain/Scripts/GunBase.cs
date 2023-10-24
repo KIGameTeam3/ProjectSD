@@ -26,7 +26,7 @@ public class GunBase : MonoBehaviour
     private const float VIBRATION_TIME = 0.1f;
     private const float VIBRATION_FREQUENCY = 5F;
     private const float VIBRATION_AMPLITUDE = 5F;
-    private const float RAYCAST_DISTANCE = 6F;
+    private const float RAYCAST_DISTANCE = 100F;
 
     private void Awake()
     {
@@ -103,9 +103,10 @@ public class GunBase : MonoBehaviour
         int layer = GlobalFunction.GetLayerMask("Floor", "Boss", "BossBullet", "Monster");
 
         currBullet.transform.up = direction;
-        if (Physics.Raycast(new Ray(point.startPos.position, direction), out hit, RAYCAST_DISTANCE, layer))
+        if (Physics.Raycast(new Ray(point.startPos.position, direction), RAYCAST_DISTANCE, ~layer) &&
+            Physics.Raycast(new Ray(point.startPos.position, direction), out hit, RAYCAST_DISTANCE, GlobalFunction.GetLayerMask("Floor")))
         {
-            currBullet.Move(direction, RAYCAST_DISTANCE);
+            currBullet.Trans(hit.point, hit.distance);
             Debug.Log("=충돌");
         }
         else
