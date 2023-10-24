@@ -854,7 +854,7 @@ PrefabInstance:
     - target: {fileID: 1872122253826079966, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
       propertyPath: gameSong
       value: 
-      objectReference: {fileID: 8300000, guid: 7293617c57c54a442932d42f6ec09faf, type: 3}
+      objectReference: {fileID: 8300000, guid: 35fc3a8a06a71014a80ac79d77c9f106, type: 3}
     - target: {fileID: 1872122253826079966, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
       propertyPath: lobbySong
       value: 
@@ -866,6 +866,10 @@ PrefabInstance:
     - target: {fileID: 6742522789636589961, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
       propertyPath: m_PlayOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6742522789636589961, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
+      propertyPath: panLevelCustomCurve.m_Curve.Array.data[0].value
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7170492118950660472, guid: 62fcf0b1e1ab03d46a635f95e215bc7c, type: 3}
       propertyPath: m_Name
