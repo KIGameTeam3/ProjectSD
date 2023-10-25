@@ -65,6 +65,12 @@ public class KHJUIManager : MonoBehaviour
    
     [SerializeField] private GameObject shopPanel; //상점 캔버스 하위 패널
     public bool isOpenShop = false;
+    //유닛 리스트
+    
+    private GameObject unitPanel;
+    public List<GameObject> unitList = default;
+    public bool isOnAim = false;
+
     //코인
     [SerializeField] private GameObject coinObj; 
     [SerializeField] private TMP_Text coinText; // 코인 수치 텍스트
@@ -83,9 +89,6 @@ public class KHJUIManager : MonoBehaviour
     [SerializeField] private Image currentBossImg; // 변동하는 이미지
     [SerializeField] private TMP_Text bossHpText; //체력 수치 텍스트
 
-    ////유닛 리스트
-    //public GameObject unit;
-    //List<GameObject> unitList;
 
     [Header("Sound")]
     //임시 사운드 
@@ -165,6 +168,10 @@ public class KHJUIManager : MonoBehaviour
         //{shopCanvas 관련 변수
         GameObject shopCanvas = GameObject.Find("ShopCanvas");
         shopPanel = shopCanvas.transform.GetChild(0).gameObject;
+
+        unitPanel = shopPanel.transform.GetChild(0).gameObject;
+       
+        
         //코인 변수
         //GameObject coinPanel = shopPanel.transform.GetChild(1).gameObject;  
         //coinObj = coinPanel.transform.GetChild(0).gameObject;
@@ -212,6 +219,12 @@ public class KHJUIManager : MonoBehaviour
         restartHit.OnHit.AddListener(() => ClickReStart());
         restartHit.OnHit.AddListener(() => ClickSound());
 
+
+        for (int i = 0; i < unitPanel.GetComponentsInChildren<BuyUnit>().Length; i++)
+        {
+            unitList.Add(unitPanel.transform.GetChild(i).gameObject);
+        }
+        
         defeatPanel.SetActive(false);
         victoryPanel.SetActive(false);
         bossPanel.SetActive(false);
@@ -434,6 +447,7 @@ public class KHJUIManager : MonoBehaviour
     {
         shopPanel.SetActive(false);
         isOpenShop = false;
+        Aim.actions();
     } //상점을 꺼줍니다.
 
     private void FindUnitDestroy()
@@ -525,5 +539,33 @@ public class KHJUIManager : MonoBehaviour
     private void OnDefeatPanel()
     {
         defeatPanel.SetActive(true);
+    }
+    public void ControlBtnScale()
+    {
+        Debug.LogFormat("{0} 1번째 bool값",unitList[0].gameObject.GetComponent<BuyUnit>().isOnAim);
+        Debug.LogFormat("{0} 2번째 bool값",unitList[1].gameObject.GetComponent<BuyUnit>().isOnAim);
+        Debug.LogFormat("{0} 3번째 bool값",unitList[2].gameObject.GetComponent<BuyUnit>().isOnAim);
+        Debug.LogFormat("{0} 4번째 bool값",unitList[3].gameObject.GetComponent<BuyUnit>().isOnAim);
+        //OffScaleUp();
+
+        for (int i = 0; i < unitList.Count; i++)
+        {
+            if (unitList[i].gameObject.GetComponent<BuyUnit>().isOnAim == true)
+            {
+                unitList[i].gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.1f, 1.1f, unitList[i].gameObject.GetComponent<RectTransform>().localScale.z);
+            }
+            else
+            {
+                unitList[i].gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            }
+        }
+    }
+    public void OffScaleUp()
+    {
+        for (int i = 0; i < unitList.Count; i++)
+        {
+            unitList[i].gameObject.GetComponent<BuyUnit>().isOnAim = false;
+            unitList[i].gameObject.GetComponent<RectTransform>().localScale = new Vector3(1.0f, 1.0f, 1.0f);
+        }
     }
 }

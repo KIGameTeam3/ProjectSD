@@ -19,21 +19,21 @@ public class MinionBase : MonoBehaviour
     // 나중에 원리 확인해보기
 
     public Rigidbody myRigid = default;                            // 자신의 Rigidbody 캐싱
-    public Collider myCollider = default;    
+    public Collider[] myCollider = default;    
     public Animator myAni = default;                                // 자신의 애니메이터 캐싱 (자식 클래스에서 각자의 애니메이터 인스펙어창에서 할당)
     public AudioSource myAudio;
     public AudioClip spawnClip;
     public AudioClip deathClip;
     public AudioClip hitClip;
 
-    void Start()
+    void Awake()
     {
         // PC 오브젝트 캐싱하기
         player = GameObject.FindWithTag("Player").GetComponent<Transform>();
 
         // 자신의 Rigidbody 캐싱
         myRigid = GetComponent<Rigidbody>();
-        myCollider = GetComponent<Collider>();
+        myCollider = GetComponents<Collider>();
 
         myAudio.clip = spawnClip;
         myAudio.Play();
@@ -96,7 +96,10 @@ public class MinionBase : MonoBehaviour
     protected virtual void OnEnable()
     {
         myRigid.useGravity = true;
-        myCollider.enabled = true;
+        foreach (Collider collider in myCollider)
+        {
+            collider.enabled = true;
+        }
         myAudio.clip = spawnClip;
         myAudio.Play();
         isLimit = false;                    // 풀에 반환되기 전 절벽을 넘었을시 세팅값 초기화

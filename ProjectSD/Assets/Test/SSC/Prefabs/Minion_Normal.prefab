@@ -365,8 +365,9 @@ GameObject:
   - component: {fileID: 7078827637945275491}
   - component: {fileID: -486654235210300774}
   - component: {fileID: 7858942223052661681}
-  - component: {fileID: 7007406070986158980}
   - component: {fileID: -8858141339008560523}
+  - component: {fileID: 7007406070986158980}
+  - component: {fileID: 3672807042899345767}
   m_Layer: 8
   m_Name: Minion_Normal
   m_TagString: HitPoint
@@ -428,7 +429,7 @@ MonoBehaviour:
   minionSpeed: 4
   isAttack: 0
   myRigid: {fileID: 7858942223052661681}
-  myCollider: {fileID: 7007406070986158980}
+  myCollider: []
   myAni: {fileID: 7078827637945275491}
   myAudio: {fileID: -8858141339008560523}
   spawnClip: {fileID: 8300000, guid: 9fd6aca4d0a9db445a4b68c8991d9376, type: 3}
@@ -453,20 +454,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
-  m_CollisionDetection: 0
---- !u!135 &7007406070986158980
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7078827637945275490}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 2
-  m_Center: {x: 0, y: 2, z: 0}
+  m_CollisionDetection: 1
 --- !u!82 &-8858141339008560523
 AudioSource:
   m_ObjectHideFlags: 0
@@ -563,6 +551,32 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!135 &7007406070986158980
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7078827637945275490}
+  m_Material: {fileID: 13400000, guid: 69a79f672a025f84ab4928b8bc7eefa4, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2
+  m_Center: {x: 0, y: 2, z: 0}
+--- !u!65 &3672807042899345767
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7078827637945275490}
+  m_Material: {fileID: 13400000, guid: 69a79f672a025f84ab4928b8bc7eefa4, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 4, z: 0.1}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!1 &7078827638036906020
 GameObject:
   m_ObjectHideFlags: 0

@@ -140,7 +140,10 @@ public class MinionBomb : MinionBase, IHitObject
             isDetected = false;
             myRigid.velocity = Vector3.zero;
             myRigid.useGravity = false;
-            myCollider.enabled = false;
+            foreach (Collider collider in myCollider)
+            {
+                collider.enabled = false;
+            }
             myAni.SetTrigger("isDie");
             state = StateBoom.DIE;
 

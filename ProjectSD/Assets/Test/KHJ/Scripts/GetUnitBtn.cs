@@ -25,6 +25,7 @@ public class GetUnitBtn : MonoBehaviour
         originHeight = upperRectTP.rect.height;
 
         unitBtnList = Resources.LoadAll<GameObject>("UnitBtnPrefabs/");
+
     }
     private void OnEnable()
     {

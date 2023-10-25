@@ -1,10 +1,10 @@
-
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 //using UnityEditor.IMGUI.Controls;
 using UnityEngine;
-
+using UnityEngine.Events;
 
 public class Aim : MonoBehaviour
 {
@@ -18,7 +18,9 @@ public class Aim : MonoBehaviour
 
     //{커브 라인렌더러 변수 관련
     public static bool isChooseTower = false;
+    public static UnityAction actions;
     public bool isChooseHand = true;
+
     public BuyUnit btn;
     private PreviewBase preview;
     private ARAVRInput.Controller controller;
@@ -36,6 +38,7 @@ public class Aim : MonoBehaviour
     public AudioSource aimAudioSource = default;
     public AudioClip shopClickClip = default;
 
+    public Action Onbutton;
 
     private void Awake()
     {
@@ -138,17 +141,25 @@ public class Aim : MonoBehaviour
     
     public void DetectL()
     {
+        KHJUIManager.Instance.OffScaleUp();//항상 꺼주기
 
         Vector3 startPos = ARAVRInput.LHandPosition;
         Vector3 endPos = startPos + ARAVRInput.LHandDirection * lrMaxDistance;
-        if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch))
-        {
-            // 왼쪽 컨트롤러 기준으로 Ray를 만든다.
-            Ray ray = new Ray(startPos, ARAVRInput.LHandDirection);
-            RaycastHit hitInfo;
 
-            // 충돌이 있다면?
-            if (Physics.Raycast(ray, out hitInfo, lrMaxDistance, GlobalFunction.GetLayerMask("UI")))
+        // 왼쪽 컨트롤러 기준으로 Ray를 만든다.
+        Ray ray = new Ray(startPos, ARAVRInput.LHandDirection);
+        RaycastHit hitInfo;
+
+        // 충돌이 있다면?
+        if (Physics.Raycast(ray, out hitInfo, lrMaxDistance, GlobalFunction.GetLayerMask("UI")))
+        {
+            if (hitInfo.collider.tag == "UnitBtn")
+            {
+                BuyUnit tmp = hitInfo.collider.gameObject.GetComponent<BuyUnit>();
+                tmp.isOnAim = true;
+                KHJUIManager.Instance.ControlBtnScale();
+            }
+            if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.LTouch))
             {
                 endPos = hitInfo.point;
                 UIHitCollider hitObject = hitInfo.transform.GetComponent<UIHitCollider>();
@@ -160,8 +171,18 @@ public class Aim : MonoBehaviour
                 }
                 else if(hitInfo.collider.tag == "UnitBtn")
                 {
-                    Debug.Log("UnitBtn 핸드 트리거 찍히나요?");
+
                     BuyUnit tmp = hitInfo.collider.gameObject.GetComponent<BuyUnit>();
+                    tmp.isOnAim = true;
+                    KHJUIManager.Instance.ControlBtnScale();
+                    //if (!tmp.aimChoose)
+                    //{
+                    //    Debug.Log("UnitBtn 핸드 트리거 찍히나요?");
+                    //    actions();
+                    //    tmp.aimChoose = true;
+                    //    tmp.SetScale(50f);
+                    //}
+
                     if (tmp.isBuildUnit)
                     {
                         if (tmp.ClickUnit())
@@ -183,6 +204,7 @@ public class Aim : MonoBehaviour
             } 
         }
         
+        
         // Ray가 부딪힌 지점에 라인 그리기
         lineRenderer.SetPosition(0, startPos);
         lineRenderer.SetPosition(1, endPos);
@@ -190,17 +212,24 @@ public class Aim : MonoBehaviour
     }
     public void DetectR()
     {
+        KHJUIManager.Instance.OffScaleUp();//항상 꺼주기
+
         Vector3 startPos = ARAVRInput.RHandPosition;
         Vector3 endPos = startPos + ARAVRInput.RHandDirection * lrMaxDistance;
-        if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.RTouch))
-        {
-           
-            // 왼쪽 컨트롤러 기준으로 Ray를 만든다.
-            Ray ray = new Ray(startPos, ARAVRInput.RHandDirection);
-            RaycastHit hitInfo;
+        // 왼쪽 컨트롤러 기준으로 Ray를 만든다.
+        Ray ray = new Ray(startPos, ARAVRInput.RHandDirection);
+        RaycastHit hitInfo;
 
-            // 충돌이 있다면?
-            if (Physics.Raycast(ray, out hitInfo, lrMaxDistance, GlobalFunction.GetLayerMask("UI")))
+        // 충돌이 있다면?
+        if (Physics.Raycast(ray, out hitInfo, lrMaxDistance, GlobalFunction.GetLayerMask("UI")))
+        {
+            if(hitInfo.collider.tag == "UnitBtn")
+            {
+                BuyUnit tmp = hitInfo.collider.gameObject.GetComponent<BuyUnit>();
+                tmp.isOnAim = true;
+                KHJUIManager.Instance.ControlBtnScale();
+            }
+            if (ARAVRInput.GetDown(ARAVRInput.Button.IndexTrigger, ARAVRInput.Controller.RTouch))
             {
                 //Debug.Log(hitInfo.transform.tag);
                 endPos = hitInfo.point;
@@ -213,8 +242,15 @@ public class Aim : MonoBehaviour
                 }
                 else if (hitInfo.collider.tag == "UnitBtn")
                 {
-                    Debug.Log("UnitBtn 핸드 트리거 찍히나요?");
                     BuyUnit tmp = hitInfo.collider.gameObject.GetComponent<BuyUnit>();
+                    
+                    //if (!tmp.aimChoose)
+                    //{
+                    //    Debug.Log("UnitBtn 핸드 트리거 찍히나요?");
+                    //    actions();
+                    //    tmp.aimChoose = true;
+                    //    tmp.SetScale(1.2f);
+                    //}
                     if (tmp.isBuildUnit)
                     {
                         if (tmp.ClickUnit())
@@ -236,7 +272,6 @@ public class Aim : MonoBehaviour
                 }
             }
         }
-
         lineRenderer.SetPosition(0, startPos);
         lineRenderer.SetPosition(1, endPos);
     }       // else : 오른쪽 핸드 기준으로 레이저 포인터 만들기
