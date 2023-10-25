@@ -26,7 +26,7 @@ public class GunBase : MonoBehaviour
     private const float VIBRATION_TIME = 0.1f;
     private const float VIBRATION_FREQUENCY = 5F;
     private const float VIBRATION_AMPLITUDE = 5F;
-    private const float RAYCAST_DISTANCE = 100F;
+    private const float RAYCAST_DISTANCE = 50F;
 
     private void Awake()
     {
@@ -106,7 +106,7 @@ public class GunBase : MonoBehaviour
         if (Physics.Raycast(new Ray(point.startPos.position, direction), RAYCAST_DISTANCE, ~layer) &&
             Physics.Raycast(new Ray(point.startPos.position, direction), out hit, RAYCAST_DISTANCE, GlobalFunction.GetLayerMask("Floor")))
         {
-            currBullet.Trans(hit.point, hit.distance);
+            currBullet.Trans(direction, hit.point, hit.distance);
             Debug.Log("=충돌");
         }
         else

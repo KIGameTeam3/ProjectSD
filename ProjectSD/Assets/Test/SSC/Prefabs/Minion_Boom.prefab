@@ -299,8 +299,9 @@ GameObject:
   - component: {fileID: 3266876403279583778}
   - component: {fileID: 3924699693649703812}
   - component: {fileID: 7772760553277847305}
-  - component: {fileID: 1513051938885138516}
   - component: {fileID: -2311408053517111243}
+  - component: {fileID: 1513051938885138516}
+  - component: {fileID: 5893456953458289344}
   m_Layer: 8
   m_Name: Minion_Boom
   m_TagString: HitPoint
@@ -361,7 +362,8 @@ MonoBehaviour:
   minionSpeed: 3.5
   isAttack: 0
   myRigid: {fileID: 7772760553277847305}
-  myCollider: {fileID: 1513051938885138516}
+  myCollider:
+  - {fileID: 0}
   myAni: {fileID: 3266876403279583778}
   myAudio: {fileID: -2311408053517111243}
   spawnClip: {fileID: 8300000, guid: 9fd6aca4d0a9db445a4b68c8991d9376, type: 3}
@@ -387,20 +389,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
-  m_CollisionDetection: 0
---- !u!135 &1513051938885138516
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3170877250666269528}
-  m_Material: {fileID: 13400000, guid: 69a79f672a025f84ab4928b8bc7eefa4, type: 2}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 2
-  m_Center: {x: 0, y: 2, z: 0}
+  m_CollisionDetection: 1
 --- !u!82 &-2311408053517111243
 AudioSource:
   m_ObjectHideFlags: 0
@@ -497,6 +486,32 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!135 &1513051938885138516
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3170877250666269528}
+  m_Material: {fileID: 13400000, guid: 69a79f672a025f84ab4928b8bc7eefa4, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 2
+  m_Center: {x: 0, y: 2, z: 0}
+--- !u!65 &5893456953458289344
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3170877250666269528}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2, y: 4, z: 0.1}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!1 &3170980851079030142
 GameObject:
   m_ObjectHideFlags: 0

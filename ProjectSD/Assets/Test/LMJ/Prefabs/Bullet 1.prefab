@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5488262965728552037}
   - component: {fileID: 2016135332455564035}
   m_Layer: 12
-  m_Name: Bullet
+  m_Name: Bullet 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -131,7 +131,7 @@ MonoBehaviour:
   bulletSpeed: 50
   damageText: {fileID: 3493583462854159362}
   lifeTime: 5
-  damage: 50
+  damage: 70
 --- !u!1001 &7276556653513295298
 PrefabInstance:
   m_ObjectHideFlags: 0

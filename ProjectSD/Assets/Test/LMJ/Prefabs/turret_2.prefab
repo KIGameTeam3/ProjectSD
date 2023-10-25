@@ -602,7 +602,7 @@ MonoBehaviour:
   - {fileID: 1203774801076989810}
   - {fileID: 1230482318157915976}
   bulletPrefab: {fileID: 2016135332455564035, guid: e51fe7cf5e436a6429f8d561aee97ccf, type: 3}
-  spawnRate: 2
+  spawnRate: 1
   flashParticleObj:
   - {fileID: 6801684994970416630}
   - {fileID: 6072451824663279770}

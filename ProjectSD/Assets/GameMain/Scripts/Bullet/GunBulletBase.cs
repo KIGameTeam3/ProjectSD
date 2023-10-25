@@ -40,16 +40,16 @@ public class GunBulletBase : MonoBehaviour
     {
         bulletRigidbody.velocity = direction * status.bulletSpeed;
     }
-    public void Trans(Vector3 point, float time)
+    public void Trans(Vector3 direction, Vector3 point, float time)
     {
-        StartCoroutine(moveRoutine(point, time));
+        StartCoroutine(moveRoutine(direction, point, time));
     }
 
-    IEnumerator moveRoutine(Vector3 point, float time)
+    IEnumerator moveRoutine(Vector3 direction, Vector3 point, float time)
     {
         yield return new WaitForSeconds(time/ status.bulletSpeed);
-        transform.position = point;
-
+        transform.position = point - direction * (time / status.bulletSpeed);
+        Move(direction);
     }
 
     protected void Remove()
@@ -153,6 +153,8 @@ public class GunBulletBase : MonoBehaviour
                 // 약점위치 변경하는 메소드 실행 (이때 접촉한 약점 게임오브젝트를 매개변수로 보내줘야함)
                 // [SSC] 2023.10.19 매개변수 other.gameobject에서 부모 오브젝트로 변경
                 obj.GetComponent<LuckyPointController>().ChangePoint(other.transform.parent.gameObject);
+
+                GameManager.Instance.SubtractGold(-50);
 
             }
 

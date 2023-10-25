@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Unit 1
   unitPrice: 100
-  unitPower: 100
-  unitLifeTime: 10
+  unitPower: 50
+  unitLifeTime: 20
   bulletPointNum: 1

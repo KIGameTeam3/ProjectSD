@@ -69,12 +69,6 @@ public class MinionBasic : MinionBase, IHitObject
     {
         base.OnTriggerEnter(other);
 
-        if (other.gameObject.layer == LayerMask.NameToLayer("PlayerBullet") && state == State.ALIVE)
-        {
-            myAudio.clip = hitClip;
-            myAudio.Play();
-        }
-
     }
 
     // 풀링오브젝트 반환에 의한 활성화시 초기 체력 세팅
@@ -114,6 +108,8 @@ public class MinionBasic : MinionBase, IHitObject
 
     public void Hit(float damage)
     {
+        myAudio.clip = hitClip;
+        myAudio.Play();
         currentHp -= damage;
 
         if (currentHp <= 0 && state == State.ALIVE)
@@ -124,7 +120,10 @@ public class MinionBasic : MinionBase, IHitObject
             isDetected = false;
             myRigid.velocity = Vector3.zero;
             myRigid.useGravity = false;
-            myCollider.enabled = false; 
+            foreach(Collider collider in myCollider)
+            {
+                collider.enabled = false;
+            }
             myAni.SetTrigger("isDie");
             
         }

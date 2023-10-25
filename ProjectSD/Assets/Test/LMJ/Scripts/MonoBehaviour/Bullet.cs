@@ -10,8 +10,8 @@ public class Bullet : MonoBehaviour
     private bool isAttack = false;
 
     public DamageText damageText;
-    float lifeTime = 5f;
-    int damage = 10;
+    public float lifeTime = 5f;
+    public int damage = 10;
 
     private void Awake()
     {

@@ -41,9 +41,27 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     public AudioClip buyClip = default;
     public AudioClip buyFailClip = default;
 
+    public bool isOnAim = false;
+
+    public bool aimChoose = false;
+
     public bool isBuildUnit = false;
+
+    public void SetScale(float size)
+    {
+        transform.localScale = Vector3.one * size;
+    }
+    public void SetScale()
+    {
+        aimChoose = false;
+        transform.localScale = Vector3.one;
+    }
+
     public void Awake()
     {
+        Aim.actions += SetScale;
+        aimChoose = false;
+
         _name.text = unitPrefab.unitData.unitName;
         _price.text = unitPrefab.unitData.unitPrice.ToString();
         price = unitPrefab.unitData.unitPrice;
@@ -262,6 +280,10 @@ public class BuyUnit : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointe
     private void BuyFail()
     {
         unitBtnAudioSource.PlayOneShot(buyFailClip);
+    }
+
+    public void DownScaleBtn()
+    { 
     }
 }
     

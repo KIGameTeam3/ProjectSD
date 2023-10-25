@@ -48,6 +48,7 @@ public class UnitBase : MonoBehaviour
             Bullet bullet = Instantiate(bulletPrefab, bulletPoints[bulletIdx].transform.position, transform.rotation);
             bullet.transform.SetParent(bulletPoints[bulletIdx].transform); // spawner 하위에 생성
             bullet.Move(unitHead.transform.forward);    // Bullet의 정면방향이 target 향하도록 회전
+            bullet.damage = unitData.unitPower;
 
             flashParticleObj[bulletIdx].Play();     // 총구 화염 파티클 재생
             audioManager(0);                        // 발사 사운드 재생
