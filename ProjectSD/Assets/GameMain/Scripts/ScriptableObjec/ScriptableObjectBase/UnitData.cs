@@ -8,4 +8,6 @@ public class UnitData : ScriptableObject
     public int unitPower = default;
     public int unitLifeTime = default;
     public int bulletPointNum = default;
+
+    
 }
