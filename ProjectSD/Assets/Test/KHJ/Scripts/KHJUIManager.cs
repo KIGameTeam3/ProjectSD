@@ -479,6 +479,9 @@ public class KHJUIManager : MonoBehaviour
         speedBuffCheck = 10f;
         sizeUpImage.fillAmount = sizeBuffCheck;
         speedUpImg.fillAmount = speedBuffCheck;
+        sizeUpBuff.SetActive(false);
+        speedUpBuff.SetActive(false);
+
     }
     public void ResetSizeBuff()
     {
